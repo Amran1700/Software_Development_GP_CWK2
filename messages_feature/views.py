@@ -15,5 +15,8 @@ def drafts(request):
 def compose(request):
     return render(request, 'messages_feature/compose.html')
 
+def delete(request):
+    return render(request, 'messages_feature/delete.html')
+
 def message_detail(request):
     return render(request, 'messages_feature/message_detail.html')
