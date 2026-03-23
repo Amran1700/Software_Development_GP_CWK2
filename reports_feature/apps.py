@@ -1,5 +1,8 @@
+# reports/apps.py
 from django.apps import AppConfig
 
 
-class ReportsFeatureConfig(AppConfig):
-    name = "reports_feature"
+class ReportsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'reports'
+    verbose_name = 'Reports'
