@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | Sky Engineering Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'reports:dashboard' %}">Reports</a></li>
+      <li class="breadcrumb-item active">{{ title }}</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <h2 class="fw-bold mb-0">{{ title }}</h2>
+    <span class="text-muted small">{% now "d F Y" %}</span>
+  </div>
+
+  {% if error %}
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    </div>
+
+  {% else %}
+
+    <!-- Download buttons -->
+    <form method="post" action="{% url 'reports:generate' %}" class="mb-4">
+      {% csrf_token %}
+      <input type="hidden" name="report_type" value="{{ report_type }}">
+      <div class="d-flex gap-2 flex-wrap">
+        <button type="submit" name="format" value="pdf" class="btn btn-danger">
+          <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
+        </button>
+        <button type="submit" name="format" value="excel" class="btn btn-success">
+          <i class="bi bi-file-earmark-excel me-1"></i> Download Excel
+        </button>
+      </div>
+    </form>
+
+    <!-- Data table -->
+    {% if rows %}
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-dark">
+            <tr>
+              {% for h in headers %}
+                <th class="px-4 py-3">{{ h }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% if report_type == 'teams_by_department' %}
+              {% for row in rows %}
+              <tr>
+                <td class="px-4 py-3">{{ row.name }}</td>
+                <td class="px-4 py-3 text-center fw-bold">{{ row.team_count }}</td>
+              </tr>
+              {% endfor %}
+
+            {% elif report_type == 'teams_without_managers' %}
+              {% for row in rows %}
+              <tr>
+                <td class="px-4 py-3">{{ row.name }}</td>
+                <td class="px-4 py-3">{{ row.department }}</td>
+              </tr>
+              {% endfor %}
+
+            {% elif report_type == 'summary' %}
+              {% for row in rows %}
+              <tr>
+                <td class="px-4 py-3">{{ row.label }}</td>
+                <td class="px-4 py-3 fw-bold">{{ row.value }}</td>
+              </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% else %}
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i> No data found for this report.
+      </div>
+    {% endif %}
+
+  {% endif %}
+
+  <a href="{% url 'reports:dashboard' %}" class="btn btn-outline-secondary mt-4">
+    <i class="bi bi-arrow-left me-1"></i> Back to Reports
+  </a>
+
+</div>
+{% endblock %}
