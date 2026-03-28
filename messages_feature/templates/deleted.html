@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deleted Messages - Sky Engineering</title>
+    <link rel="stylesheet" href="{% static 'messages.css' %}" />
+</head>
+<body>
+<div class="main-container">
+    {% include 'components/sidebar_messages.html' %}
+
+    <div class="inbox-content">
+        <h1>Deleted Messages</h1>
+        <table class="inbox-table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in messages %}
+                <tr>
+                    <td>{{ message.sender.username }}</td>
+                    <td>{{ message.subject }}</td>
+                    <td>{{ message.timestamp|date:"M d, Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">No deleted messages.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'inbox' %}" class="btn btn-secondary mt-3">Back to Inbox</a>
+    </div>
+</div>
+</body>
+</html>

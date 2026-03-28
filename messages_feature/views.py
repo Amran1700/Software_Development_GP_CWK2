@@ -63,68 +63,6 @@ def deleted(request):
 
 
 
-# COMPOSE VIEW
-@login_required
-def compose(request):
-    """
-    Handles creating a new message
-    """
-
-    # Get all users except the current user (so you can't message yourself)
-    users = User.objects.exclude(id=request.user.id)
-
-    # If form is submitted
-    if request.method == 'POST':
-
-        # Get list of selected recipient IDs
-        recipient_ids = request.POST.getlist('recipient')
-
-        # Get subject and body from form
-        subject = request.POST.get('subject', '')
-        body = request.POST.get('body', '')
-
-        # Get status (sent or draft)
-        status = request.POST.get('status', 'sent')
-
-        # Basic validation
-        if recipient_ids and body:
-
-            # Create message WITHOUT receivers first
-            message = Message.objects.create(
-                sender=request.user,
-                subject=subject,
-                body=body,
-                status=status
-            )
-
-            # Add receivers (ManyToMany requires separate step)
-            message.receiver.set(recipient_ids)
-
-            # Save message
-            message.save()
-
-            # Redirect depending on status
-            if status == 'draft':
-                return redirect('drafts')
-
-            return redirect('sent')
-
-        else:
-            # If validation fails
-            error = "Recipient and message body are required"
-
-            return render(request, 'messages_app/compose.html', {
-                'error': error,
-                'users': users
-            })
-
-    # If GET request → just show empty form
-    return render(request, 'messages_app/compose.html', {
-        'users': users
-    })
-
-
-
 # MESSAGE DETAIL VIEW
 @login_required
 def message_detail(request, message_id):
@@ -166,3 +104,70 @@ def delete_message(request, message_id):
         message.save()
 
     return redirect('inbox')
+
+@login_required  # Ensures only authenticated users can access this view
+def compose(request):
+    
+    #this will get all of the users except the current user, so you can't send a message to yourself??
+    users = User.objects.exclude(id=request.user.id)
+
+    # Retrieve GET parameters if the compose page was opened via Reply/Forward
+    # Example: /compose/?to=3&subject=Re: Hello
+    initial_receiver = request.GET.get('to')        # Pre-select a single user ID in the dropdown
+    initial_subject = request.GET.get('subject', '')  # Pre-fill the subject line, defaults to empty string
+
+    # --- POST REQUEST HANDLING ---
+    if request.method == 'POST':
+        # Get list of selected recipients from the form submission (can be multiple for Reply All)
+        recipient_ids = request.POST.getlist('recipient')
+
+        subject = request.POST.get('subject', '')
+        body = request.POST.get('body', '')
+
+        status = request.POST.get('status', 'sent')
+
+        # Basic validation: ensure at least one recipient is selected and body is not empty
+        if recipient_ids and body:
+            
+            message = Message.objects.create(
+                sender=request.user,  
+                subject=subject,      
+                body=body,            
+                status=status         
+            )
+
+            # Add receivers using ManyToMany relationship (must be done after creation)
+            message.receiver.set(recipient_ids)
+
+            # Save message to the database
+            message.save()
+
+            # Redirect depending on message status
+            if status == 'draft':
+                return redirect('drafts')  # Send user to their drafts folder
+            return redirect('sent')        # Otherwise, go to Sent messages
+
+        else:
+            # Validation failed → missing recipient or empty body
+            error = "Recipient and message body are required"
+            context = {
+                'error': error,  
+                'users': users  
+            }
+            return render(request, 'messages_feature/compose.html', context)
+
+    # --- GET REQUEST HANDLING ---
+    else:
+        # GET request → show the form for composing a new message
+        # This can also include pre-filled fields if accessed via Reply/Forward links
+        context = {'users': users}  # Include all users for the dropdown
+
+        # Pre-fill recipient if "to" parameter exists
+        if initial_receiver:
+            context['initial_receiver'] = int(initial_receiver)
+
+        # Pre-fill subject if provided in GET parameters
+        context['initial_subject'] = initial_subject
+
+        # Render the compose template with the context
+        return render(request, 'messages_feature/compose.html', context)
