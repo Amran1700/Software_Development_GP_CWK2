@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+
+def home(request):
+    """Landing page until organisation routes are added."""
+    return HttpResponse(
+        "<h1>Sky Engineering</h1>"
+        "<p>Try "
+        '<a href="/messages/inbox/">Messages</a>, '
+        '<a href="/reports/">Reports</a>, or '
+        '<a href="/admin/">Admin</a>.'
+        "</p>"
+    )

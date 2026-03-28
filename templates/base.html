@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,8 @@
   <title>{% block title %}Sky Engineering Portal{% endblock %}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <style>
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  {% comment %} <style>
     body { background-color: #f8f9fa; }
     .navbar-brand { font-weight: 700; }
     .sidebar {
@@ -28,7 +30,66 @@
     }
     .sidebar .nav-link i { margin-right: 8px; }
     .main-content { padding: 1.5rem; }
-  </style>
+  </style> {% endcomment %}
+
+  <style>
+  body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* ===== NAVBAR (STICKY + GRADIENT) ===== */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(90deg, #4277D6, #6C71CF, #6F50A0);
+  }
+
+  .navbar-brand {
+    font-weight: 700;
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    min-height: calc(100vh - 56px);
+    background: linear-gradient(180deg, #4277D6, #6C71CF, #6F50A0);
+    padding-top: 1rem;
+  }
+
+  .sidebar .nav-link {
+    color: rgba(255,255,255,0.85);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    margin: 4px 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+
+  /* Hover effect */
+  .sidebar .nav-link:hover {
+    background-color: rgba(255,255,255,0.15);
+    color: #fff;
+    font-weight: 500;
+    transform: translateX(3px);
+  }
+
+  /* Active state (you already use class="active") */
+  .sidebar .nav-link.active {
+    background-color: rgba(255,255,255,0.25);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .sidebar .nav-link i {
+    margin-right: 8px;
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  .main-content {
+    padding: 1.5rem;
+  }
+</style>
 </head>
 <body>
 
@@ -39,7 +100,10 @@
     <div class="d-flex align-items-center gap-3">
       {% if user.is_authenticated %}
         <span class="text-white small">{{ user.username }}</span>
-        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Logout</a>
+        <form method="post" action="{% url 'logout' %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+        </form>
       {% else %}
         <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Login</a>
       {% endif %}
