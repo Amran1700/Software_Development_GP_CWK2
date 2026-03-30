@@ -158,7 +158,8 @@ class UpstreamDependency(models.Model):
 class DownstreamDependency(models.Model):
     team = models.ForeignKey(
         Team, on_delete=models.CASCADE, 
-        related_name='downstream_dependencies'
+        related_name='down
+        stream_dependencies'
     )
     downstream_team = models.ForeignKey(
         Team, on_delete=models.CASCADE, 
