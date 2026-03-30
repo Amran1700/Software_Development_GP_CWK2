@@ -8,86 +8,90 @@
 
 <div class="container-fluid">
 
-    <!-- Back Button -->
-    <div class="mb-4">
-        <a href="/departments/" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left me-1"></i> Back to Departments
-        </a>
-    </div>
+   <!-- Back Button -->
+   <div class="mb-4">
+       <a href="/departments/" class="btn btn-outline-secondary btn-sm">
+           <i class="bi bi-arrow-left me-1"></i> Back to Departments
+       </a>
+   </div>
 
-    <!-- Department Header -->
-    <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-        <div class="card-body p-4">
-            <div class="d-flex align-items-center mb-3">
-                <div class="rounded-circle d-flex align-items-center justify-content-center me-4"
-                     style="width:64px; height:64px; background: linear-gradient(to right, #4277D6, #6F50A0);">
-                    <i class="bi bi-building text-white fs-3"></i>
-                </div>
-                <div>
-                    <h2 class="fw-bold mb-1" style="color: #4277D6;">
-                        {{ department.department_name }}
-                    </h2>
-                    <span class="badge" 
-                          style="background: linear-gradient(to right, #4277D6, #6F50A0); font-size: 0.85rem;">
-                        <i class="bi bi-star me-1"></i>
-                        {{ department.specialisation|default:"No specialisation listed" }}
-                    </span>
-                </div>
-            </div>
-            <hr>
-            <p class="text-secondary mb-0">
-                <i class="bi bi-info-circle me-2"></i>
-                {{ department.description|default:"No description available." }}
-            </p>
-        </div>
-    </div>
 
-    <!-- Teams Section (placeholder until Student 1's Team model is ready) -->
-    <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-        <div class="card-body p-4">
-            <h5 class="fw-bold mb-3" style="color: #4277D6;">
-                <i class="bi bi-people me-2"></i> Teams in this Department
-            </h5>
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-2"></i>
-                Teams will be displayed here once the Team module is integrated.
-            </div>
-        </div>
-    </div>
+   <!-- Department Header -->
+   <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+       <div class="card-body p-4">
+           <div class="d-flex align-items-center mb-3">
+               <div class="rounded-circle d-flex align-items-center justify-content-center me-4"
+                    style="width:64px; height:64px; background: linear-gradient(to right, #4277D6, #6F50A0);">
+                   <i class="bi bi-building text-white fs-3"></i>
+               </div>
+               <div>
+                   <h2 class="fw-bold mb-1" style="color: #4277D6;">
+                       {{ department.department_name }}
+                   </h2>
+                   <span class="badge"
+                         style="background: linear-gradient(to right, #4277D6, #6F50A0); font-size: 0.85rem;">
+                       <i class="bi bi-star me-1"></i>
+                       {{ department.specialisation|default:"No specialisation listed" }}
+                   </span>
+               </div>
+           </div>
+           <hr>
+           <p class="text-secondary mb-0">
+               <i class="bi bi-info-circle me-2"></i>
+               {{ department.description|default:"No description available." }}
+           </p>
+       </div>
+   </div>
 
-    <!-- Department Info Cards -->
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3" style="color: #4277D6;">
-                        <i class="bi bi-person-badge me-2"></i> Department Leader
-                    </h5>
-                    <p class="text-muted">
-                        <i class="bi bi-info-circle me-2"></i>
-                        Department leader will be displayed here once user authentication is integrated.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3" style="color: #4277D6;">
-                        <i class="bi bi-tags me-2"></i> Team Types
-                    </h5>
-                    {% for team_type in team_types %}
-                    <span class="badge me-2 mb-2" 
-                          style="background: linear-gradient(to right, #4277D6, #6F50A0); font-size: 0.85rem;">
-                        {{ team_type.type_name }}
-                    </span>
-                    {% empty %}
-                    <p class="text-muted">No team types defined yet.</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
+
+   <!-- Teams Section (placeholder until Student 1's Team model is ready) -->
+   <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+       <div class="card-body p-4">
+           <h5 class="fw-bold mb-3" style="color: #4277D6;">
+               <i class="bi bi-people me-2"></i> Teams in this Department
+           </h5>
+           <div class="alert alert-info">
+               <i class="bi bi-info-circle me-2"></i>
+               Teams will be displayed here once the Team module is integrated.
+           </div>
+       </div>
+   </div>
+
+
+   <!-- Department Info Cards -->
+   <div class="row g-4">
+       <div class="col-md-6">
+           <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+               <div class="card-body p-4">
+                   <h5 class="fw-bold mb-3" style="color: #4277D6;">
+                       <i class="bi bi-person-badge me-2"></i> Department Leader
+                   </h5>
+                   <p class="text-muted">
+                       <i class="bi bi-info-circle me-2"></i>
+                       Department leader will be displayed here once user authentication is integrated.
+                   </p>
+               </div>
+           </div>
+       </div>
+       <div class="col-md-6">
+           <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+               <div class="card-body p-4">
+                   <h5 class="fw-bold mb-3" style="color: #4277D6;">
+                       <i class="bi bi-tags me-2"></i> Team Types
+                   </h5>
+                   {% for team_type in team_types %}
+                   <span class="badge me-2 mb-2"
+                         style="background: linear-gradient(to right, #4277D6, #6F50A0); font-size: 0.85rem;">
+                       {{ team_type.type_name }}
+                   </span>
+                   {% empty %}
+                   <p class="text-muted">No team types defined yet.</p>
+                   {% endfor %}
+               </div>
+           </div>
+       </div>
+   </div>
+
 
 </div>
 
