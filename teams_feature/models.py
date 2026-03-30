@@ -1,21 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-
-class Department(models.Model):
-    dept_name = models.CharField(max_length=100)
-    dept_head = models.ForeignKey(
-        User, on_delete=models.SET_NULL, 
-        null=True, blank=True, 
-        related_name='led_departments'
-    )
-    budget_code = models.CharField(max_length=50, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.dept_name
-
+from organisation_feature.models import Department
 
 class TeamType(models.Model):
     type_name = models.CharField(max_length=100)
