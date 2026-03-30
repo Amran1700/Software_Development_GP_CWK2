@@ -1,18 +1,10 @@
 from django.contrib import admin
 
 from .models import (
-    Department, TeamType, Skill, Role, Team, TeamMember,
+    TeamType, Skill, Role, Team, TeamMember,
     TeamRepository, TeamSkill, UserRole,
     UpstreamDependency, DownstreamDependency
 )
-
-
-@admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('dept_name', 'dept_head', 'budget_code', 'is_active')
-    search_fields = ('dept_name',)
-    list_filter = ('is_active',)
-
 
 @admin.register(TeamType)
 class TeamTypeAdmin(admin.ModelAdmin):
