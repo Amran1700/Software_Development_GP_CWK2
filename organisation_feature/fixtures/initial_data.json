@@ -1,0 +1,36 @@
+[
+{
+  "model": "organisation_feature.teamtype",
+  "pk": 1,
+  "fields": {
+    "type_name": "Backend",
+    "description": "Teams focused on server-side development and APIs"
+  }
+},
+{
+  "model": "organisation_feature.teamtype",
+  "pk": 2,
+  "fields": {
+    "type_name": "Frontend",
+    "description": "Teams focused on UI and client-side development"
+  }
+},
+{
+  "model": "organisation_feature.department",
+  "pk": 1,
+  "fields": {
+    "department_name": "Cloud Infrastructure",
+    "specialisation": "Cloud platforms, DevOps and infrastructure automation",
+    "description": "Responsible for managing Sky's cloud environments and deployment pipelines"
+  }
+},
+{
+  "model": "organisation_feature.department",
+  "pk": 2,
+  "fields": {
+    "department_name": "Product Engineering",
+    "specialisation": "Customer facing product development and feature delivery",
+    "description": "Builds and maintains Sky's core streaming and product platforms"
+  }
+}
+]
