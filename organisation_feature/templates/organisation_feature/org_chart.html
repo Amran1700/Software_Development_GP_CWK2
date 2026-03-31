@@ -57,7 +57,7 @@
                             <div class="d-flex justify-content-center">
                                 <div style="width: 2px; height: 30px; background-color: #6C71CF;"></div>
                             </div>
-                            <div class="card border-0 shadow-sm mx-2 mb-3" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
+                            <div class="card border-0 shadow-sm mx-2 mb-3 dept-card" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
                                 <div class="card-body p-3 text-center">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width:40px; height:40px; background-color: {{ dept_color }};">
                                         <i class="bi bi-building text-white"></i>
@@ -89,7 +89,7 @@
                             <div class="d-flex justify-content-center">
                                 <div style="width: 2px; height: 30px; background-color: #6C71CF;"></div>
                             </div>
-                            <div class="card border-0 shadow-sm mx-2 mb-3" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
+                            <div class="card border-0 shadow-sm mx-2 mb-3 dept-card" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
                                 <div class="card-body p-3 text-center">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width:40px; height:40px; background-color: {{ dept_color }};">
                                         <i class="bi bi-building text-white"></i>
@@ -121,7 +121,7 @@
                             <div class="d-flex justify-content-center">
                                 <div style="width: 2px; height: 30px; background-color: #6C71CF;"></div>
                             </div>
-                            <div class="card border-0 shadow-sm mx-2 mb-3" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
+                            <div class="card border-0 shadow-sm mx-2 mb-3 dept-card" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
                                 <div class="card-body p-3 text-center">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width:40px; height:40px; background-color: {{ dept_color }};">
                                         <i class="bi bi-building text-white"></i>
@@ -153,7 +153,7 @@
                             <div class="d-flex justify-content-center">
                                 <div style="width: 2px; height: 30px; background-color: #6C71CF;"></div>
                             </div>
-                            <div class="card border-0 shadow-sm mx-2 mb-3" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
+                            <div class="card border-0 shadow-sm mx-2 mb-3 dept-card" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
                                 <div class="card-body p-3 text-center">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width:40px; height:40px; background-color: {{ dept_color }};">
                                         <i class="bi bi-building text-white"></i>
@@ -185,7 +185,7 @@
                             <div class="d-flex justify-content-center">
                                 <div style="width: 2px; height: 30px; background-color: #6C71CF;"></div>
                             </div>
-                            <div class="card border-0 shadow-sm mx-2 mb-3" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
+                            <div class="card border-0 shadow-sm mx-2 mb-3 dept-card" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
                                 <div class="card-body p-3 text-center">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width:40px; height:40px; background-color: {{ dept_color }};">
                                         <i class="bi bi-building text-white"></i>
@@ -250,5 +250,16 @@
     </div>
 
 </div>
+
+<style>
+    .dept-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+    .dept-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+    }
+</style>
 
 {% endblock %}
