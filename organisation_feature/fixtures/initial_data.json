@@ -19,18 +19,36 @@
   "model": "organisation_feature.department",
   "pk": 1,
   "fields": {
-    "department_name": "Cloud Infrastructure",
-    "specialisation": "Cloud platforms, DevOps and infrastructure automation",
-    "description": "Responsible for managing Sky's cloud environments and deployment pipelines"
+    "department_name": "Engineering",
+    "specialisation": "Backend Development",
+    "description": "Infrastructure & backend services development"
   }
 },
 {
   "model": "organisation_feature.department",
   "pk": 2,
   "fields": {
-    "department_name": "Product Engineering",
-    "specialisation": "Customer facing product development and feature delivery",
-    "description": "Builds and maintains Sky's core streaming and product platforms"
+    "department_name": "Design",
+    "specialisation": "UX/UI",
+    "description": "User experience and visual design for all products"
+  }
+},
+{
+  "model": "organisation_feature.department",
+  "pk": 3,
+  "fields": {
+    "department_name": "Product",
+    "specialisation": "Product Management",
+    "description": "Product strategy, roadmap planning, and execution"
+  }
+},
+{
+  "model": "organisation_feature.department",
+  "pk": 4,
+  "fields": {
+    "department_name": "Marketing",
+    "specialisation": "Digital Marketing",
+    "description": "Brand strategy, content creation, and digital campaigns"
   }
 }
 ]
