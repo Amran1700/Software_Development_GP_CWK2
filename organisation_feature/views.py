@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Department, TeamType
-from teams_feature.models import Team
+from teams_feature.models import Team, UpstreamDependency, DownstreamDependency
 
 
 def org_chart(request):
@@ -44,8 +44,7 @@ def department_detail(request, department_id):
     """
     Displays the detail page for a single department.
     Retrieves the department by ID, returns 404 if not found.
-    Also passes all teams belonging to this department
-    and all team types for display in the sidebar.
+    Passes teams, team types, and dependency data to the template.
     """
     # Get department or return 404 if not found
     department = get_object_or_404(Department, id=department_id)
@@ -56,8 +55,20 @@ def department_detail(request, department_id):
     # Get all team types for the team types section
     team_types = TeamType.objects.all()
 
+    # Build dependency data for each team in this department
+    team_dependencies = []
+    for team in teams:
+        upstream = UpstreamDependency.objects.filter(team=team)
+        downstream = DownstreamDependency.objects.filter(team=team)
+        team_dependencies.append({
+            'team': team,
+            'upstream': upstream,
+            'downstream': downstream,
+        })
+
     return render(request, 'organisation_feature/department_detail.html', {
         'department': department,
         'teams': teams,
         'team_types': team_types,
+        'team_dependencies': team_dependencies,
     })
