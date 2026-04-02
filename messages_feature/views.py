@@ -120,6 +120,7 @@ def compose(request):
     if request.method == 'POST':
         # Get list of selected recipients from the form submission (can be multiple for Reply All)
         recipient_ids = request.POST.getlist('recipient')
+        
 
         subject = request.POST.get('subject', '')
         body = request.POST.get('body', '')
@@ -137,7 +138,8 @@ def compose(request):
             )
 
             # Add receivers using ManyToMany relationship (must be done after creation)
-            message.receiver.set(recipient_ids)
+            recipients = User.objects.filter(id__in=recipient_ids)
+            message.receiver.set(recipients)
 
             # Save message to the database
             message.save()
@@ -164,7 +166,7 @@ def compose(request):
 
         # Pre-fill recipient if "to" parameter exists
         if initial_receiver:
-            context['initial_receiver'] = int(initial_receiver)
+            context['initial_receiver'] = [int(i) for i in initial_receiver.split(',')]
 
         # Pre-fill subject if provided in GET parameters
         context['initial_subject'] = initial_subject
