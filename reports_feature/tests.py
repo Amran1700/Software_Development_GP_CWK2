@@ -1,6 +1,6 @@
 # reports_feature/tests.py
 # Author: Student 5 – Reports Module
-# Week 3: Full test suite – TC01 to TC16
+# Week 3: Full test suite – TC01 to TC22
 # Run with: python manage.py test reports_feature
 
 from django.test import TestCase, Client
@@ -39,6 +39,8 @@ class ReportsBaseTest(TestCase):
         )
 
 
+# ── POSITIVE TESTS ────────────────────────────────────────────────────
+
 # TC01
 class TC01_DashboardLoadsForLoggedInUser(ReportsBaseTest):
     """TC01 – Dashboard returns HTTP 200 for authenticated user."""
@@ -46,16 +48,6 @@ class TC01_DashboardLoadsForLoggedInUser(ReportsBaseTest):
     def test_dashboard_loads(self):
         response = self.client.get(reverse('reports:dashboard'))
         self.assertEqual(response.status_code, 200)
-
-
-# TC02
-class TC02_DashboardRedirectsAnonymous(ReportsBaseTest):
-    """TC02 – Unauthenticated user is redirected away from dashboard."""
-
-    def test_dashboard_redirects_anonymous(self):
-        self.client.logout()
-        response = self.client.get(reverse('reports:dashboard'))
-        self.assertNotEqual(response.status_code, 200)
 
 
 # TC03
@@ -105,35 +97,6 @@ class TC06_PreviewSummary(ReportsBaseTest):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Total Teams')
         self.assertContains(response, 'Total Departments')
-
-
-# TC07
-class TC07_PreviewUnknownTypeShowsError(ReportsBaseTest):
-    """TC07 – An unrecognised report_type renders an error message, not a crash."""
-
-    def test_preview_unknown_type_shows_error(self):
-        response = self.client.get(
-            reverse('reports:preview', args=['nonsense_report'])
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Unknown report type')
-
-
-# TC08
-class TC08_PreviewEmptyData(TestCase):
-    """TC08 – Preview with no teams/departments shows 'No data found' message."""
-
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user(username='emptyuser', password='pass')
-        self.client.login(username='emptyuser', password='pass')
-
-    def test_preview_empty_teams_by_dept(self):
-        response = self.client.get(
-            reverse('reports:preview', args=['teams_by_department'])
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'No data found')
 
 
 # TC09
@@ -218,6 +181,47 @@ class TC14_ExcelSummary(ReportsBaseTest):
         self.assertIn('summary_report.xlsx', response['Content-Disposition'])
 
 
+# ── NEGATIVE / EDGE CASE TESTS ────────────────────────────────────────
+
+# TC02
+class TC02_DashboardRedirectsAnonymous(ReportsBaseTest):
+    """TC02 – Unauthenticated user is redirected away from dashboard."""
+
+    def test_dashboard_redirects_anonymous(self):
+        self.client.logout()
+        response = self.client.get(reverse('reports:dashboard'))
+        self.assertNotEqual(response.status_code, 200)
+
+
+# TC07
+class TC07_PreviewUnknownTypeShowsError(ReportsBaseTest):
+    """TC07 – An unrecognised report_type renders an error message, not a crash."""
+
+    def test_preview_unknown_type_shows_error(self):
+        response = self.client.get(
+            reverse('reports:preview', args=['nonsense_report'])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Unknown report type')
+
+
+# TC08
+class TC08_PreviewEmptyData(TestCase):
+    """TC08 – Preview with no teams/departments shows 'No data found' message."""
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='emptyuser', password='pass')
+        self.client.login(username='emptyuser', password='pass')
+
+    def test_preview_empty_teams_by_dept(self):
+        response = self.client.get(
+            reverse('reports:preview', args=['teams_by_department'])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'No data found')
+
+
 # TC15
 class TC15_GETRequestNotAllowed(ReportsBaseTest):
     """TC15 – GET to generate endpoint returns 405 Method Not Allowed."""
@@ -249,3 +253,99 @@ class TC16_AllTeamsHaveManagers(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'No data found')
+
+
+# TC17
+class TC17_PDFEmptyDatabase(TestCase):
+    """TC17 – PDF download with empty database does not crash, returns valid PDF."""
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='emptyuser2', password='pass')
+        self.client.login(username='emptyuser2', password='pass')
+
+    def test_pdf_empty_database(self):
+        response = self.client.post(reverse('reports:generate'), {
+            'report_type': 'teams_by_department',
+            'format': 'pdf',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+
+
+# TC18
+class TC18_ExcelUnknownReportType(ReportsBaseTest):
+    """TC18 – Excel download with unknown report type returns 400 Bad Request."""
+
+    def test_excel_unknown_report_type(self):
+        response = self.client.post(reverse('reports:generate'), {
+            'report_type': 'nonsense_report',
+            'format': 'excel',
+        })
+        self.assertEqual(response.status_code, 400)
+
+
+# TC19
+class TC19_PreviewRequiresLogin(TestCase):
+    """TC19 – Unauthenticated user cannot access preview page directly."""
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_preview_redirects_anonymous(self):
+        response = self.client.get(
+            reverse('reports:preview', args=['summary'])
+        )
+        self.assertNotEqual(response.status_code, 200)
+
+
+# TC20
+class TC20_GenerateRequiresLogin(TestCase):
+    """TC20 – Unauthenticated user cannot POST to generate endpoint."""
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_generate_redirects_anonymous(self):
+        response = self.client.post(reverse('reports:generate'), {
+            'report_type': 'summary',
+            'format': 'pdf',
+        })
+        self.assertNotEqual(response.status_code, 200)
+
+
+# TC21
+class TC21_UnsupportedFormat(ReportsBaseTest):
+    """TC21 – Unsupported export format returns 400 Bad Request."""
+
+    def test_unsupported_format_returns_400(self):
+        response = self.client.post(reverse('reports:generate'), {
+            'report_type': 'summary',
+            'format': 'csv',
+        })
+        self.assertEqual(response.status_code, 400)
+
+
+# TC22
+class TC22_PDFNoManagersWhenAllManaged(TestCase):
+    """TC22 – PDF for Teams Without Managers when all teams managed downloads correctly."""
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='allmanaged', password='pass')
+        self.client.login(username='allmanaged', password='pass')
+
+        dept = Department.objects.create(department_name='Managed Dept')
+        Team.objects.create(
+            team_name='Fully Managed Team',
+            department=dept,
+            manager=self.user,
+        )
+
+    def test_pdf_no_managers_empty_data(self):
+        response = self.client.post(reverse('reports:generate'), {
+            'report_type': 'teams_without_managers',
+            'format': 'pdf',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
