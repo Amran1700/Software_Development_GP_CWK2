@@ -1,0 +1,138 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    background: #f8f8f8;
+}
+
+/* Inbox content wrapper */
+.inbox-content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Message header */
+.message-header {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.message-header p {
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+/* Message body */
+.message-body {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.message-body p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1e293b;
+}
+
+/* Action buttons container */
+.action-buttons {
+    margin-top: 15px;
+}
+
+/* Buttons */
+.action-buttons .btn {
+    margin-right: 10px;
+    min-width: 100px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+/* Primary buttons (Reply) */
+.action-buttons .btn-primary {
+    background: linear-gradient(135deg, #6F50A0 0%, #6C71CF 100%);
+    border: none;
+    color: #ffffff;
+}
+.action-buttons .btn-primary:hover {
+    background: linear-gradient(135deg, #5d4287 0%, #5a5fb8 100%);
+}
+
+/* Secondary buttons (Back) */
+.action-buttons .btn-secondary {
+    background: #95a5a6;
+    border: none;
+    color: #ffffff;
+}
+.action-buttons .btn-secondary:hover {
+    background: #7f8c8d;
+}
+
+/* Danger buttons (Delete) */
+.action-buttons .btn-danger {
+    background: #e74c3c;
+    border: none;
+    color: #ffffff;
+}
+.action-buttons .btn-danger:hover {
+    background: #c0392b;
+}
+
+/* Reply All / Info buttons */
+.action-buttons .btn-info {
+    background: #6C71CF;
+    color: #ffffff;
+    border: none;
+}
+.action-buttons .btn-info:hover {
+    background: #5a5fb8;
+}
+
+/* Replies / Thread */
+ul li {
+    background: #f8f8f8;
+    border: 1px solid #e0d4f7;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+ul li strong {
+    color: #6F50A0; 
+}
+
+ul li small {
+    color: #64748b; 
+}
+.required {
+    color: #dc2626; 
+}
+
+.form-select + .form-text {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.list-group-item {
+    padding: 1rem; /* slightly more padding */
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.list-group-item:hover {
+    background-color: #f5f3fa; /* subtle purple-tinted hover */
+}
+
+.list-group-item h5,
+.list-group-item p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
