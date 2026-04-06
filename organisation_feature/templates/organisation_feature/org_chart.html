@@ -21,10 +21,18 @@
         </a>
     </div>
 
+    <!-- Zoom Controls -->
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <button class="btn btn-outline-secondary btn-sm" id="zoomOut">−</button>
+        <span id="zoomLevel" class="fw-bold" style="min-width: 45px; text-align: center;">100%</span>
+        <button class="btn btn-outline-secondary btn-sm" id="zoomIn">+</button>
+        <button class="btn btn-outline-secondary btn-sm" id="zoomReset">Reset View</button>
+    </div>
+
     <div class="d-flex gap-4 align-items-start">
 
         <!-- Org Chart -->
-        <div class="card border-0 shadow-sm mb-4 flex-grow-1" style="border-radius: 12px; overflow-x: auto;">
+        <div id="orgChart" class="card border-0 shadow-sm mb-4 flex-grow-1" style="border-radius: 12px; overflow-x: auto;">
             <div class="card-body p-4">
 
                 <!-- Top Level: Sky Engineering -->
@@ -261,5 +269,29 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
     }
 </style>
+
+<script>
+    let zoom = 100;
+    const min = 50;
+    const max = 200;
+    const step = 25;
+    const chart = document.getElementById('orgChart');
+
+    document.getElementById('zoomIn').addEventListener('click', () => {
+        if (zoom < max) { zoom += step; applyZoom(); }
+    });
+    document.getElementById('zoomOut').addEventListener('click', () => {
+        if (zoom > min) { zoom -= step; applyZoom(); }
+    });
+    document.getElementById('zoomReset').addEventListener('click', () => {
+        zoom = 100; applyZoom();
+    });
+
+    function applyZoom() {
+        chart.style.transform = `scale(${zoom / 100})`;
+        chart.style.transformOrigin = 'top left';
+        document.getElementById('zoomLevel').textContent = zoom + '%';
+    }
+</script>
 
 {% endblock %}
