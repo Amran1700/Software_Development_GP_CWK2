@@ -17,26 +17,36 @@ def org_chart(request):
 
 def department_list(request):
     """
-    Displays a searchable list of all departments.
-    Accepts a GET parameter 'q' for search queries.
+    Displays a searchable, filterable list of all departments.
+    Accepts GET parameter 'q' for search and 'filter' for category filtering.
     Filters by department name or specialisation if a query is provided.
+    Filters by department name if a filter chip is selected.
+    3+ Teams filter shows departments with 3 or more teams.
     """
     query = request.GET.get('q', '')  # Get search query from URL params
+    active_filter = request.GET.get('filter', '')  # Get active filter chip
+
+    departments = Department.objects.all()
 
     if query:
-        # Filter departments by name or specialisation (case insensitive)
-        departments = Department.objects.filter(
+        # Filter by name or specialisation
+        departments = departments.filter(
             department_name__icontains=query
-        ) | Department.objects.filter(
+        ) | departments.filter(
             specialisation__icontains=query
         )
-    else:
-        # Return all departments if no search query
-        departments = Department.objects.all()
+
+    if active_filter == '3teams':
+        # Filter departments with 3 or more teams
+        departments = [d for d in departments if d.teams.count() >= 3]
+    elif active_filter:
+        # Filter by department name
+        departments = departments.filter(department_name__icontains=active_filter)
 
     return render(request, 'organisation_feature/department_list.html', {
         'departments': departments,
         'query': query,
+        'active_filter': active_filter,
     })
 
 

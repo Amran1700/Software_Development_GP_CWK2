@@ -1,92 +1,117 @@
 {% extends 'global.html' %}
 
-
 {% block title %}Departments - Sky Engineering{% endblock %}
-
 
 {% block nav_organisation %}active{% endblock %}
 
-
 {% block content %}
-
 
 <div class="container-fluid">
 
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold" style="color: #4277D6;">
+                <i class="bi bi-diagram-3"></i> Departments
+            </h2>
+            <p class="text-muted">Browse all departments in the Sky Engineering organisation</p>
+        </div>
+    </div>
 
-   <!-- Page Header -->
-   <div class="d-flex justify-content-between align-items-center mb-4">
-       <div>
-           <h2 class="fw-bold" style="color: #4277D6;">
-               <i class="bi bi-diagram-3"></i> Departments
-           </h2>
-           <p class="text-muted">Browse all departments in the Sky Engineering organisation</p>
-       </div>
-   </div>
+    <!-- Search Bar -->
+    <div class="mb-3">
+        <form method="GET" action="">
+            <div class="input-group" style="max-width: 400px;">
+                <span class="input-group-text bg-white">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" name="q" class="form-control"
+                       placeholder="Search departments..."
+                       value="{{ query }}">
+                <button class="btn" type="submit"
+                        style="background: linear-gradient(to right, #4277D6, #6F50A0); color: white;">
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
 
+    <!-- Filter Chips -->
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="/departments/"
+           class="btn btn-sm {% if not active_filter %}text-white{% else %}btn-outline-secondary{% endif %}"
+           style="{% if not active_filter %}background: linear-gradient(to right, #4277D6, #6F50A0);{% endif %} border-radius: 20px;">
+            All Departments
+        </a>
+        <a href="/departments/?filter=Engineering"
+           class="btn btn-sm {% if active_filter == 'Engineering' %}text-white{% else %}btn-outline-secondary{% endif %}"
+           style="{% if active_filter == 'Engineering' %}background-color: #1565C0;{% endif %} border-radius: 20px;">
+            Engineering
+        </a>
+        <a href="/departments/?filter=Design"
+           class="btn btn-sm {% if active_filter == 'Design' %}text-white{% else %}btn-outline-secondary{% endif %}"
+           style="{% if active_filter == 'Design' %}background-color: #6F50A0;{% endif %} border-radius: 20px;">
+            Design
+        </a>
+        <a href="/departments/?filter=Product"
+           class="btn btn-sm {% if active_filter == 'Product' %}text-white{% else %}btn-outline-secondary{% endif %}"
+           style="{% if active_filter == 'Product' %}background-color: #2E7D32;{% endif %} border-radius: 20px;">
+            Product
+        </a>
+        <a href="/departments/?filter=Marketing"
+           class="btn btn-sm {% if active_filter == 'Marketing' %}text-white{% else %}btn-outline-secondary{% endif %}"
+           style="{% if active_filter == 'Marketing' %}background-color: #E65100;{% endif %} border-radius: 20px;">
+            Marketing
+        </a>
+        <a href="/departments/?filter=3teams"
+           class="btn btn-sm {% if active_filter == '3teams' %}text-white{% else %}btn-outline-secondary{% endif %}"
+           style="{% if active_filter == '3teams' %}background: linear-gradient(to right, #4277D6, #6F50A0);{% endif %} border-radius: 20px;">
+            3+ Teams
+        </a>
+    </div>
 
-   <!-- Search Bar -->
-   <div class="mb-4">
-       <form method="GET" action="">
-           <div class="input-group" style="max-width: 400px;">
-               <span class="input-group-text bg-white">
-                   <i class="bi bi-search text-muted"></i>
-               </span>
-               <input type="text" name="q" class="form-control"
-                      placeholder="Search departments..."
-                      value="{{ request.GET.q }}">
-               <button class="btn" type="submit"
-                       style="background: linear-gradient(to right, #4277D6, #6F50A0); color: white;">
-                   Search
-               </button>
-           </div>
-       </form>
-   </div>
-
-
-   <!-- Department Cards -->
-   <div class="row g-4">
-       {% for department in departments %}
-       <div class="col-md-6 col-lg-4">
-           <div class="card h-100 shadow-sm border-0"
-                style="border-radius: 12px; transition: transform 0.2s;"
-                onmouseover="this.style.transform='translateY(-4px)'"
-                onmouseout="this.style.transform='translateY(0)'">
-               <div class="card-body p-4">
-                   <div class="d-flex align-items-center mb-3">
-                       <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                            style="width:48px; height:48px; background: linear-gradient(to right, #4277D6, #6F50A0);">
-                           <i class="bi bi-building text-white fs-5"></i>
-                       </div>
-                       <h5 class="card-title fw-bold mb-0">{{ department.department_name }}</h5>
-                   </div>
-                   <p class="text-muted small mb-3">
-                       <i class="bi bi-star me-1"></i>
-                       {{ department.specialisation|default:"No specialisation listed" }}
-                   </p>
-                   <p class="card-text small text-secondary">
-                       {{ department.description|default:"No description available"|truncatechars:100 }}
-                   </p>
-               </div>
-               <div class="card-footer bg-white border-0 pb-4 px-4">
-                   <a href="/departments/{{ department.id }}/"
-                      class="btn btn-sm w-100"
-                      style="background: linear-gradient(to right, #4277D6, #6F50A0); color: white; border-radius: 8px;">
-                       <i class="bi bi-arrow-right-circle me-1"></i> View Details
-                   </a>
-               </div>
-           </div>
-       </div>
-       {% empty %}
-       <div class="col-12">
-           <div class="alert alert-info">
-               <i class="bi bi-info-circle me-2"></i> No departments found.
-           </div>
-       </div>
-       {% endfor %}
-   </div>
-
+    <!-- Department Cards -->
+    <div class="row g-4">
+        {% for department in departments %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0"
+                 style="border-radius: 12px; transition: transform 0.2s;"
+                 onmouseover="this.style.transform='translateY(-4px)'"
+                 onmouseout="this.style.transform='translateY(0)'">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:48px; height:48px; background: linear-gradient(to right, #4277D6, #6F50A0);">
+                            <i class="bi bi-building text-white fs-5"></i>
+                        </div>
+                        <h5 class="card-title fw-bold mb-0">{{ department.department_name }}</h5>
+                    </div>
+                    <p class="text-muted small mb-3">
+                        <i class="bi bi-star me-1"></i>
+                        {{ department.specialisation|default:"No specialisation listed" }}
+                    </p>
+                    <p class="card-text small text-secondary">
+                        {{ department.description|default:"No description available"|truncatechars:100 }}
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-0 pb-4 px-4">
+                    <a href="/departments/{{ department.id }}/"
+                       class="btn btn-sm w-100"
+                       style="background: linear-gradient(to right, #4277D6, #6F50A0); color: white; border-radius: 8px;">
+                        <i class="bi bi-arrow-right-circle me-1"></i> View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i> No departments found.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
 </div>
-
 
 {% endblock %}
