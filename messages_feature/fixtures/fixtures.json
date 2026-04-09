@@ -1,0 +1,142 @@
+[
+  {
+    "model": "messages_feature.message",
+    "pk": 1,
+    "fields": {
+      "sender": 1,
+      "receiver": [2, 3],
+      "subject": "Welcome to Sky Engineering",
+      "body": "Hello! Welcome to the team.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 2,
+    "fields": {
+      "sender": 2,
+      "receiver": [1],
+      "subject": "Project Update",
+      "body": "Please review the latest project documents.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:10:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 3,
+    "fields": {
+      "sender": 3,
+      "receiver": [1, 2, 4],
+      "subject": "Meeting Reminder",
+      "body": "Don't forget the team meeting at 3 PM.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:20:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 4,
+    "fields": {
+      "sender": 4,
+      "receiver": [5, 6],
+      "subject": "New Task Assigned",
+      "body": "You have been assigned a new task. Check your dashboard.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 5,
+    "fields": {
+      "sender": 5,
+      "receiver": [1, 3, 7],
+      "subject": "Code Review",
+      "body": "Please review the pull request by Ehsaan.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:40:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 6,
+    "fields": {
+      "sender": 6,
+      "receiver": [2, 3],
+      "subject": "Server Update",
+      "body": "The server will undergo maintenance tonight.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:50:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 7,
+    "fields": {
+      "sender": 7,
+      "receiver": [1, 4],
+      "subject": "Documentation Needed",
+      "body": "Can you provide the documentation for the latest feature?",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T10:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 8,
+    "fields": {
+      "sender": 1,
+      "receiver": [2, 3, 4],
+      "subject": "Weekly Report",
+      "body": "Please submit your weekly report by EOD Friday.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T10:10:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 9,
+    "fields": {
+      "sender": 2,
+      "receiver": [5, 6],
+      "subject": "Client Feedback",
+      "body": "The client has provided feedback. Please review.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T10:20:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 10,
+    "fields": {
+      "sender": 3,
+      "receiver": [1, 7],
+      "subject": "Design Mockups",
+      "body": "Mockups for the new feature are ready for review.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T10:30:00Z"
+    }
+  }
+]

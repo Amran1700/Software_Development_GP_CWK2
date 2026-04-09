@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+  * { font-family: 'Roboto', sans-serif; }
+  :root { --brand-gradient: linear-gradient(135deg, #4277D6, #6C71CF, #6F50A0); --brand-mid: #6C71CF; }
+  .create-wrapper { max-width: 660px; margin: 30px auto; padding: 0 20px; }
+  .page-title { font-weight: 700; font-size: 1.4rem; color: #222; margin-bottom: 4px; }
+  .page-sub { color: #888; font-size: 0.88rem; margin-bottom: 24px; }
+  .form-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 16px; }
+  .form-card .card-title { font-weight: 700; font-size: 0.95rem; color: #222; margin-bottom: 2px; }
+  .form-card .card-sub { color: #999; font-size: 0.82rem; margin-bottom: 18px; }
+  .form-label { font-weight: 500; font-size: 0.88rem; color: #444; margin-bottom: 5px; }
+  .form-control { border-radius: 8px; border: 1px solid #ddd; padding: 9px 12px; font-size: 0.9rem; width: 100%; }
+  .form-control:focus { border-color: #6C71CF; outline: none; }
+  .platform-options { display: flex; gap: 12px; flex-wrap: wrap; }
+  .platform-label { border: 2px solid #e0e0e0; border-radius: 10px; padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; color: #444; }
+  .platform-label:hover { border-color: #6C71CF; }
+  .attendee-list { border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; max-height: 160px; overflow-y: auto; }
+  .attendee-item { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 6px; cursor: pointer; }
+  .attendee-item:hover { background: #f8f4ff; }
+  .attendee-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #4277D6, #6F50A0); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+  .section-icon { width: 32px; height: 32px; border-radius: 8px; background: #f0f4ff; display: flex; align-items: center; justify-content: center; color: #6C71CF; font-size: 1rem; }
+  .btn-cancel { border: 1px solid #ddd; background: white; color: #555; padding: 10px 24px; border-radius: 8px; font-weight: 500; text-decoration: none; font-size: 0.9rem; }
+  .btn-submit { background: linear-gradient(135deg, #4277D6, #6C71CF, #6F50A0); color: white; border: none; padding: 10px 28px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+  .btn-submit:hover { opacity: 0.9; }
+</style>
+
+<div class="create-wrapper">
+  <div class="page-title"><i class="bi bi-pencil-square me-2"></i>Edit Meeting</div>
+  <div class="page-sub">Update the details for "{{ meeting.title }}"</div>
+
+  <form method="POST" action="{% url 'schedule:edit_meeting' meeting.pk %}">
+    {% csrf_token %}
+
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-pencil-square"></i></div>
+        <div>
+          <div class="card-title">Meeting Details</div>
+          <div class="card-sub">Basic information about your meeting</div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Meeting Title *</label>
+        {{ form.title }}
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-label">Date *</label>
+          {{ form.date }}
+        </div>
+        <div class="col">
+          <label class="form-label">Time *</label>
+          {{ form.time }}
+        </div>
+      </div>
+      <div class="mb-0">
+        <label class="form-label">Duration</label>
+        {{ form.duration_minutes }}
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-camera-video"></i></div>
+        <div>
+          <div class="card-title">Meeting Platform</div>
+          <div class="card-sub">Choose your preferred video conferencing tool</div>
+        </div>
+      </div>
+      <div class="platform-options">
+        <label class="platform-label">
+          <input type="radio" name="platform" value="zoom" {% if meeting.platform == 'zoom' %}checked{% endif %}> 🎥 Zoom
+        </label>
+        <label class="platform-label">
+          <input type="radio" name="platform" value="teams" {% if meeting.platform == 'teams' %}checked{% endif %}> 💼 MS Teams
+        </label>
+        <label class="platform-label">
+          <input type="radio" name="platform" value="meet" {% if meeting.platform == 'meet' %}checked{% endif %}> 📹 Google Meet
+        </label>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-people"></i></div>
+        <div>
+          <div class="card-title">Attendees</div>
+          <div class="card-sub">Invite individuals to your meeting</div>
+        </div>
+      </div>
+      <div class="attendee-list">
+        {% for user in users %}
+        <label class="attendee-item">
+          <input type="checkbox" name="attendees" value="{{ user.id }}">
+          <div class="attendee-avatar">{{ user.username|first|upper }}</div>
+          <span>{{ user.username }}</span>
+        </label>
+        {% empty %}
+        <p class="text-muted mb-0" style="font-size:0.85rem;">No other users found</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-text-left"></i></div>
+        <div>
+          <div class="card-title mb-0">Description</div>
+          <div class="card-sub mb-0">Add agenda or notes for attendees</div>
+        </div>
+      </div>
+      {{ form.description }}
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <a href="{% url 'schedule:meeting_detail' meeting.pk %}" class="btn-cancel">Cancel</a>
+      <div class="d-flex gap-2">
+        <a href="{% url 'schedule:delete_meeting' meeting.pk %}" 
+           class="btn btn-outline-danger btn-sm">
+          <i class="bi bi-trash"></i> Delete
+        </a>
+        <button type="submit" class="btn-submit"><i class="bi bi-check-lg me-1"></i>Save Changes</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

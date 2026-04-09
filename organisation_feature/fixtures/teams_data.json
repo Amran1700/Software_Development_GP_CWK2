@@ -1,0 +1,1126 @@
+[
+{
+  "model": "teams_feature.team",
+  "pk": 1,
+  "fields": {
+    "team_name": "Platform Ops",
+    "department": 1,
+    "manager": 1,
+    "team_type": null,
+    "description": "Manages cloud infrastructure and deployment pipelines",
+    "purpose": "Ensure reliable and scalable cloud operations",
+    "team_size": 6,
+    "created_date": "2026-03-31",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 2,
+  "fields": {
+    "team_name": "DevOps Core",
+    "department": 1,
+    "manager": 1,
+    "team_type": null,
+    "description": "Handles CI/CD pipelines and automation",
+    "purpose": "Automate and streamline software delivery",
+    "team_size": 5,
+    "created_date": "2026-03-31",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 3,
+  "fields": {
+    "team_name": "Streaming UI",
+    "department": 3,
+    "manager": 1,
+    "team_type": null,
+    "description": "Builds the Sky streaming front-end experience",
+    "purpose": "Deliver high quality UI for Sky customers",
+    "team_size": 7,
+    "created_date": "2026-03-31",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 4,
+  "fields": {
+    "team_name": "Brand & Visual",
+    "department": 2,
+    "manager": 1,
+    "team_type": null,
+    "description": "Manages Sky's visual identity and brand guidelines",
+    "purpose": "Ensure consistent branding across all Sky products",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 5,
+  "fields": {
+    "team_name": "UX Research",
+    "department": 2,
+    "manager": 1,
+    "team_type": null,
+    "description": "Conducts user research to improve product experiences",
+    "purpose": "Understand user needs and inform design decisions",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 6,
+  "fields": {
+    "team_name": "Motion & Animation",
+    "department": 2,
+    "manager": 1,
+    "team_type": null,
+    "description": "Creates motion graphics and animations for Sky platforms",
+    "purpose": "Enhance user experience through animation",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 7,
+  "fields": {
+    "team_name": "Backend Services",
+    "department": 1,
+    "manager": 1,
+    "team_type": null,
+    "description": "Develops server-side services and APIs for Sky products",
+    "purpose": "Power Sky's products with reliable backend services",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 8,
+  "fields": {
+    "team_name": "Platform Engineering",
+    "department": 1,
+    "manager": 1,
+    "team_type": null,
+    "description": "Builds and maintains Sky's core engineering platforms",
+    "purpose": "Provide reliable platforms for all Sky engineering teams",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 9,
+  "fields": {
+    "team_name": "Digital Marketing",
+    "department": 4,
+    "manager": 1,
+    "team_type": null,
+    "description": "Manages Sky's digital marketing campaigns",
+    "purpose": "Drive customer acquisition through digital channels",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 10,
+  "fields": {
+    "team_name": "Social media & Content",
+    "department": 4,
+    "manager": 1,
+    "team_type": null,
+    "description": "Creates content and manages Sky's social media presence",
+    "purpose": "Engage Sky customers through compelling content",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 11,
+  "fields": {
+    "team_name": "Analytics & Insights",
+    "department": 4,
+    "manager": 1,
+    "team_type": null,
+    "description": "Analyses marketing data to optimise campaigns",
+    "purpose": "Drive data-informed marketing decisions",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 12,
+  "fields": {
+    "team_name": "Product Strategy",
+    "department": 3,
+    "manager": 1,
+    "team_type": null,
+    "description": "Defines Sky's product vision and roadmap",
+    "purpose": "Guide Sky's product direction and priorities",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.team",
+  "pk": 13,
+  "fields": {
+    "team_name": "Mobile Products",
+    "department": 3,
+    "manager": 1,
+    "team_type": null,
+    "description": "Owns Sky's mobile product experience",
+    "purpose": "Deliver exceptional mobile products for Sky customers",
+    "team_size": 5,
+    "created_date": "2026-04-01",
+    "is_active": true
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 1,
+  "fields": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "John@sky.com",
+    "role": "Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 1
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 2,
+  "fields": {
+    "first_name": "Sarah",
+    "last_name": "Jane",
+    "email": "Sarah@sky.com",
+    "role": "Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 1
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 3,
+  "fields": {
+    "first_name": "Mike",
+    "last_name": "Smith",
+    "email": "Mike@sky.com",
+    "role": "Senior Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 1
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 4,
+  "fields": {
+    "first_name": "Emma",
+    "last_name": "Brown",
+    "email": "Emma@sky.com",
+    "role": "Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 1
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 5,
+  "fields": {
+    "first_name": "James",
+    "last_name": "Taylor",
+    "email": "James@sky.com",
+    "role": "Lead Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 1
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 6,
+  "fields": {
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "Jane@sky.com",
+    "role": "DevOps Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 2
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 7,
+  "fields": {
+    "first_name": "Kane",
+    "last_name": "Smith",
+    "email": "Kane@sky.com",
+    "role": "Senior DevOps Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 2
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 8,
+  "fields": {
+    "first_name": "Adam",
+    "last_name": "Brown",
+    "email": "Adam@sky.com",
+    "role": "DevOps Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 2
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 9,
+  "fields": {
+    "first_name": "Corey",
+    "last_name": "Edwards",
+    "email": "Corey@sky.com",
+    "role": "DevOps Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 2
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 10,
+  "fields": {
+    "first_name": "Michael",
+    "last_name": "Jackson",
+    "email": "Michael@sky.com",
+    "role": "DevOps Engineer Lead",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 2
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 11,
+  "fields": {
+    "first_name": "Chris",
+    "last_name": "Lee",
+    "email": "Chris@sky.com",
+    "role": "Frontend Developer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 3
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 12,
+  "fields": {
+    "first_name": "Sophie",
+    "last_name": "White",
+    "email": "Sophie@sky.com",
+    "role": "Senior Frontend Developer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 3
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 13,
+  "fields": {
+    "first_name": "Jackie",
+    "last_name": "Robinson",
+    "email": "Jackie@sky.com",
+    "role": "Frontend Developer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 3
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 14,
+  "fields": {
+    "first_name": "Mia",
+    "last_name": "Khan",
+    "email": "Mia@sky.com",
+    "role": "UI Designer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 3
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 15,
+  "fields": {
+    "first_name": "Oliver",
+    "last_name": "Martin",
+    "email": "Oliver@sky.com",
+    "role": "Frontend Developer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 3
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 16,
+  "fields": {
+    "first_name": "Raheem",
+    "last_name": "Sterling",
+    "email": "Raheem@sky.com",
+    "role": "Frontend Developer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 3
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 17,
+  "fields": {
+    "first_name": "Gabriel",
+    "last_name": "Martinez",
+    "email": "Gabriel@sky.com",
+    "role": "Frontend Developer Lead",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 3
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 18,
+  "fields": {
+    "first_name": "Elivis",
+    "last_name": "Presley",
+    "email": "Elvis@sky.com",
+    "role": "Engineer",
+    "phone_number": "",
+    "date_joined": "2026-03-31",
+    "team": 1
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 19,
+  "fields": {
+    "first_name": "Anna",
+    "last_name": "White",
+    "email": "Anna@sky.com",
+    "role": "Brand Designer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 4
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 20,
+  "fields": {
+    "first_name": "Benjamin",
+    "last_name": "Clark",
+    "email": "Benjamin@sky.com",
+    "role": "Visual Designer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 4
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 21,
+  "fields": {
+    "first_name": "Peter",
+    "last_name": "Parker",
+    "email": "Peter@sky.com",
+    "role": "Senior Brand Designer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 4
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 22,
+  "fields": {
+    "first_name": "Dan",
+    "last_name": "Harris",
+    "email": "Dan@sky.com",
+    "role": "Brand Designer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 4
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 23,
+  "fields": {
+    "first_name": "Harry",
+    "last_name": "Osborne",
+    "email": "Harry@sky.com",
+    "role": "Lead Brand Designer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 4
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 24,
+  "fields": {
+    "first_name": "Frank",
+    "last_name": "Ocean",
+    "email": "Frank@sky.com",
+    "role": "UX Researcher",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 5
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 25,
+  "fields": {
+    "first_name": "Grace",
+    "last_name": "Taylor",
+    "email": "Grace@sky.com",
+    "role": "Senior UX Researcher",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 5
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 26,
+  "fields": {
+    "first_name": "Tory",
+    "last_name": "Lanez",
+    "email": "Tory@sky.com",
+    "role": "UX Researcher",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 5
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 27,
+  "fields": {
+    "first_name": "Chris",
+    "last_name": "Brown",
+    "email": "Chris@sky.com",
+    "role": "UX Researcher",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 5
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 28,
+  "fields": {
+    "first_name": "India",
+    "last_name": "Smith",
+    "email": "India@sky.com",
+    "role": "Lead UX Researcher",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 5
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 29,
+  "fields": {
+    "first_name": "Karen",
+    "last_name": "Baker",
+    "email": "Karen@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 6
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 30,
+  "fields": {
+    "first_name": "Liam",
+    "last_name": "Gallagher",
+    "email": "Liam@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 6
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 31,
+  "fields": {
+    "first_name": "Noah",
+    "last_name": "Smith",
+    "email": "Noah@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 6
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 32,
+  "fields": {
+    "first_name": "Miah",
+    "last_name": "Davies",
+    "email": "Miah@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 6
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 33,
+  "fields": {
+    "first_name": "Olivia",
+    "last_name": "Dean",
+    "email": "Olivia@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 6
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 34,
+  "fields": {
+    "first_name": "Maya",
+    "last_name": "Jama",
+    "email": "Maya@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 7
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 35,
+  "fields": {
+    "first_name": "Victor",
+    "last_name": "Perez",
+    "email": "Victor@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 7
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 36,
+  "fields": {
+    "first_name": "Wendy",
+    "last_name": "Ortiz",
+    "email": "Wendy@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 7
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 37,
+  "fields": {
+    "first_name": "Kai",
+    "last_name": "Cenat",
+    "email": "Kai@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 7
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 38,
+  "fields": {
+    "first_name": "Yasmin",
+    "last_name": "Ahmed",
+    "email": "Yasmin@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 7
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 39,
+  "fields": {
+    "first_name": "Omar",
+    "last_name": "Green",
+    "email": "Omar@sky.com",
+    "role": "Platform Engineer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 8
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 40,
+  "fields": {
+    "first_name": "Quentin",
+    "last_name": "Jackson",
+    "email": "Quentin@sky.com",
+    "role": "Senior Platform Engineer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 8
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 41,
+  "fields": {
+    "first_name": "Kendrick",
+    "last_name": "Lamar",
+    "email": "Kendick@sky.com",
+    "role": "Platform Engineer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 8
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 42,
+  "fields": {
+    "first_name": "Addison",
+    "last_name": "Rae",
+    "email": "Addison@skuy.com",
+    "role": "Platform Engineer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 8
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 43,
+  "fields": {
+    "first_name": "Steve",
+    "last_name": "Irwin",
+    "email": "Steve@sky.com",
+    "role": "Lead Platform Engineer",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 8
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 44,
+  "fields": {
+    "first_name": "Edward",
+    "last_name": "Brown",
+    "email": "Edward@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 9
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 45,
+  "fields": {
+    "first_name": "Faye",
+    "last_name": "Webster",
+    "email": "Faye@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 9
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 46,
+  "fields": {
+    "first_name": "George",
+    "last_name": "Martin",
+    "email": "George@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 9
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 47,
+  "fields": {
+    "first_name": "Hannah",
+    "last_name": "Montana",
+    "email": "Hannah@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 9
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 48,
+  "fields": {
+    "first_name": "Che",
+    "last_name": "Zhang",
+    "email": "Che@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 9
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 49,
+  "fields": {
+    "first_name": "Julia",
+    "last_name": "Fox",
+    "email": "Julia@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 10
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 50,
+  "fields": {
+    "first_name": "Kevin",
+    "last_name": "Brown",
+    "email": "Kevin@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 10
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 51,
+  "fields": {
+    "first_name": "Laura",
+    "last_name": "Clark",
+    "email": "Laura@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 10
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 52,
+  "fields": {
+    "first_name": "Nina",
+    "last_name": "Adams",
+    "email": "Nina@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 10
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 53,
+  "fields": {
+    "first_name": "Zinadine",
+    "last_name": "Zidane",
+    "email": "Zinadine@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 10
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 54,
+  "fields": {
+    "first_name": "Odel",
+    "last_name": "Beckham",
+    "email": "Odel@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 11
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 55,
+  "fields": {
+    "first_name": "Penny",
+    "last_name": "Green",
+    "email": "Penny@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 11
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 56,
+  "fields": {
+    "first_name": "Ryan",
+    "last_name": "Trehan",
+    "email": "Ryan@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 11
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 57,
+  "fields": {
+    "first_name": "Sarah",
+    "last_name": "Irwin",
+    "email": "Sarah@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 11
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 58,
+  "fields": {
+    "first_name": "Tommy",
+    "last_name": "Johnso",
+    "email": "Tom@sky.com",
+    "role": "",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 11
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 59,
+  "fields": {
+    "first_name": "Umar",
+    "last_name": "King",
+    "email": "Umar@sky.com",
+    "role": "Product Strategist",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 12
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 60,
+  "fields": {
+    "first_name": "Vincent",
+    "last_name": "Lee",
+    "email": "Vincent@sky.com",
+    "role": "Senior Product Strategist",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 12
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 61,
+  "fields": {
+    "first_name": "Xavier",
+    "last_name": "Hernandez",
+    "email": "Xavier@sky.com",
+    "role": "Product Strategist",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 12
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 62,
+  "fields": {
+    "first_name": "Nara",
+    "last_name": "Smith",
+    "email": "Nara@sky.com",
+    "role": "Product Strategist",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 12
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 63,
+  "fields": {
+    "first_name": "Abdul",
+    "last_name": "Aziz",
+    "email": "Abdul@sky.com",
+    "role": "Lead Product Strategist",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 12
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 64,
+  "fields": {
+    "first_name": "Zoe",
+    "last_name": "Paker",
+    "email": "Zoe@sky.com",
+    "role": "Mobile Product Manager",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 13
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 65,
+  "fields": {
+    "first_name": "Quinn",
+    "last_name": "Adams",
+    "email": "Quinn@sky.com",
+    "role": "Senior Mobile PM",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 13
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 66,
+  "fields": {
+    "first_name": "Bella",
+    "last_name": "Hadid",
+    "email": "Bella@sky.com",
+    "role": "Mobile Product Manager",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 13
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 67,
+  "fields": {
+    "first_name": "Chrisie",
+    "last_name": "Evans",
+    "email": "Chrisie@sky.com",
+    "role": "Mobile Product Manager",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 13
+  }
+},
+{
+  "model": "teams_feature.teammember",
+  "pk": 68,
+  "fields": {
+    "first_name": "Daisey",
+    "last_name": "Turner",
+    "email": "Daisey@sky.com",
+    "role": "Lead Mobile PM",
+    "phone_number": "",
+    "date_joined": "2026-04-01",
+    "team": 13
+  }
+},
+{
+  "model": "teams_feature.upstreamdependency",
+  "pk": 1,
+  "fields": {
+    "team": 2,
+    "upstream_team": 1,
+    "description": "DevOps Core depends on Platform Ops for infrastructure"
+  }
+},
+{
+  "model": "teams_feature.upstreamdependency",
+  "pk": 2,
+  "fields": {
+    "team": 7,
+    "upstream_team": 2,
+    "description": "Backend Services depends on DevOps Core for CI/CD pipelines"
+  }
+},
+{
+  "model": "teams_feature.upstreamdependency",
+  "pk": 3,
+  "fields": {
+    "team": 8,
+    "upstream_team": 1,
+    "description": "Platform Engineering depends on Platform Ops for cloud resources"
+  }
+},
+{
+  "model": "teams_feature.downstreamdependency",
+  "pk": 1,
+  "fields": {
+    "team": 1,
+    "downstream_team": 2,
+    "description": "Platform Ops supports DevOps Core with infrastructure"
+  }
+},
+{
+  "model": "teams_feature.downstreamdependency",
+  "pk": 2,
+  "fields": {
+    "team": 2,
+    "downstream_team": 7,
+    "description": "DevOps Core supports Backend Services with deployment pipelines"
+  }
+}
+]

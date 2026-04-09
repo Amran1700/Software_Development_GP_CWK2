@@ -1,7 +1,7 @@
-echo "venv/
-__pycache__/
+venv/ 
+__pycache__/ 
 *.pyc
-*.pyo
-db.sqlite3
+*.pyo 
+*.pyd 
+db.sqlite3 
 .DS_Store
-*.cpython-*.pyc" > .gitignore
