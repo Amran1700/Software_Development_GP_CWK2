@@ -1,4 +1,5 @@
 asgiref==3.11.1
+<<<<<<< HEAD
 charset-normalizer==3.4.7
 contourpy==1.3.3
 cycler==0.12.1
@@ -19,3 +20,12 @@ six==1.17.0
 sqlparse==0.5.5
 
 
+=======
+charset-normalizer==3.4.6
+Django==6.0.3
+et_xmlfile==2.0.0
+openpyxl==3.1.5
+pillow==12.2.0
+reportlab==4.4.10
+sqlparse==0.5.5
+>>>>>>> origin/main

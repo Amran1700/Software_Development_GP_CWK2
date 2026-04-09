@@ -1,0 +1,47 @@
+{% extends 'global.html' %}
+
+{% block title %}Inbox - Sky Engineering{% endblock %}
+{% block nav_messages %}active{% endblock %}
+
+{% block content %}
+<div class="messages-page-wrapper">
+    <div class="sidebar-messages">
+        {% include 'messages_feature/components/sidebar_messages.html' %}
+    </div>
+
+    <div class="messages-content">
+        <h1>Inbox</h1>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in messages %}
+                <tr class="{% if not message.read_status %}table-info{% endif %}">
+                    <td>{{ message.sender.username }}</td>
+                    <td>
+                        <a href="{% url 'message_detail' message.id %}">{{ message.subject|default:"(No Subject)" }}</a>
+                    </td>
+                    <td>{{ message.timestamp|date:"M d, Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}" class="btn btn-sm btn-primary">Reply</a>
+                        <a href="{% url 'compose' %}?subject=Fwd: {{ message.subject }}&body={{ message.body|urlencode }}" class="btn btn-sm btn-warning">Forward</a>
+                        <a href="{% url 'delete_message' message.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this message?');">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No messages found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

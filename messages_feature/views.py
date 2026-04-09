@@ -14,12 +14,16 @@ def inbox(request):
     # - current user is a receiver
     # - message status is 'sent'
     messages = request.user.received_messages.filter(status='sent')
+    
+    inbox_count = messages.count()
+    drafts_count = request.user.sent_messages.filter(status='draft').count()
 
     # Render template and pass messages to HTML
-    return render(request, 'inbox.html', {
-        'messages': messages
-    })
-
+    return render(request, 'messages_feature/inbox.html', {
+        'messages': messages,
+        'inbox_count': inbox_count,
+        'drafts_count': drafts_count
+    })  
 
 # SENT VIEW
 @login_required
@@ -29,9 +33,13 @@ def sent(request):
     """
 
     messages = request.user.sent_messages.filter(status='sent')
+    inbox_count = request.user.received_messages.filter(status='sent').count()
+    drafts_count = request.user.sent_messages.filter(status='draft').count()
 
-    return render(request, 'messages_app/sent.html', {
-        'messages': messages
+    return render(request, 'messages_feature/sent.html', {
+        'messages': messages,
+        'inbox_count': inbox_count,
+        'drafts_count': drafts_count
     })
 
 # DRAFTS VIEW
@@ -42,9 +50,12 @@ def drafts(request):
     """
 
     messages = request.user.sent_messages.filter(status='draft')
-
-    return render(request, 'messages_app/drafts.html', {
-        'messages': messages
+    inbox_count = request.user.received_messages.filter(status='sent').count()
+    drafts_count = request.user.sent_messages.filter(status='draft').count()
+    return render(request, 'messages_feature/drafts.html', {
+        'messages': messages,
+        'inbox_count': inbox_count,
+        'drafts_count': drafts_count
     })
 
 
@@ -57,8 +68,12 @@ def deleted(request):
 
     messages = request.user.received_messages.filter(status='deleted')
 
-    return render(request, 'messages_app/deleted.html', {
-        'messages': messages
+    inbox_count = request.user.received_messages.filter(status='sent').count()
+    drafts_count = request.user.sent_messages.filter(status='draft').count()
+    return render(request, 'messages_feature/deleted.html', {
+        'messages': messages,
+        'inbox_count': inbox_count,
+        'drafts_count': drafts_count
     })
 
 
@@ -67,26 +82,32 @@ def deleted(request):
 @login_required
 def message_detail(request, message_id):
     """
-    Shows a single message in detail
+    Shows a single message in detail.
     """
 
     # Get message or return 404 if it doesn't exist
     message = get_object_or_404(Message, id=message_id)
 
-    # SECURITY CHECK:
-    # Only allow sender or receivers to view message
+    # SECURITY CHECK: only sender or receivers can view message
     if request.user != message.sender and request.user not in message.receiver.all():
         return redirect('inbox')
 
-    # If user is a receiver → mark as read
+    # --- MARK AS READ ---
+    # If the current user is a recipient and hasn't read the message yet
     if request.user in message.receiver.all():
         message.read_status = True
         message.save()
 
-    return render(request, 'messages_app/message_detail.html', {
-        'message': message
-    })
+    # Prepare inbox/draft counts for template
+    inbox_count = request.user.received_messages.filter(status='sent').count()
+    drafts_count = request.user.sent_messages.filter(status='draft').count()
 
+    # Render the message detail template
+    return render(request, 'messages_feature/message_detail.html', {
+        'message': message,
+        'inbox_count': inbox_count,
+        'drafts_count': drafts_count
+    })
 
 
 # DELETE MESSAGE VIEW
@@ -105,69 +126,84 @@ def delete_message(request, message_id):
 
     return redirect('inbox')
 
-@login_required  # Ensures only authenticated users can access this view
+
+
+@login_required
 def compose(request):
-    
-    #this will get all of the users except the current user, so you can't send a message to yourself??
+    """
+    Handles composing new messages, replying, forwarding, and saving drafts.
+
+    - GET request: displays the compose form.
+    - POST request: validates and saves message as 'sent' or 'draft'.
+    - Ensures only logged-in users can send messages.
+    """
+
+    # Exclude the current user from recipients (you cannot send to yourself)
     users = User.objects.exclude(id=request.user.id)
 
-    # Retrieve GET parameters if the compose page was opened via Reply/Forward
-    # Example: /compose/?to=3&subject=Re: Hello
-    initial_receiver = request.GET.get('to')        # Pre-select a single user ID in the dropdown
-    initial_subject = request.GET.get('subject', '')  # Pre-fill the subject line, defaults to empty string
+    # Retrieve GET parameters for reply/forward pre-filling
+    initial_receiver = request.GET.get('to')        # e.g., /compose/?to=3
+    initial_subject = request.GET.get('subject', '')  # e.g., /compose/?subject=Re: Hello
 
-    # --- POST REQUEST HANDLING ---
     if request.method == 'POST':
-        # Get list of selected recipients from the form submission (can be multiple for Reply All)
+        # Get list of selected recipients from form (can be multiple)
         recipient_ids = request.POST.getlist('recipient')
 
-        subject = request.POST.get('subject', '')
-        body = request.POST.get('body', '')
+        # Strip whitespace from subject and body
+        subject = request.POST.get('subject', '').strip()
+        body = request.POST.get('body', '').strip()
+        status = request.POST.get('status', 'sent')  # Default to 'sent' if not provided
 
-        status = request.POST.get('status', 'sent')
-
-        # Basic validation: ensure at least one recipient is selected and body is not empty
-        if recipient_ids and body:
-            
-            message = Message.objects.create(
-                sender=request.user,  
-                subject=subject,      
-                body=body,            
-                status=status         
-            )
-
-            # Add receivers using ManyToMany relationship (must be done after creation)
-            message.receiver.set(recipient_ids)
-
-            # Save message to the database
-            message.save()
-
-            # Redirect depending on message status
-            if status == 'draft':
-                return redirect('drafts')  # Send user to their drafts folder
-            return redirect('sent')        # Otherwise, go to Sent messages
-
-        else:
-            # Validation failed → missing recipient or empty body
+        # --- VALIDATION ---
+        # Only enforce recipient/body requirement if message is being SENT
+        if status == 'sent' and (not recipient_ids or not body):
+            # Prepare error message
             error = "Recipient and message body are required"
+
+            # Pass context back to template so user input is not lost
             context = {
-                'error': error,  
-                'users': users  
+                'error': error,
+                'users': users,
+                'subject': subject,  # preserves stripped subject
+                'body': request.POST.get('body', ''),  # preserve original input, even if whitespace
+                'recipient_ids': [int(r) for r in recipient_ids] if recipient_ids else []
             }
+
+            # Re-render compose page with error message
             return render(request, 'messages_feature/compose.html', context)
 
-    # --- GET REQUEST HANDLING ---
+        # --- SAVE MESSAGE ---
+        # Create message instance
+        message = Message.objects.create(
+            sender=request.user,
+            subject=subject,
+            body=body,
+            status=status
+        )
+
+        # Set recipients using ManyToMany relationship
+        recipients = User.objects.filter(id__in=recipient_ids)
+        message.receiver.set(recipients)
+
+        # Save message to database
+        message.save()
+
+        # --- REDIRECT BASED ON STATUS ---
+        if status == 'draft':
+            return redirect('drafts')  # Send to drafts folder
+        return redirect('sent')        # Otherwise, go to Sent messages
+
     else:
-        # GET request → show the form for composing a new message
-        # This can also include pre-filled fields if accessed via Reply/Forward links
-        context = {'users': users}  # Include all users for the dropdown
+        # --- GET REQUEST ---
+        # Prepare context for initial render
+        context = {'users': users}
 
-        # Pre-fill recipient if "to" parameter exists
+        # Pre-fill recipient(s) if "to" parameter exists (for reply/forward)
         if initial_receiver:
-            context['initial_receiver'] = int(initial_receiver)
+            context['initial_receiver'] = [int(i) for i in initial_receiver.split(',')]
 
-        # Pre-fill subject if provided in GET parameters
+        # Pre-fill subject if provided
         context['initial_subject'] = initial_subject
 
-        # Render the compose template with the context
+        # Render compose template
         return render(request, 'messages_feature/compose.html', context)
