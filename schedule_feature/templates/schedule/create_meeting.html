@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+  * { font-family: 'Roboto', sans-serif; }
+  :root { --brand-gradient: linear-gradient(135deg, #4277D6, #6C71CF, #6F50A0); --brand-mid: #6C71CF; }
+  .create-wrapper { max-width: 660px; margin: 30px auto; padding: 0 20px; }
+  .page-title { font-weight: 700; font-size: 1.4rem; color: #222; margin-bottom: 4px; }
+  .page-sub { color: #888; font-size: 0.88rem; margin-bottom: 24px; }
+  .form-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 16px; }
+  .form-card .card-title { font-weight: 700; font-size: 0.95rem; color: #222; margin-bottom: 2px; }
+  .form-card .card-sub { color: #999; font-size: 0.82rem; margin-bottom: 18px; }
+  .form-label { font-weight: 500; font-size: 0.88rem; color: #444; margin-bottom: 5px; }
+  .form-control { border-radius: 8px; border: 1px solid #ddd; padding: 9px 12px; font-size: 0.9rem; width: 100%; }
+  .form-control:focus { border-color: #6C71CF; outline: none; box-shadow: 0 0 0 3px rgba(108,113,207,0.15); }
+  .platform-options { display: flex; gap: 12px; flex-wrap: wrap; }
+  .platform-label { border: 2px solid #e0e0e0; border-radius: 10px; padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; color: #444; }
+  .platform-label:hover { border-color: #6C71CF; }
+  .platform-label input { accent-color: #6C71CF; }
+  .attendee-list { border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; max-height: 160px; overflow-y: auto; }
+  .attendee-item { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 6px; cursor: pointer; }
+  .attendee-item:hover { background: #f8f4ff; }
+  .attendee-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #4277D6, #6F50A0); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+  .attendee-name { font-size: 0.88rem; font-weight: 500; color: #333; }
+  .section-icon { width: 32px; height: 32px; border-radius: 8px; background: #f0f4ff; display: flex; align-items: center; justify-content: center; color: #6C71CF; font-size: 1rem; }
+  .btn-cancel { border: 1px solid #ddd; background: white; color: #555; padding: 10px 24px; border-radius: 8px; font-weight: 500; text-decoration: none; font-size: 0.9rem; }
+  .btn-cancel:hover { border-color: #aaa; color: #333; }
+  .btn-submit { background: linear-gradient(135deg, #4277D6, #6C71CF, #6F50A0); color: white; border: none; padding: 10px 28px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+  .btn-submit:hover { opacity: 0.9; }
+</style>
+
+<div class="create-wrapper">
+  <div class="page-title"><i class="bi bi-calendar-plus me-2"></i>Create New Meeting</div>
+  <div class="page-sub">Schedule a meeting and invite participants from your organisation.</div>
+
+  <form method="POST" action="{% url 'schedule:create_meeting' %}">
+    {% csrf_token %}
+
+    <!-- Meeting Details -->
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-pencil-square"></i></div>
+        <div>
+          <div class="card-title">Meeting Details</div>
+          <div class="card-sub">Basic information about your meeting</div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Meeting Title *</label>
+        {{ form.title }}
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-label">Date *</label>
+          {{ form.date }}
+        </div>
+        <div class="col">
+          <label class="form-label">Time *</label>
+          {{ form.time }}
+        </div>
+      </div>
+      <div class="mb-0">
+        <label class="form-label">Duration</label>
+        {{ form.duration_minutes }}
+      </div>
+    </div>
+
+    <!-- Platform -->
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-camera-video"></i></div>
+        <div>
+          <div class="card-title">Meeting Platform</div>
+          <div class="card-sub">Choose your preferred video conferencing tool</div>
+        </div>
+      </div>
+      <div class="platform-options">
+        <label class="platform-label">
+          <input type="radio" name="platform" value="zoom"> 🎥 Zoom
+        </label>
+        <label class="platform-label">
+          <input type="radio" name="platform" value="teams"> 💼 MS Teams
+        </label>
+        <label class="platform-label">
+          <input type="radio" name="platform" value="meet"> 📹 Google Meet
+        </label>
+      </div>
+    </div>
+
+    <!-- Attendees -->
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-people"></i></div>
+        <div>
+          <div class="card-title">Attendees</div>
+          <div class="card-sub">Invite individuals to your meeting</div>
+        </div>
+      </div>
+      <div class="attendee-list">
+        {% for user in users %}
+        <label class="attendee-item">
+          <input type="checkbox" name="attendees" value="{{ user.id }}">
+          <div class="attendee-avatar">{{ user.username|first|upper }}</div>
+          <span class="attendee-name">{{ user.username }} – {{ user.first_name }} {{ user.last_name }}</span>
+        </label>
+        {% empty %}
+        <p class="text-muted mb-0" style="font-size:0.85rem;">No other users found</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Recurring -->
+    <div class="form-card">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <div class="section-icon"><i class="bi bi-arrow-repeat"></i></div>
+          <div>
+            <div class="card-title mb-0">Recurring Meeting</div>
+            <div class="card-sub mb-0">Set up a repeating schedule</div>
+          </div>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" name="is_recurring" style="width:2.5em; height:1.4em;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-card">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="section-icon"><i class="bi bi-text-left"></i></div>
+        <div>
+          <div class="card-title mb-0">Description</div>
+          <div class="card-sub mb-0">Add agenda or notes for attendees</div>
+        </div>
+      </div>
+      {{ form.description }}
+      <small class="text-muted mt-1 d-block">Supports markdown formatting</small>
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Calendar invites will be sent automatically</small>
+      <div class="d-flex gap-2">
+        <a href="{% url 'schedule:calendar_month' %}" class="btn-cancel">Cancel</a>
+        <button type="submit" class="btn-submit"><i class="bi bi-plus-lg me-1"></i>Create Meeting</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+{% endblock %}
