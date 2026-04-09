@@ -27,8 +27,9 @@ urlpatterns = [
     path("",include("organisation_feature.urls")),
     path("reports/", include("reports_feature.urls")),
     path("schedule/", include("schedule_feature.urls")),
+    path('teams/', include('teams_feature.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.BASE_DIR / "static")
- 
+    
