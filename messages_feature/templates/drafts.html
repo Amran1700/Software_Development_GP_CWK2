@@ -1,0 +1,48 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drafts - Sky Engineering</title>
+    <link rel="stylesheet" href="{% static 'messages.css' %}" />
+</head>
+<body>
+<div class="main-container">
+    {% include 'components/sidebar_messages.html' %}
+
+    <div class="inbox-content">
+        <h1>Drafts</h1>
+        <table class="inbox-table">
+            <thead>
+                <tr>
+                    <th>To</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in messages %}
+                <tr>
+                    <td>
+                        {% for user in message.receiver.all %}
+                            {{ user.username }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ message.subject }}</td>
+                    <td>{{ message.timestamp|date:"M d, Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'compose' %}?to={% for user in message.receiver.all %}{{ user.id }}{% if not forloop.last %},{% endif %}{% endfor %}&subject={{ message.subject }}">Edit</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">No draft messages.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'inbox' %}" class="btn btn-secondary mt-3">Back to Inbox</a>
+    </div>
+</div>
+</body>
+</html>

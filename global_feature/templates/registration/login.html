@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Log in · Sky Engineering{% endblock %}
+
+{% block content %}
+<div class="mx-auto" style="max-width: 420px;">
+  <h1 class="h4 mb-4">Log in</h1>
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+      {{ form.username }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+      {{ form.password }}
+    </div>
+    {% if next %}
+      <input type="hidden" name="next" value="{{ next }}" />
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Log in</button>
+  </form>
+  <p class="small text-muted mt-3">
+    No account? Create one in <a href="{% url 'admin:index' %}">Admin</a> (staff) or ask your team.
+  </p>
+</div>
+
+<style>
+  #id_username, #id_password { display: block; width: 100%; padding: .375rem .75rem; border: 1px solid #ced4da; border-radius: .375rem; }
+</style>
+{% endblock %}

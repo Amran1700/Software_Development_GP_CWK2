@@ -1,0 +1,82 @@
+/* SIDEBAR */
+.message-sidebar {
+    width: 220px;
+    background: #f8f8f8;
+    height: calc(100vh - 60px); /* full height minus top nav */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* COMPOSE BUTTON */
+.compose-btn {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #6F50A0 0%, #6C71CF 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.compose-btn:hover {
+    background: linear-gradient(135deg, #5d4287 0%, #5a5fb8 100%);
+}
+
+/* LINKS */
+.side-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+/* HOVER */
+.side-link:hover {
+    background: #eee;
+    font-weight: 500;
+}
+
+/* ACTIVE */
+.side-link.active {
+    background: #6F50A0;
+    color: white;
+    font-weight: 600;
+}
+
+/* BADGES */
+.side-link .badge {
+    background: #e0d4f7;
+    color: #6F50A0;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 12px;
+}
+
+/* ICONS */
+.side-link i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* For small text on badge if needed */
+.side-link .badge {
+    display: inline-block;
+    line-height: 1;
+    text-align: center;
+}
+
+/* Optional: add subtle shadow for sidebar */
+.message-sidebar {
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+}
