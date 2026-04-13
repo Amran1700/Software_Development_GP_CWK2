@@ -1,21 +1,26 @@
 {% extends 'messages_feature/messages_layout.html' %}
+
 {% block title %}Deleted{% endblock %}
-{% block nav_messages %}active{% endblock %}
 
 {% block messages_content %}
 
 <div class="card border-0 shadow-sm main-card">
+
     <div class="card-body p-4">
 
-        <h3 style="color:#4277D6;" class="fw-bold mb-3">Deleted Messages</h3>
+        <h3 class="fw-bold mb-3" style="color:#4277D6;">Deleted Messages</h3>
 
         {% for message in messages %}
+
         <div class="card border-0 shadow-sm mb-3">
             <div class="card-body">
 
                 <h5>{{ message.subject|default:"(No Subject)" }}</h5>
 
-                <p><strong>From:</strong> {{ message.sender.username }}</p>
+                <p>
+                    <strong>From:</strong>
+                    {{ message.sender.username }}
+                </p>
 
                 <small class="text-muted">
                     {{ message.timestamp|date:"M d, Y H:i" }}
@@ -30,8 +35,9 @@
 
             </div>
         </div>
+
         {% empty %}
-            <p class="text-muted">No deleted messages.</p>
+        <p class="text-muted">No deleted messages.</p>
         {% endfor %}
 
     </div>

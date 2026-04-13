@@ -1,20 +1,22 @@
 {% extends 'messages_feature/messages_layout.html' %}
 
 {% block title %}Message Detail{% endblock %}
-{% block nav_messages %}active{% endblock %}
 
 {% block messages_content %}
 
 <div class="card border-0 shadow-sm main-card">
+
     <div class="card-body p-4">
 
-        <!-- SUBJECT (FIXED SIZE) -->
-        <h4 class="fw-bold mb-3" style="color:#2c3e50;">
+        <!-- subject -->
+        <h4 class="fw-bold mb-3">
             {{ message.subject|default:"(No Subject)" }}
         </h4>
 
+        <!-- sender -->
         <p><strong>From:</strong> {{ message.sender.username }}</p>
 
+        <!-- receivers -->
         <p>
             <strong>To:</strong>
             {% for user in message.receiver.all %}
@@ -24,11 +26,12 @@
 
         <hr>
 
+        <!-- message body -->
         <p style="white-space: pre-line;">
             {{ message.body|linebreaks }}
         </p>
 
-        <!-- QUICK ACTIONS -->
+        <!--  quick actions -->
         <div class="d-flex gap-2 mt-3">
 
             <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"

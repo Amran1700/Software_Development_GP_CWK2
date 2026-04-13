@@ -1,46 +1,56 @@
 {% extends 'messages_feature/messages_layout.html' %}
+
 {% block title %}Drafts{% endblock %}
-{% block nav_messages %}active{% endblock %}
 
 {% block messages_content %}
 
 <div class="card border-0 shadow-sm main-card">
+
     <div class="card-body p-4">
 
-        <h3 style="color:#4277D6;" class="fw-bold mb-3">Drafts</h3>
+        <h3 class="fw-bold mb-3" style="color:#4277D6;">Draft Messages</h3>
 
-        {% for draft in messages %}
+        {% for message in messages %}
+
         <div class="card border-0 shadow-sm mb-3">
             <div class="card-body">
 
-                <h5>{{ draft.subject|default:"(No Subject)" }}</h5>
+                <!-- subject -->
+                <h5>{{ message.subject|default:"(No Subject)" }}</h5>
 
+                <!-- recipients -->
                 <p>
                     <strong>To:</strong>
-                    {% for user in draft.receiver.all %}
+                    {% for user in message.receiver.all %}
                         {{ user.username }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </p>
 
+                <!-- timestamp -->
                 <small class="text-muted">
-                    {{ draft.timestamp|date:"M d, Y H:i" }}
+                    {{ message.timestamp|date:"M d, Y H:i" }}
                 </small>
 
-                <div class="mt-2">
-                    <a href="{% url 'compose' %}?draft_id={{ draft.id }}"
-                       class="btn btn-sm btn-outline-primary">
+                <!-- quick actions -->
+                <div class="mt-2 d-flex gap-2">
+                    <!-- edit-->
+                    <a href="{% url 'edit_draft' message.id %}"
+                       class="btn btn-sm btn-primary">
                         Edit
                     </a>
-                    <a href="{% url 'delete_message' draft.id %}"
-                       class="btn btn-sm btn-outline-danger">
-                        Delete
+
+                    <!-- view -->
+                    <a href="{% url 'message_detail' message.id %}"
+                       class="btn btn-sm btn-outline-primary">
+                        View
                     </a>
                 </div>
 
             </div>
         </div>
+
         {% empty %}
-            <p class="text-muted">No drafts saved.</p>
+        <p class="text-muted">No drafts available.</p>
         {% endfor %}
 
     </div>

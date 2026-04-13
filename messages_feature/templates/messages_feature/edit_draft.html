@@ -1,0 +1,73 @@
+{% extends 'messages_feature/messages_layout.html' %}
+
+{% block title %}Edit Draft{% endblock %}
+
+{% block messages_content %}
+
+<div class="card border-0 shadow-sm main-card">
+
+    <div class="card-body p-4">
+
+        <h3 class="fw-bold mb-4" style="color:#4277D6;">Edit Draft</h3>
+
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- recipients -->
+            <div class="mb-3">
+
+                <label class="fw-bold">Recipients</label>
+
+                <div class="card p-3" style="max-height:200px; overflow-y:auto;">
+
+                    {% for user in users %}
+                    <div class="form-check">
+
+                        <input type="checkbox"
+                               name="recipient"
+                               value="{{ user.id }}"
+                               class="form-check-input"
+                               id="user{{ user.id }}">
+
+                        <label class="form-check-label" for="user{{ user.id }}">
+                            {{ user.username }}
+                        </label>
+
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <!-- subject -->
+            <input type="text"
+                   name="subject"
+                   value="{{ message.subject }}"
+                   class="form-control mb-3">
+
+            <!-- body -->
+            <textarea name="body"
+                      rows="6"
+                      class="form-control mb-3">{{ message.body }}</textarea>
+
+            <!-- quick actions -->
+            <button type="submit" name="status" value="sent" class="btn btn-primary">
+                Send
+            </button>
+
+            <button type="submit" name="status" value="draft" class="btn btn-secondary">
+                Save Draft
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,53 +1,60 @@
 {% extends 'global.html' %}
-
 {% block content %}
 
 <style>
+ /* holds the main layout for the page*/
 .page-wrapper {
     display: flex;
+    /* Makes sidebar & content stay next to each other */
     gap: 20px;
     min-height: calc(100vh - 80px);
     align-items: stretch;
+    /* insures that the sidebar & content are equal in length */
 }
 
-/* SIDEBAR */
+/* holds the css specific to the sidebar */
+
 .sidebar-container {
     width: 240px;
     display: flex;
     align-self: stretch;
+    /* makes sidebar fill the full length */
 }
 
-/* make sidebar card fill full height */
+/* this insures sidebar card stretches fully */
 .sidebar-container > * {
     flex: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
+    /* Forces sidebar inner card to match full height */
 }
 
-/* CONTENT AREA */
+/* the following contains the css for the main content area  */
 .messages-content-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* MAIN CONTENT CARD */
 .main-card {
     flex: 1;
     border-radius: 12px;
+     /* makes the corners of the main content area card/container rounded */
 }
 
-/* SIDEBAR ITEMS */
+
 .list-group-item-action {
     transition: all 0.2s ease;
 }
 
+/* Hover effect for sidebar links */
 .list-group-item-action:hover {
     background-color: #eef3fb !important;
     transform: translateX(4px);
 }
 
+/* Active page highlight */
 .list-group-item.active {
     background: linear-gradient(to right, #4277D6, #6F50A0) !important;
     color: white !important;
@@ -60,7 +67,7 @@
     font-weight: 500;
 }
 
-/* BADGES */
+
 .badge {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -69,17 +76,18 @@
 
 </style>
 
+
 <div class="container-fluid">
 
     <div class="page-wrapper">
-
-        <!-- SIDEBAR -->
+        
         <div class="sidebar-container">
             {% include 'messages_feature/components/sidebar_messages.html' %}
+   
         </div>
 
-        <!-- CONTENT -->
-        <div class="messages-content-wrapper">
+        
+        <div class="messages-content-wrapper"> 
             {% block messages_content %}{% endblock %}
         </div>
 
