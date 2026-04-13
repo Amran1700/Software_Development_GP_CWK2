@@ -1,17 +1,16 @@
 {% extends 'messages_feature/messages_layout.html' %}
 
-{% block title %}Compose Message - Sky Engineering{% endblock %}
-{% block nav_messages %}active{% endblock %}
+{% block title %}Compose{% endblock %}
 
 {% block messages_content %}
 
 <div class="card border-0 shadow-sm main-card">
+
     <div class="card-body p-4">
 
-        <h3 class="fw-bold mb-4" style="color:#4277D6;">
-            Compose Message
-        </h3>
+        <h3 class="fw-bold mb-4" style="color:#4277D6;">Compose Message</h3>
 
+        <!-- error message -->
         {% if error %}
         <div class="alert alert-danger">
             {{ error }}
@@ -21,91 +20,49 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- RECIPIENTS -->
-            <div class="mb-3">
+            <!-- Recipients -->
+            <label class="fw-bold mb-2">Recipients</label>
 
-                <label class="fw-bold d-flex align-items-center gap-2">
-                    Recipients <span class="text-danger">*</span>
-                    <small class="text-muted fw-normal">
-                        (Select one or more recipients)
-                    </small>
-                </label>
+            <div class="card p-3 mb-3" style="max-height: 200px; overflow-y:auto;">
 
-                <div class="card p-3" style="max-height: 220px; overflow-y: auto;">
+                {% for user in users %}
+                <div class="form-check">
 
-                    {% for user in users %}
-                    <div class="form-check">
+                    <input type="checkbox"
+                           name="recipient"
+                           value="{{ user.id }}"
+                           class="form-check-input"
+                           id="user{{ user.id }}">
 
-                        <input class="form-check-input"
-                               type="checkbox"
-                               name="recipient"
-                               value="{{ user.id }}"
-                               id="user{{ user.id }}"
-                               {% if user.id in recipient_ids %}checked{% endif %}>
-
-                        <label class="form-check-label" for="user{{ user.id }}">
-                            {{ user.username }}
-                        </label>
-
-                    </div>
-                    {% endfor %}
+                    <label class="form-check-label" for="user{{ user.id }}">
+                        {{ user.username }}
+                    </label>
 
                 </div>
+                {% endfor %}
 
             </div>
 
-            <!-- SUBJECT -->
-            <div class="mb-3">
+            <!-- subject -->
+            <input type="text"
+                   name="subject"
+                   class="form-control mb-3"
+                   placeholder="Subject (optional)">
 
-                <label class="fw-bold">
-                    Subject
-                </label>
+            <!-- body-->
+            <textarea name="body"
+                      class="form-control mb-3"
+                      rows="6"
+                      placeholder="Write your message..."></textarea>
 
-                <input type="text"
-                       name="subject"
-                       value="{{ initial_subject|default:'' }}"
-                       class="form-control"
-                       placeholder="Optional subject...">
+            <!-- quick action buttons -->
+            <button type="submit" name="status" value="sent" class="btn btn-primary">
+                Send
+            </button>
 
-            </div>
-
-            <!-- MESSAGE -->
-            <div class="mb-3">
-
-                <label class="fw-bold">
-                    Message <span class="text-danger">*</span>
-                </label>
-
-                <textarea name="body"
-                          rows="6"
-                          class="form-control"
-                          placeholder="Write your message...">{{ body|default:'' }}</textarea>
-
-            </div>
-
-            <!-- BUTTONS -->
-            <div class="card p-3 border-0 shadow-sm"
-                 style="background:#f8f9fa; border-radius:10px;">
-
-                <div class="d-flex gap-2">
-
-                    <button type="submit"
-                            name="status"
-                            value="sent"
-                            class="btn btn-primary">
-                        Send
-                    </button>
-
-                    <button type="submit"
-                            name="status"
-                            value="draft"
-                            class="btn btn-outline-secondary">
-                        Save Draft
-                    </button>
-
-                </div>
-
-            </div>
+            <button type="submit" name="status" value="draft" class="btn btn-outline-secondary">
+                Save Draft
+            </button>
 
         </form>
 

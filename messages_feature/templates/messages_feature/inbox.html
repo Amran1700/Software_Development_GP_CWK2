@@ -1,14 +1,12 @@
 {% extends 'messages_feature/messages_layout.html' %}
-
 {% block title %}Inbox - Sky Engineering{% endblock %}
 {% block nav_messages %}active{% endblock %}
-
 {% block messages_content %}
 
 <div class="card border-0 shadow-sm main-card">
     <div class="card-body p-0">
 
-        <!-- HEADER -->
+        <!-- header-->
         <div class="p-4 border-bottom">
             <h3 class="fw-bold mb-0" style="color:#4277D6;">
                 Inbox
@@ -18,19 +16,23 @@
         {% if messages %}
 
         <div class="gmail-list">
+            <!-- Container for all message rows (Gmail-style list) -->
 
             {% for message in messages %}
+            <!-- Loop through each message in inbox -->
 
             <a href="{% url 'message_detail' message.id %}"
                class="gmail-row d-flex align-items-stretch text-decoration-none
                       {% if not message.read_status %}unread{% endif %}">
 
-                <!-- LEFT STATUS BAR -->
-                <div class="status-bar {% if message.read_status %}read{% else %}unread{% endif %}"></div>
+                <div class="status-bar {% if message.read_status %}read{% else %}unread{% endif %}">
+                </div>
+                <!-- Visual indicator:
+                     - Blue = unread
+                     - Grey = read -->
 
-                <!-- CONTENT -->
+                <!-- message content -->
                 <div class="flex-grow-1 px-4 py-3 overflow-hidden">
-
                     <div class="d-flex justify-content-between">
 
                         <div class="sender">
@@ -38,15 +40,18 @@
                         </div>
 
                         <div class="text-muted small">
+                            <!-- Time that the message was sent -->
                             {{ message.timestamp|date:"M d H:i" }}
                         </div>
 
                     </div>
 
+                    <!-- subject -->
                     <div class="subject {% if not message.read_status %}fw-bold{% endif %}">
                         {{ message.subject|default:"(No Subject)" }}
                     </div>
 
+                    <!-- preview of message body -->
                     <div class="preview text-muted small">
                         {{ message.body|truncatechars:100 }}
                     </div>
@@ -70,34 +75,38 @@
     </div>
 </div>
 
-<!-- STYLES -->
+
 <style>
 
 .gmail-list {
     display: flex;
     flex-direction: column;
+    /* Stack messages vertically like how its done in Gmail */
 }
 
-/* ROW */
+
 .gmail-row {
     border-bottom: 1px solid #eee;
+    /* small separator between messages */
     transition: background 0.15s ease;
+    /* Smooth hover animation */
     color: inherit;
+    /* Prevent link blue color override */
 }
 
-/* HOVER */
 .gmail-row:hover {
     background-color: #f2f6fc;
+    /* Light highlight when hovering */
 }
 
-/* UNREAD TEXT */
 .gmail-row.unread .sender,
 .gmail-row.unread .subject {
     font-weight: 700;
+    /* Make unread messages bold */
     color: #202124;
+    /* Dark text for emphasis */
 }
 
-/* SENDER */
 .sender {
     width: 180px;
     color: #202124;
@@ -106,33 +115,33 @@
     text-overflow: ellipsis;
 }
 
-/* SUBJECT */
 .subject {
     color: #202124;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* Prevent overflow */
 }
 
-/* PREVIEW */
 .preview {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* VERTICAL STATUS BAR */
 .status-bar {
     width: 4px;
     min-height: 100%;
+    /* Vertical indicator bar to show if a message has been read before */
 }
 
-/* unread = blue bar */
+/* UNREAD COLOR = BLUE */
 .status-bar.unread {
     background-color: #1a73e8;
 }
 
-/* read = grey bar */
+/* READ COLOR = GREY */
 .status-bar.read {
     background-color: #e0e0e0;
 }

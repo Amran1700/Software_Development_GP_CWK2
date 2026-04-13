@@ -1,0 +1,109 @@
+{% extends 'global.html' %}
+
+{% comment %}
+  reports_feature/templates/reports_feature/reports_dashboard.html
+  Author: Student 5 – Sadana Suresh (w21162895)
+  Description: Dashboard page showing all available report type cards.
+               Each card links to the preview page for that report type.
+               Extends global.html to use the shared navbar and layout.
+{% endcomment %}
+
+{% block title %}Reports Dashboard{% endblock %}
+{% block nav_reports %}active{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+
+    <!-- Page header -->
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color: #2d3a5e;">
+            <i class="bi bi-bar-chart-fill me-2" style="color: #4277D6;"></i>Reports Dashboard
+        </h2>
+        <p class="text-muted">Select a report type below to preview and generate reports.</p>
+    </div>
+
+    <!-- Report type cards – one card per report type -->
+    <div class="row g-4">
+
+        <!-- Card 1: Teams Summary Report -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 16px; overflow: hidden;">
+                <!-- Gradient top bar for visual branding -->
+                <div style="height: 6px; background: linear-gradient(to right, #4277D6, #6C71CF);"></div>
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:48px; height:48px; background: linear-gradient(135deg, #4277D6, #6C71CF);">
+                            <i class="bi bi-graph-up-arrow text-white fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0" style="color: #2d3a5e;">Teams Summary Report</h5>
+                            <small class="text-muted">Department breakdown</small>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-4">Total teams, departments, and teams without managers.</p>
+                    <!-- Link to preview page with report_type slug 'teams' -->
+                    <a href="{% url 'reports:preview' 'teams' %}"
+                       class="btn w-100 text-white fw-semibold"
+                       style="background: linear-gradient(to right, #4277D6, #6C71CF); border-radius: 10px; border: none;">
+                        <i class="bi bi-eye me-2"></i>Preview Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: All Teams Report -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 16px; overflow: hidden;">
+                <div style="height: 6px; background: linear-gradient(to right, #6C71CF, #6F50A0);"></div>
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:48px; height:48px; background: linear-gradient(135deg, #6C71CF, #6F50A0);">
+                            <i class="bi bi-people-fill text-white fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0" style="color: #2d3a5e;">All Teams Report</h5>
+                            <small class="text-muted">Full team registry</small>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-4">Every engineering team with their manager and department.</p>
+                    <!-- Link to preview page with report_type slug 'all-teams' -->
+                    <a href="{% url 'reports:preview' 'all-teams' %}"
+                       class="btn w-100 text-white fw-semibold"
+                       style="background: linear-gradient(to right, #6C71CF, #6F50A0); border-radius: 10px; border: none;">
+                        <i class="bi bi-eye me-2"></i>Preview Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Teams Without Managers -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 16px; overflow: hidden;">
+                <div style="height: 6px; background: linear-gradient(to right, #6F50A0, #4277D6);"></div>
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:48px; height:48px; background: linear-gradient(135deg, #6F50A0, #4277D6);">
+                            <i class="bi bi-tools text-white fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0" style="color: #2d3a5e;">Teams Without Managers</h5>
+                            <small class="text-muted">Governance & HR planning</small>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-4">View all teams that currently have no assigned manager.</p>
+                    <!-- Uses teams slug as it includes the no-manager stat in the summary -->
+                    <a href="{% url 'reports:preview' 'teams' %}"
+                       class="btn w-100 text-white fw-semibold"
+                       style="background: linear-gradient(to right, #6F50A0, #4277D6); border-radius: 10px; border: none;">
+                        <i class="bi bi-eye me-2"></i>Preview Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
