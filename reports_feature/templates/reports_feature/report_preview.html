@@ -1,0 +1,114 @@
+{% extends 'global.html' %}
+
+{% comment %}
+  reports_feature/templates/reports_feature/report_preview.html
+  Author: Student 5 – Sadana Suresh (w21162895)
+  Description: Preview page for a single report type.
+               Shows headline stat cards at the top, followed by the full data table.
+               Download PDF and Download Excel buttons trigger the download_report view.
+               Extends global.html to use the shared navbar and layout.
+               Template variables passed from report_preview view:
+                 - report_type: slug used in download URLs
+                 - report_title: human-readable title shown in heading
+                 - report_description: short description shown below heading
+                 - stats: list of {label, value} dicts for stat cards
+                 - columns: list of column header strings
+                 - rows: list of lists containing row data
+{% endcomment %}
+
+{% block title %}{{ report_title }} Preview{% endblock %}
+{% block nav_reports %}active{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+
+    <!-- Page header with back link and download buttons -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <!-- Back link navigates to reports dashboard -->
+            <a href="{% url 'reports:reports_dashboard' %}" class="text-muted text-decoration-none small">
+                <i class="bi bi-arrow-left me-1"></i>Back to Reports
+            </a>
+            <h2 class="fw-bold mt-1 mb-0" style="color: #2d3a5e;">
+                <i class="bi bi-file-earmark-bar-graph-fill me-2" style="color: #4277D6;"></i>{{ report_title }}
+            </h2>
+            <p class="text-muted small mb-0">{{ report_description }}</p>
+        </div>
+
+        <!-- Download buttons – pass report_type and format to download_report view -->
+        <div class="d-flex gap-2">
+            <a href="{% url 'reports:download_report' report_type 'pdf' %}"
+               class="btn text-white fw-semibold px-4"
+               style="background: linear-gradient(to right, #e74c3c, #c0392b); border-radius: 10px; border: none;">
+                <i class="bi bi-file-earmark-pdf-fill me-2"></i>Download PDF
+            </a>
+            <a href="{% url 'reports:download_report' report_type 'excel' %}"
+               class="btn text-white fw-semibold px-4"
+               style="background: linear-gradient(to right, #27ae60, #1e8449); border-radius: 10px; border: none;">
+                <i class="bi bi-file-earmark-excel-fill me-2"></i>Download Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats cards row – rendered from the stats list passed by the view -->
+    <div class="row g-3 mb-4">
+        {% for stat in stats %}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="border-radius: 14px; overflow: hidden;">
+                <!-- Gradient top bar matches dashboard branding -->
+                <div style="height: 4px; background: linear-gradient(to right, #4277D6, #6F50A0);"></div>
+                <div class="card-body p-3">
+                    <p class="text-muted small mb-1">{{ stat.label }}</p>
+                    <h4 class="fw-bold mb-0" style="color: #2d3a5e;">{{ stat.value }}</h4>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Main data table – columns and rows passed from the view -->
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+        <div style="height: 5px; background: linear-gradient(to right, #4277D6, #6C71CF, #6F50A0);"></div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+
+                    <!-- Column headers – looped from columns list -->
+                    <thead style="background-color: #f8f9fc;">
+                        <tr>
+                            {% for col in columns %}
+                            <th class="px-4 py-3 fw-semibold" style="color: #2d3a5e; border-bottom: 2px solid #e9ecef;">
+                                {{ col }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- Data rows – each row is a list of cell values -->
+                        {% for row in rows %}
+                        <tr>
+                            {% for cell in row %}
+                            <td class="px-4 py-3" style="color: #495057; border-bottom: 1px solid #f1f3f5;">
+                                {{ cell }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <!-- Empty state shown when no rows returned from the query -->
+                        {% empty %}
+                        <tr>
+                            <td colspan="{{ columns|length }}" class="text-center text-muted py-5">
+                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                No data available for this report.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

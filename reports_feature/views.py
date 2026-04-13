@@ -1,352 +1,299 @@
 # reports_feature/views.py
-# Author: Student 5 – Reports Module
-# -------------------------------------------------------
-# Week 1: App created, stub views defined, libraries installed
-# Week 2: Full implementation – dashboard, preview, PDF + Excel export
-# Week 3: Bug fixes – field names, template paths, related_name, edge cases
-# -------------------------------------------------------
+# Author: Student 5 – Sadana Suresh (w21162895)
+# Module: 5COSC021W – Software Development Group Project CWK2
+# Description: Views and report data builders for the Reports module.
+#              Handles dashboard, preview, and file download (PDF/Excel) for 3 report types.
 
-import io
-from datetime import date
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.db.models import Count
-from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+import csv
+import io
+from datetime import datetime
 
-try:
-    from teams_feature.models import Team
-except ImportError:
-    Team = None
-
-try:
-    from organisation_feature.models import Department
-except ImportError:
-    Department = None
-
-from reportlab.lib import colors
+# ReportLab imports for PDF generation
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
 from reportlab.lib.units import cm
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
-import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+# Import models from teammate apps – try/except ensures app runs standalone if models not yet available
+from organisation_feature.models import Department
+from teams_feature.models import Team
 
-User = get_user_model()
 
+# ── REPORT DATA BUILDERS ──────────────────────────────────────────────────────
+# Each builder function returns a dictionary with title, description, stats, columns and rows.
+# This separates database query logic from view logic, keeping views clean and maintainable.
 
-# ──────────────────────────────────────────────────────
-# Query helpers
-# ──────────────────────────────────────────────────────
-
-def _teams_by_department():
-    """Report 1 – count of teams per department, A→Z.
-    Uses 'teams' as the related_name on Team.department FK.
-    Department field is 'department_name', not 'name'.
+def get_teams_report_data():
     """
-    if Department is None or Team is None:
-        return []
-    return (
-        Department.objects
-        .annotate(team_count=Count('teams'))
-        .values('department_name', 'team_count')
-        .order_by('department_name')
-    )
-
-
-def _teams_without_managers():
-    """Report 2 – Teams with no manager assigned.
-    Returns queryset of Team objects where manager is NULL.
+    Builds data for the Teams Summary Report.
+    Returns department breakdown with team counts, plus headline statistics.
+    Queries Department and Team models from teammate apps.
     """
-    if Team is None:
-        return []
-    return Team.objects.filter(manager__isnull=True).select_related('department')
+    # Count totals for the stats cards
+    total_teams = Team.objects.count()
+    total_depts = Department.objects.count()
+    teams_without_managers = Team.objects.filter(manager__isnull=True).count()
 
+    # Build department rows using annotate to count teams per department
+    # 'teams' is the related_name on the Team.department ForeignKey
+    dept_rows = []
+    for dept in Department.objects.annotate(team_count=Count('teams')).order_by('-team_count'):
+        dept_rows.append([dept.department_name, str(dept.team_count)])
 
-def _summary_stats():
-    """Report 3 – headline numbers across the whole application."""
+    # Stats cards shown at top of the preview page
+    stats = [
+        {'label': 'Total Teams',            'value': str(total_teams)},
+        {'label': 'Total Departments',      'value': str(total_depts)},
+        {'label': 'Teams Without Managers', 'value': str(teams_without_managers)},
+    ]
+
     return {
-        'total_teams':            Team.objects.count() if Team else 0,
-        'total_departments':      Department.objects.count() if Department else 0,
-        'total_users':            User.objects.count(),
-        'teams_without_managers': Team.objects.filter(manager__isnull=True).count() if Team else 0,
+        'title':       'Teams Report',
+        'description': 'Sky Engineering team registry summary and department metrics.',
+        'stats':       stats,
+        'columns':     ['Department', 'Number of Teams'],
+        'rows':        dept_rows,
     }
 
 
-# ──────────────────────────────────────────────────────
-# Views
-# ──────────────────────────────────────────────────────
+def get_all_teams_data():
+    """
+    Builds data for the All Teams Report.
+    Returns every team with manager name, department, size and active status.
+    Uses select_related to load department and manager in a single query (avoids N+1).
+    """
+    rows = []
+    for team in Team.objects.select_related('department', 'manager').order_by('department__department_name', 'team_name'):
+        # Use em dash if no manager assigned
+        manager_name = team.manager.username if team.manager else '—'
+        rows.append([
+            team.team_name,
+            manager_name,
+            team.department.department_name if team.department else '—',
+            str(team.team_size) if team.team_size else '0',
+            'Active' if team.is_active else 'Inactive',
+        ])
+
+    # Stats cards shown at top of the preview page
+    stats = [
+        {'label': 'Total Teams',   'value': str(Team.objects.count())},
+        {'label': 'Departments',   'value': str(Department.objects.count())},
+        {'label': 'No Manager',    'value': str(Team.objects.filter(manager__isnull=True).count())},
+        {'label': 'Active Teams',  'value': str(Team.objects.filter(is_active=True).count())},
+    ]
+
+    return {
+        'title':       'All Teams',
+        'description': 'Full list of all engineering teams, their managers and departments.',
+        'stats':       stats,
+        'columns':     ['Team Name', 'Manager', 'Department', 'Team Size', 'Status'],
+        'rows':        rows,
+    }
+
+
+def get_report_meta(report_type):
+    """
+    Router function that maps a report_type slug to the correct builder function.
+    Returns an empty dict if the report_type is not recognised.
+    Adding a new report type only requires adding one entry to this dictionary.
+    """
+    builders = {
+        'teams':     get_teams_report_data,
+        'all-teams': get_all_teams_data,
+    }
+    builder = builders.get(report_type)
+    return builder() if builder else {}
+
+
+# ── PDF GENERATOR ─────────────────────────────────────────────────────────────
+
+def generate_pdf(title, description, columns, rows, stats):
+    """
+    Builds and returns a PDF file as a BytesIO buffer using ReportLab.
+    Includes a title block, stats summary table, and main data table.
+    Called from the download_report view when format is 'pdf'.
+    """
+    # Create in-memory buffer – no file written to disk
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=1.5*cm,
+        leftMargin=1.5*cm,
+        topMargin=2*cm,
+        bottomMargin=2*cm,
+    )
+
+    # Colour constants – defined once so changing brand colours only requires editing here
+    styles = getSampleStyleSheet()
+    brand_blue = colors.HexColor('#2d3a5e')
+    accent_blue = colors.HexColor('#4277D6')
+    light_grey = colors.HexColor('#f8f9fc')
+
+    # Custom paragraph styles for title, subtitle and metadata
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Title'],
+        textColor=brand_blue,
+        fontSize=22,
+        spaceAfter=6,
+    )
+    subtitle_style = ParagraphStyle(
+        'Subtitle',
+        parent=styles['Normal'],
+        textColor=colors.HexColor('#6c757d'),
+        fontSize=10,
+        spaceAfter=4,
+    )
+    meta_style = ParagraphStyle(
+        'Meta',
+        parent=styles['Normal'],
+        textColor=colors.HexColor('#6c757d'),
+        fontSize=8,
+        spaceAfter=16,
+    )
+
+    elements = []
+
+    # Title block – report name, description and generation timestamp
+    elements.append(Paragraph(title, title_style))
+    elements.append(Paragraph(description, subtitle_style))
+    elements.append(Paragraph(f"Generated: {datetime.now().strftime('%d %B %Y, %H:%M')} — Sky Engineering", meta_style))
+    elements.append(Spacer(1, 0.3*cm))
+
+    # Stats summary table – label row on top, value row below
+    if stats:
+        stat_data = [[s['label'] for s in stats], [s['value'] for s in stats]]
+        stat_col_width = (A4[0] - 3*cm) / len(stats)
+        stat_table = Table(stat_data, colWidths=[stat_col_width] * len(stats))
+        stat_table.setStyle(TableStyle([
+            ('BACKGROUND',    (0, 0), (-1, 0), light_grey),
+            ('BACKGROUND',    (0, 1), (-1, 1), colors.white),
+            ('TEXTCOLOR',     (0, 0), (-1, 0), colors.HexColor('#6c757d')),
+            ('TEXTCOLOR',     (0, 1), (-1, 1), brand_blue),
+            ('FONTNAME',      (0, 0), (-1, 0), 'Helvetica'),
+            ('FONTNAME',      (0, 1), (-1, 1), 'Helvetica-Bold'),
+            ('FONTSIZE',      (0, 0), (-1, 0), 8),
+            ('FONTSIZE',      (0, 1), (-1, 1), 18),
+            ('ALIGN',         (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN',        (0, 0), (-1, -1), 'MIDDLE'),
+            ('TOPPADDING',    (0, 0), (-1, -1), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+            ('GRID',          (0, 0), (-1, -1), 0.5, colors.HexColor('#e9ecef')),
+        ]))
+        elements.append(stat_table)
+        elements.append(Spacer(1, 0.5*cm))
+
+    # Main data table – first row is column headers, remaining rows are data
+    if columns and rows:
+        table_data = [columns] + rows
+        col_width = (A4[0] - 3*cm) / len(columns)
+        main_table = Table(table_data, colWidths=[col_width] * len(columns), repeatRows=1)
+        main_table.setStyle(TableStyle([
+            # Header row styling
+            ('BACKGROUND',    (0, 0), (-1, 0), accent_blue),
+            ('TEXTCOLOR',     (0, 0), (-1, 0), colors.white),
+            ('FONTNAME',      (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE',      (0, 0), (-1, 0), 10),
+            ('TOPPADDING',    (0, 0), (-1, 0), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+            # Data rows styling
+            ('FONTNAME',      (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE',      (0, 1), (-1, -1), 9),
+            ('TEXTCOLOR',     (0, 1), (-1, -1), colors.HexColor('#495057')),
+            ('TOPPADDING',    (0, 1), (-1, -1), 8),
+            ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+            # Alternating row background for readability
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, light_grey]),
+            ('GRID',          (0, 0), (-1, -1), 0.5, colors.HexColor('#e9ecef')),
+            ('ALIGN',         (0, 0), (-1, -1), 'LEFT'),
+            ('VALIGN',        (0, 0), (-1, -1), 'MIDDLE'),
+        ]))
+        elements.append(main_table)
+
+    # Build the PDF into the buffer and reset to start for reading
+    doc.build(elements)
+    buffer.seek(0)
+    return buffer
+
+
+# ── VIEWS ─────────────────────────────────────────────────────────────────────
 
 @login_required
 def reports_dashboard(request):
-    """Renders the reports home page with three report-type cards."""
+    """
+    Renders the Reports Dashboard page showing all available report type cards.
+    Protected by @login_required – unauthenticated users are redirected to login.
+    """
     report_types = [
-        {
-            'id':          'teams_by_department',
-            'title':       'Teams by Department',
-            'description': 'Shows how many engineering teams exist in each department.',
-            'icon':        'bi-diagram-3',
-        },
-        {
-            'id':          'teams_without_managers',
-            'title':       'Teams Without Managers',
-            'description': 'Lists every team that currently has no assigned manager.',
-            'icon':        'bi-person-x',
-        },
-        {
-            'id':          'summary',
-            'title':       'Summary Statistics',
-            'description': 'High-level totals: teams, departments, users, unmanaged teams.',
-            'icon':        'bi-bar-chart-line',
-        },
+        {'name': 'Teams Summary Report', 'slug': 'teams'},
+        {'name': 'All Teams Report',     'slug': 'all-teams'},
     ]
-    return render(request, 'reports/reports_dashboard.html', {'report_types': report_types})
+    return render(request, 'reports_feature/reports_dashboard.html', {'report_types': report_types})
 
 
 @login_required
 def report_preview(request, report_type):
-    """HTML table preview of the chosen report with PDF/Excel download buttons."""
-    context = {'report_type': report_type}
-
-    if report_type == 'teams_by_department':
-        context['title']   = 'Teams by Department'
-        context['headers'] = ['Department', 'Number of Teams']
-        context['rows']    = list(_teams_by_department())
-
-    elif report_type == 'teams_without_managers':
-        context['title']   = 'Teams Without Managers'
-        context['headers'] = ['Team Name', 'Department']
-        context['rows'] = [
-            {
-                'name':       t.team_name,
-                'department': t.department.department_name if t.department else 'N/A',
-            }
-            for t in _teams_without_managers()
-        ]
-
-    elif report_type == 'summary':
-        context['title']   = 'Summary Statistics'
-        context['headers'] = ['Metric', 'Value']
-        stats = _summary_stats()
-        context['rows'] = [
-            {'label': 'Total Teams',              'value': stats['total_teams']},
-            {'label': 'Total Departments',        'value': stats['total_departments']},
-            {'label': 'Total Registered Users',   'value': stats['total_users']},
-            {'label': 'Teams Without Managers',   'value': stats['teams_without_managers']},
-        ]
-
-    else:
-        context['error'] = f'Unknown report type: {report_type}'
-
-    return render(request, 'reports/report_preview.html', context)
+    """
+    Renders the HTML preview page for a given report type.
+    Passes stats, column headers and row data to the template.
+    If report_type is not recognised, meta will be empty and template shows no data.
+    Protected by @login_required.
+    """
+    meta = get_report_meta(report_type)
+    context = {
+        'report_type':        report_type,
+        'report_title':       meta.get('title',       'Report'),
+        'report_description': meta.get('description', ''),
+        'stats':              meta.get('stats',        []),
+        'columns':            meta.get('columns',      []),
+        'rows':               meta.get('rows',         []),
+    }
+    return render(request, 'reports_feature/report_preview.html', context)
 
 
 @login_required
-def generate_report(request):
-    """POST-only view. Returns PDF or Excel file as a download."""
-    if request.method != 'POST':
-        return HttpResponse('Method not allowed', status=405)
+def download_report(request, report_type, file_format):
+    """
+    Handles file download requests for a given report type and format.
+    Supported formats: 'pdf' (via ReportLab) and 'excel' (CSV with Excel content-type).
+    Returns 400 if report_type is not recognised or format is not supported.
+    Protected by @login_required.
+    """
+    meta = get_report_meta(report_type)
 
-    report_type = request.POST.get('report_type', '')
-    fmt         = request.POST.get('format', 'pdf')
-
-    if fmt == 'pdf':
-        return _build_pdf(report_type)
-    elif fmt == 'excel':
-        return _build_excel(report_type)
-    else:
-        return HttpResponse('Unsupported format', status=400)
-
-
-# ──────────────────────────────────────────────────────
-# PDF builder
-# ──────────────────────────────────────────────────────
-
-def _build_pdf(report_type):
-    """Builds and returns a PDF FileResponse for the given report_type."""
-    buffer = io.BytesIO()
-    doc = SimpleDocTemplate(
-        buffer, pagesize=A4,
-        leftMargin=2*cm, rightMargin=2*cm,
-        topMargin=2*cm, bottomMargin=2*cm,
-    )
-
-    styles = getSampleStyleSheet()
-    H1 = ParagraphStyle(
-        'H1', parent=styles['Heading1'],
-        fontSize=16, spaceAfter=4,
-        textColor=colors.HexColor('#1a3a5c'),
-    )
-    SUB = ParagraphStyle(
-        'SUB', parent=styles['Normal'],
-        fontSize=9, spaceAfter=14, textColor=colors.grey,
-    )
-    NAVY = colors.HexColor('#1a3a5c')
-    ALT  = colors.HexColor('#f0f4f8')
-
-    elems = [
-        Paragraph('Sky Engineering Teams Portal', H1),
-        Paragraph(f'Generated: {date.today().strftime("%d %B %Y")}', SUB),
-        Spacer(1, 0.3*cm),
-    ]
-
-    if report_type == 'teams_by_department':
-        elems.append(Paragraph('Report: Teams by Department', H1))
-        data = [['Department', 'Number of Teams']]
-        rows = list(_teams_by_department())
-        if rows:
-            data += [[r['department_name'], str(r['team_count'])] for r in rows]
-        else:
-            data.append(['No data available', ''])
-        filename = 'teams_by_department.pdf'
-
-    elif report_type == 'teams_without_managers':
-        elems.append(Paragraph('Report: Teams Without Managers', H1))
-        data  = [['Team Name', 'Department']]
-        teams = list(_teams_without_managers())
-        if teams:
-            data += [
-                [t.team_name, t.department.department_name if t.department else 'N/A']
-                for t in teams
-            ]
-        else:
-            data.append(['All teams have managers assigned', ''])
-        filename = 'teams_without_managers.pdf'
-
-    elif report_type == 'summary':
-        elems.append(Paragraph('Report: Summary Statistics', H1))
-        stats = _summary_stats()
-        data = [
-            ['Metric', 'Value'],
-            ['Total Teams',            str(stats['total_teams'])],
-            ['Total Departments',      str(stats['total_departments'])],
-            ['Total Registered Users', str(stats['total_users'])],
-            ['Teams Without Managers', str(stats['teams_without_managers'])],
-        ]
-        filename = 'summary_report.pdf'
-
-    else:
+    # Return 400 if report type not recognised – prevents silent empty downloads
+    if not meta:
         return HttpResponse('Unknown report type', status=400)
 
-    tbl = Table(data, colWidths=[10*cm, 5*cm], repeatRows=1)
-    tbl.setStyle(TableStyle([
-        ('BACKGROUND',     (0, 0), (-1,  0), NAVY),
-        ('TEXTCOLOR',      (0, 0), (-1,  0), colors.white),
-        ('FONTNAME',       (0, 0), (-1,  0), 'Helvetica-Bold'),
-        ('FONTSIZE',       (0, 0), (-1,  0), 11),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, ALT]),
-        ('GRID',           (0, 0), (-1, -1), 0.5, colors.HexColor('#cccccc')),
-        ('FONTNAME',       (0, 1), (-1, -1), 'Helvetica'),
-        ('FONTSIZE',       (0, 1), (-1, -1), 10),
-        ('TOPPADDING',     (0, 0), (-1, -1), 6),
-        ('BOTTOMPADDING',  (0, 0), (-1, -1), 6),
-        ('LEFTPADDING',    (0, 0), (-1, -1), 8),
-    ]))
-    elems.append(tbl)
-    doc.build(elems)
+    columns     = meta.get('columns', [])
+    rows        = meta.get('rows',    [])
+    title       = meta.get('title',   report_type)
+    description = meta.get('description', '')
+    stats       = meta.get('stats',   [])
 
-    buffer.seek(0)
-    resp = FileResponse(buffer, content_type='application/pdf')
-    resp['Content-Disposition'] = f'attachment; filename="{filename}"'
-    return resp
+    if file_format == 'excel':
+        # Generate CSV with Excel content-type so browser opens it in Excel
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = f'attachment; filename="{report_type}_report.csv"'
+        writer = csv.writer(response)
+        writer.writerow(columns)   # Write header row
+        writer.writerows(rows)     # Write all data rows
+        return response
 
+    elif file_format == 'pdf':
+        # Generate PDF using ReportLab and return as file download
+        buffer = generate_pdf(title, description, columns, rows, stats)
+        response = HttpResponse(buffer, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{report_type}_report.pdf"'
+        return response
 
-# ──────────────────────────────────────────────────────
-# Excel builder
-# ──────────────────────────────────────────────────────
-
-def _build_excel(report_type):
-    """Builds and returns an Excel FileResponse for the given report_type."""
-    wb = openpyxl.Workbook()
-    ws = wb.active
-
-    hdr_font  = Font(bold=True, color='FFFFFF', size=11)
-    hdr_fill  = PatternFill('solid', start_color='1A3A5C', end_color='1A3A5C')
-    hdr_align = Alignment(horizontal='center', vertical='center')
-    alt_fill  = PatternFill('solid', start_color='F0F4F8', end_color='F0F4F8')
-    thin      = Side(style='thin', color='CCCCCC')
-    bdr       = Border(left=thin, right=thin, top=thin, bottom=thin)
-
-    ws['A1'] = 'Sky Engineering Teams Portal'
-    ws['A1'].font = Font(bold=True, size=13, color='1A3A5C')
-    ws['A2'] = f'Generated: {date.today().strftime("%d %B %Y")}'
-    ws['A2'].font = Font(italic=True, color='888888', size=10)
-    ws.append([])
-    ws.append([])
-
-    def write_headers(cols):
-        """Write a styled header row."""
-        ws.append(cols)
-        r = ws.max_row
-        for c in range(1, len(cols) + 1):
-            cell = ws.cell(row=r, column=c)
-            cell.font      = hdr_font
-            cell.fill      = hdr_fill
-            cell.alignment = hdr_align
-            cell.border    = bdr
-
-    def write_row(values, idx):
-        """Write a data row with alternating fill."""
-        ws.append(values)
-        r = ws.max_row
-        for c in range(1, len(values) + 1):
-            cell = ws.cell(row=r, column=c)
-            if idx % 2 == 1:
-                cell.fill = alt_fill
-            cell.border = bdr
-
-    if report_type == 'teams_by_department':
-        ws.title = 'Teams by Dept'
-        write_headers(['Department', 'Number of Teams'])
-        rows = list(_teams_by_department())
-        if rows:
-            for i, r in enumerate(rows):
-                write_row([r['department_name'], r['team_count']], i)
-        else:
-            write_row(['No data available', 0], 0)
-        ws.column_dimensions['A'].width = 35
-        ws.column_dimensions['B'].width = 20
-        filename = 'teams_by_department.xlsx'
-
-    elif report_type == 'teams_without_managers':
-        ws.title = 'No Manager Teams'
-        write_headers(['Team Name', 'Department'])
-        teams = list(_teams_without_managers())
-        if teams:
-            for i, t in enumerate(teams):
-                write_row([t.team_name, t.department.department_name if t.department else 'N/A'], i)
-        else:
-            write_row(['All teams have managers assigned', ''], 0)
-        ws.column_dimensions['A'].width = 35
-        ws.column_dimensions['B'].width = 30
-        filename = 'teams_without_managers.xlsx'
-
-    elif report_type == 'summary':
-        ws.title = 'Summary'
-        write_headers(['Metric', 'Value'])
-        stats = _summary_stats()
-        for i, (label, val) in enumerate([
-            ('Total Teams',            stats['total_teams']),
-            ('Total Departments',      stats['total_departments']),
-            ('Total Registered Users', stats['total_users']),
-            ('Teams Without Managers', stats['teams_without_managers']),
-        ]):
-            write_row([label, val], i)
-        ws.column_dimensions['A'].width = 35
-        ws.column_dimensions['B'].width = 20
-        filename = 'summary_report.xlsx'
-
-    else:
-        return HttpResponse('Unknown report type', status=400)
-
-    out = io.BytesIO()
-    wb.save(out)
-    out.seek(0)
-    resp = FileResponse(
-        out,
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    )
-    resp['Content-Disposition'] = f'attachment; filename="{filename}"'
-    return resp
+    # Return 400 for any unsupported format (e.g. csv, xml)
+    return HttpResponse('Invalid format', status=400)
