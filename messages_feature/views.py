@@ -1,40 +1,54 @@
-from django.shortcuts import render, get_object_or_404, redirect # Import shortcuts to simplify common Django tasks
-from .models import Message # Import your Message model
-from django.contrib.auth.decorators import login_required # Ensures only logged-in users can access views
-from django.contrib.auth.models import User # Import User model (used in compose view)
+# Author: Amran Mohammed id:w2066724
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db import models
+from .models import Message
+
 
 
 # INBOX VIEW
+# Shows messages RECEIVED by the logged-in user
 @login_required
 def inbox(request):
-    """
-    Shows all messages RECEIVED by the logged-in user
-    """
-    # Get messages where:
-    # - current user is a receiver
-    # - message status is 'sent'
-    messages = request.user.received_messages.filter(status='sent')
-    
-    inbox_count = messages.count()
-    drafts_count = request.user.sent_messages.filter(status='draft').count()
+    # Gets the  messages that are current for the user who is a RECEIVER
+    # Only show messages that were actually sent not the drafts/deleted
+    messages = request.user.received_messages.filter(
+        status='sent'
+    ).order_by('-timestamp')
+    # Count unread messages for badge display in sidebar
+    # read_status = False means message has not been opened
+    inbox_count = request.user.received_messages.filter(
+        status='sent',
+        read_status=False
+    ).count()
+    drafts_count = request.user.sent_messages.filter(
+        status='draft'
+    ).count()
 
-    # Render template and pass messages to HTML
     return render(request, 'messages_feature/inbox.html', {
         'messages': messages,
         'inbox_count': inbox_count,
         'drafts_count': drafts_count
-    })  
+    })
+
 
 # SENT VIEW
+# Shows messages SENT by the logged-in user
 @login_required
 def sent(request):
-    """
-    Shows messages SENT by the user
-    """
-
-    messages = request.user.sent_messages.filter(status='sent')
-    inbox_count = request.user.received_messages.filter(status='sent').count()
-    drafts_count = request.user.sent_messages.filter(status='draft').count()
+    messages = request.user.sent_messages.filter(
+        status='sent'
+    ).order_by('-timestamp')
+    inbox_count = request.user.received_messages.filter(
+        status='sent',
+        read_status=False
+    ).count()
+    # Count drafts for sidebar
+    drafts_count = request.user.sent_messages.filter(
+        status='draft'
+    ).count()
 
     return render(request, 'messages_feature/sent.html', {
         'messages': messages,
@@ -42,67 +56,77 @@ def sent(request):
         'drafts_count': drafts_count
     })
 
+
 # DRAFTS VIEW
+# Shows messages saved as drafts by the user
 @login_required
 def drafts(request):
-    """
-    Shows messages saved as drafts
-    """
+    messages = request.user.sent_messages.filter(
+        status='draft'
+    ).order_by('-timestamp')
+    inbox_count = request.user.received_messages.filter(
+        status='sent',
+        read_status=False
+    ).count()
 
-    messages = request.user.sent_messages.filter(status='draft')
-    inbox_count = request.user.received_messages.filter(status='sent').count()
-    drafts_count = request.user.sent_messages.filter(status='draft').count()
+    drafts_count = messages.count()
+
     return render(request, 'messages_feature/drafts.html', {
         'messages': messages,
         'inbox_count': inbox_count,
         'drafts_count': drafts_count
     })
 
-
 # DELETED VIEW
+# Shows soft-deleted messages related to the user
 @login_required
 def deleted(request):
-    """
-    Shows deleted messages (basic version)
-    """
+    # Get deleted messages where user is sender OR receiver
+    messages = Message.objects.filter(
+        status='deleted'
+    ).filter(
+        models.Q(sender=request.user) |
+        models.Q(receiver=request.user)
+    ).distinct().order_by('-timestamp')
 
-    messages = request.user.received_messages.filter(status='deleted')
+    inbox_count = request.user.received_messages.filter(
+        status='sent',
+        read_status=False
+    ).count()
 
-    inbox_count = request.user.received_messages.filter(status='sent').count()
-    drafts_count = request.user.sent_messages.filter(status='draft').count()
+    drafts_count = request.user.sent_messages.filter(
+        status='draft'
+    ).count()
+
     return render(request, 'messages_feature/deleted.html', {
         'messages': messages,
         'inbox_count': inbox_count,
         'drafts_count': drafts_count
     })
 
-
-
 # MESSAGE DETAIL VIEW
+# Shows full message content
+# Also marks message as READ if receiver opens it
 @login_required
 def message_detail(request, message_id):
-    """
-    Shows a single message in detail.
-    """
-
-    # Get message or return 404 if it doesn't exist
     message = get_object_or_404(Message, id=message_id)
-
-    # SECURITY CHECK: only sender or receivers can view message
+    # Security check: only sender or receiver can view message
     if request.user != message.sender and request.user not in message.receiver.all():
         return redirect('inbox')
-
-    # --- MARK AS READ ---
-    # If the current user is a recipient and hasn't read the message yet
-    if request.user in message.receiver.all():
+    # Mark as read ONLY if receiver has opened it
+    if request.user in message.receiver.all() and not message.read_status:
         message.read_status = True
         message.save()
+        
+    inbox_count = request.user.received_messages.filter(
+        status='sent',
+        read_status=False
+    ).count()
 
-    # Prepare inbox/draft counts for template
-    inbox_count = request.user.received_messages.filter(status='sent').count()
-    drafts_count = request.user.sent_messages.filter(status='draft').count()
+    drafts_count = request.user.sent_messages.filter(
+        status='draft'
+    ).count()
 
-    # Render the message detail template
     return render(request, 'messages_feature/message_detail.html', {
         'message': message,
         'inbox_count': inbox_count,
@@ -110,70 +134,98 @@ def message_detail(request, message_id):
     })
 
 
-# DELETE MESSAGE VIEW
+
+#  DELETE MESSAGE
+# Marks message as deleted instead of removing from DB
+
 @login_required
 def delete_message(request, message_id):
-    """
-    Marks a message as deleted
-    """
 
     message = get_object_or_404(Message, id=message_id)
 
-    # Only allow receiver to delete message
-    if request.user in message.receiver.all():
-        message.status = 'deleted'
-        message.save()
+    # Security: only sender or receiver can delete
+    if request.user != message.sender and request.user not in message.receiver.all():
+        return redirect('inbox')
+    # it can be considered a soft  delete beacuse it keeps data but hides it from normal views
+    message.status = 'deleted'
+    message.save()
 
     return redirect('inbox')
 
+# DELETED MESSAGE DETAIL VIEW
+# Shows full content of deleted message
+@login_required
+def deleted_message_detail(request, message_id):
 
+    message = get_object_or_404(Message, id=message_id)
+    # Only allow deleted messages
+    if message.status != 'deleted':
+        return redirect('inbox')
+    # Security: only sender or receiver can view
+    if request.user != message.sender and request.user not in message.receiver.all():
+        return redirect('deleted')
+
+    inbox_count = request.user.received_messages.filter(
+        status='sent',
+        read_status=False
+    ).count()
+
+    drafts_count = request.user.sent_messages.filter(
+        status='draft'
+    ).count()
+
+    return render(request, 'messages_feature/deleted_message_detail.html', {
+        'message': message,
+        'inbox_count': inbox_count,
+        'drafts_count': drafts_count
+    })
+
+
+
+# COMPOSE MESSAGE VIEW
+# Handles:
+# - sending messages
+# - saving drafts
+# - replying 
 
 @login_required
 def compose(request):
-    """
-    Handles composing new messages, replying, forwarding, and saving drafts.
-
-    - GET request: displays the compose form.
-    - POST request: validates and saves message as 'sent' or 'draft'.
-    - Ensures only logged-in users can send messages.
-    """
-
-    # Exclude the current user from recipients (you cannot send to yourself)
+    # Get all users except current user (no self messaging)
     users = User.objects.exclude(id=request.user.id)
 
-    # Retrieve GET parameters for reply/forward pre-filling
-    initial_receiver = request.GET.get('to')        # e.g., /compose/?to=3
-    initial_subject = request.GET.get('subject', '')  # e.g., /compose/?subject=Re: Hello
+    initial_receiver = request.GET.get('to')
+    initial_subject = request.GET.get('subject', '')
 
+    inbox_count = request.user.received_messages.filter(
+        status='sent',
+        read_status=False
+    ).count()
+
+    drafts_count = request.user.sent_messages.filter(
+        status='draft'
+    ).count()
+
+    # If form is submitted
     if request.method == 'POST':
-        # Get list of selected recipients from form (can be multiple)
         recipient_ids = request.POST.getlist('recipient')
-
-        # Strip whitespace from subject and body
         subject = request.POST.get('subject', '').strip()
         body = request.POST.get('body', '').strip()
-        status = request.POST.get('status', 'sent')  # Default to 'sent' if not provided
+        # Determines whether message is sent or saved as draft
+        status = request.POST.get('status', 'sent')
 
-        # --- VALIDATION ---
-        # Only enforce recipient/body requirement if message is being SENT
+        # Validation: only required when sending
         if status == 'sent' and (not recipient_ids or not body):
-            # Prepare error message
-            error = "Recipient and message body are required"
-
-            # Pass context back to template so user input is not lost
-            context = {
-                'error': error,
+            return render(request, 'messages_feature/compose.html', {
+                'error': "Recipient and message body are required",
                 'users': users,
-                'subject': subject,  # preserves stripped subject
-                'body': request.POST.get('body', ''),  # preserve original input, even if whitespace
-                'recipient_ids': [int(r) for r in recipient_ids] if recipient_ids else []
-            }
+                'subject': subject,
+                'body': body,
+                'recipient_ids': [int(r) for r in recipient_ids] if recipient_ids else [],
+                'inbox_count': inbox_count,
+                'drafts_count': drafts_count,
+                'initial_subject': initial_subject
+            })
 
-            # Re-render compose page with error message
-            return render(request, 'messages_feature/compose.html', context)
-
-        # --- SAVE MESSAGE ---
-        # Create message instance
         message = Message.objects.create(
             sender=request.user,
             subject=subject,
@@ -181,29 +233,70 @@ def compose(request):
             status=status
         )
 
-        # Set recipients using ManyToMany relationship
         recipients = User.objects.filter(id__in=recipient_ids)
         message.receiver.set(recipients)
 
-        # Save message to database
+        if status == 'draft':
+            return redirect('drafts')
+
+        return redirect('sent')
+
+
+    context = {
+        'users': users,
+        'inbox_count': inbox_count,
+        'drafts_count': drafts_count,
+        'initial_subject': initial_subject
+    }
+
+    # If replying to message, prefill recipient list with all the users in superadmins
+    if initial_receiver:
+        context['initial_receiver'] = [int(i) for i in initial_receiver.split(',')]
+
+    return render(request, 'messages_feature/compose.html', context)
+
+
+
+# EDIT DRAFT VIEW
+# Allows user to modify saved drafts before sending
+@login_required
+def edit_draft(request, message_id):
+    #only editing messages that are still drafts
+    message = get_object_or_404(Message, id=message_id, status='draft')
+    # only the original sender can edit draft
+    if request.user != message.sender:
+        return redirect('drafts')
+
+    users = User.objects.exclude(id=request.user.id)
+
+    if request.method == 'POST':
+        recipient_ids = request.POST.getlist('recipient')
+        subject = request.POST.get('subject', '').strip()
+        body = request.POST.get('body', '').strip()
+        status = request.POST.get('status', 'draft')
+        
+        # Validation before sending
+        if status == 'sent' and (not recipient_ids or not body):
+            return render(request, 'messages_feature/edit_draft.html', {
+                'error': "Recipient and message body are required",
+                'message': message,
+                'users': users
+            })
+
+        message.subject = subject
+        message.body = body
+        message.status = status
         message.save()
 
-        # --- REDIRECT BASED ON STATUS ---
+        recipients = User.objects.filter(id__in=recipient_ids)
+        message.receiver.set(recipients)
+
         if status == 'draft':
-            return redirect('drafts')  # Send to drafts folder
-        return redirect('sent')        # Otherwise, go to Sent messages
+            return redirect('drafts')
 
-    else:
-        # --- GET REQUEST ---
-        # Prepare context for initial render
-        context = {'users': users}
+        return redirect('sent')
 
-        # Pre-fill recipient(s) if "to" parameter exists (for reply/forward)
-        if initial_receiver:
-            context['initial_receiver'] = [int(i) for i in initial_receiver.split(',')]
-
-        # Pre-fill subject if provided
-        context['initial_subject'] = initial_subject
-
-        # Render compose template
-        return render(request, 'messages_feature/compose.html', context)
+    return render(request, 'messages_feature/edit_draft.html', {
+        'message': message,
+        'users': users
+    })

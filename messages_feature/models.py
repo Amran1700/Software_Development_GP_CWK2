@@ -1,74 +1,52 @@
+# Author: Amran Mohammed id:w2066724
+
 from django.db import models
 from django.contrib.auth.models import User
 
 class Message(models.Model):
-    """
-    This class defines the structure of your Message table in the database.
-    Each attribute becomes a column in db.sqlite3.
-    """
+
 
     sender = models.ForeignKey(
-        User,  # Links to Django's User model
-        on_delete=models.CASCADE,  # If user is deleted → their messages are deleted too
-        related_name='sent_messages'  # Allows: user.sent_messages.all()
+        User,
+        on_delete=models.CASCADE,
+        related_name='sent_messages'
     )
 
-    # RECEIVER(S) (who gets message)   
     receiver = models.ManyToManyField(
-        User,  # A message can have multiple users
-        related_name='received_messages'  # Allows: user.received_messages.all()
+        User,
+        related_name='received_messages'
     )
 
-    # MESSAGE CONTENT
-    subject = models.CharField(
-        max_length=255,  # Max length of subject line
-        blank=True  # Subject is optional
-    )
+    subject = models.CharField(max_length=255, blank=True)
+    body = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
-    body = models.TextField()  # Main message content (no max length limit)
-
-    # TIMESTAMP
-    timestamp = models.DateTimeField(
-        auto_now_add=True  # Automatically set when message is created
-    )
-
-
-    # STATUS (sent, draft, deleted)
     STATUS_CHOICES = [
         ('sent', 'Sent'),
         ('draft', 'Draft'),
         ('deleted', 'Deleted'),
-    ]
-
+    ] 
     status = models.CharField(
         max_length=20,
-        choices=STATUS_CHOICES,  # Limits values to above choices
-        default='sent'  # Default when message is created
+        choices=STATUS_CHOICES,
+        default='sent'
     )
-
-
-    # READ STATUS 
-    read_status = models.BooleanField(
-        default=False  # False = unread, True = read
-    )
-
-    # OPTIONAL: REPLY / THREADING
+    read_status = models.BooleanField(default=False)
+    # true = read, false = unread
     parent = models.ForeignKey(
-        'self',  # Refers to another Message
-        null=True,  # Can be empty
+        'self',
+        null=True,
         blank=True,
-        on_delete=models.SET_NULL,  # If parent deleted → set to NULL
-        related_name='replies'  # Allows: message.replies.all()
+        on_delete=models.SET_NULL,
+        related_name='replies'
     )
+    # Self-referencing FK:
+    # Used for reply chains (email threads)
+    # Currently NOT used in views yet cause i havent implemented threading 
 
-
-    # STRING REPRESENTATION
     def __str__(self):
-        # How message appears in admin panel / shell
         return f"{self.subject} from {self.sender.username}"
 
-
-    # DEFAULT ORDERING
     class Meta:
-        # Show newest messages first automatically
         ordering = ['-timestamp']
+        #  newest messages first

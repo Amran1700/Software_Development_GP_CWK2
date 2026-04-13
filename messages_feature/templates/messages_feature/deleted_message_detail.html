@@ -1,0 +1,70 @@
+<!-- Author: Amran Mohammed id:w2066724 -->
+ 
+{% extends 'messages_feature/messages_layout.html' %}
+{% block title %}Deleted Message Detail{% endblock %}
+{% block nav_messages %}active{% endblock %}
+{% block messages_content %}
+
+<div class="card border-0 shadow-sm main-card">
+    <div class="card-body p-4">
+
+        <!-- subject -->
+        <h4 class="fw-bold mb-3" style="color:#2c3e50;">
+            {{ message.subject|default:"(No Subject)" }}
+        </h4>
+
+        <!-- sender -->
+        <p>
+            <strong>From:</strong>
+            {{ message.sender.username }}
+            <!-- Sender username -->
+            ({{ message.sender.email }})
+            <!-- Sender email address -->
+        </p>
+
+        <!-- recipients -->
+        <p>
+            <strong>To:</strong>
+            {% for user in message.receiver.all %}
+                <!-- Loop through all recipients -->
+                {{ user.username }}
+                <!-- Display the current username -->
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+
+        <!-- timestamp -->
+        <p>
+            <strong>Date:</strong>
+            {{ message.timestamp|date:"M d, Y H:i" }}
+            <!-- Format: Month Day, Year Hour:Minute -->
+        </p>
+
+        <hr>
+        <!-- body-->
+        <p style="white-space: pre-line;">
+            <!-- Keeps line breaks exactly as user wrote them -->
+            {{ message.body|linebreaks }}
+        </p>
+
+        <!-- quick actions -->
+        <div class="d-flex gap-2 mt-3">
+
+            <!-- reply -->
+            <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"
+               class="btn btn-primary btn-sm">
+                Reply
+            </a>
+
+            <!-- delete Permanently  -->
+            <a href="{% url 'delete_message' message.id %}"
+               class="btn btn-danger btn-sm">
+                Delete Permanently
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

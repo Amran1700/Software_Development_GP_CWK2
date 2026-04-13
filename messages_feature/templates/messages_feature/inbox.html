@@ -1,47 +1,153 @@
-{% extends 'global.html' %}
-
+<!-- Author: Amran Mohammed id:w2066724 -->
+ 
+{% extends 'messages_feature/messages_layout.html' %}
 {% block title %}Inbox - Sky Engineering{% endblock %}
 {% block nav_messages %}active{% endblock %}
+{% block messages_content %}
 
-{% block content %}
-<div class="messages-page-wrapper">
-    <div class="sidebar-messages">
-        {% include 'messages_feature/components/sidebar_messages.html' %}
-    </div>
+<div class="card border-0 shadow-sm main-card">
+    <div class="card-body p-0">
 
-    <div class="messages-content">
-        <h1>Inbox</h1>
+        <!-- header-->
+        <div class="p-4 border-bottom">
+            <h3 class="fw-bold mb-0" style="color:#4277D6;">
+                Inbox
+            </h3>
+        </div>
 
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>From</th>
-                    <th>Subject</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for message in messages %}
-                <tr class="{% if not message.read_status %}table-info{% endif %}">
-                    <td>{{ message.sender.username }}</td>
-                    <td>
-                        <a href="{% url 'message_detail' message.id %}">{{ message.subject|default:"(No Subject)" }}</a>
-                    </td>
-                    <td>{{ message.timestamp|date:"M d, Y H:i" }}</td>
-                    <td>
-                        <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}" class="btn btn-sm btn-primary">Reply</a>
-                        <a href="{% url 'compose' %}?subject=Fwd: {{ message.subject }}&body={{ message.body|urlencode }}" class="btn btn-sm btn-warning">Forward</a>
-                        <a href="{% url 'delete_message' message.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this message?');">Delete</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4">No messages found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if messages %}
+
+        <div class="gmail-list">
+            <!-- Container for all message rows (Gmail-style list) -->
+
+            {% for message in messages %}
+            <!-- Loop through each message in inbox -->
+
+            <a href="{% url 'message_detail' message.id %}"
+               class="gmail-row d-flex align-items-stretch text-decoration-none
+                      {% if not message.read_status %}unread{% endif %}">
+
+                <div class="status-bar {% if message.read_status %}read{% else %}unread{% endif %}">
+                </div>
+                <!-- Visual indicator:
+                     - Blue = unread
+                     - Grey = read -->
+
+                <!-- message content -->
+                <div class="flex-grow-1 px-4 py-3 overflow-hidden">
+                    <div class="d-flex justify-content-between">
+
+                        <div class="sender">
+                            {{ message.sender.username }}
+                        </div>
+
+                        <div class="text-muted small">
+                            <!-- Time that the message was sent -->
+                            {{ message.timestamp|date:"M d H:i" }}
+                        </div>
+
+                    </div>
+
+                    <!-- subject -->
+                    <div class="subject {% if not message.read_status %}fw-bold{% endif %}">
+                        {{ message.subject|default:"(No Subject)" }}
+                    </div>
+
+                    <!-- preview of message body -->
+                    <div class="preview text-muted small">
+                        {{ message.body|truncatechars:100 }}
+                    </div>
+
+                </div>
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="p-4 text-muted">
+            No messages in your inbox.
+        </div>
+
+        {% endif %}
+
     </div>
 </div>
+
+
+<style>
+
+.gmail-list {
+    display: flex;
+    flex-direction: column;
+    /* Stack messages vertically like how its done in Gmail */
+}
+
+
+.gmail-row {
+    border-bottom: 1px solid #eee;
+    /* small separator between messages */
+    transition: background 0.15s ease;
+    /* Smooth hover animation */
+    color: inherit;
+    /* Prevent link blue color override */
+}
+
+.gmail-row:hover {
+    background-color: #f2f6fc;
+    /* Light highlight when hovering */
+}
+
+.gmail-row.unread .sender,
+.gmail-row.unread .subject {
+    font-weight: 700;
+    /* Make unread messages bold */
+    color: #202124;
+    /* Dark text for emphasis */
+}
+
+.sender {
+    width: 180px;
+    color: #202124;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subject {
+    color: #202124;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Prevent overflow */
+}
+
+.preview {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-bar {
+    width: 4px;
+    min-height: 100%;
+    /* Vertical indicator bar to show if a message has been read before */
+}
+
+/* UNREAD COLOR = BLUE */
+.status-bar.unread {
+    background-color: #1a73e8;
+}
+
+/* READ COLOR = GREY */
+.status-bar.read {
+    background-color: #e0e0e0;
+}
+
+</style>
+
 {% endblock %}

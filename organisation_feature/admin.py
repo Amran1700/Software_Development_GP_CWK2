@@ -1,3 +1,6 @@
+"""Name: Ehsaan Zakriya 
+ID: W2115831 """
+
 from django.contrib import admin
 from .models import Department, TeamType
 
@@ -11,6 +14,7 @@ class DepartmentAdmin(admin.ModelAdmin):
     """
     list_display = ['department_name', 'specialisation']
     search_fields = ['department_name', 'specialisation']
+    list_filter = ['specialisation']
 
 
 @admin.register(TeamType)

@@ -1,49 +1,59 @@
-{% extends 'global.html' %}
+<!-- Author: Amran Mohammed id:w2066724 -->
+ 
+{% extends 'messages_feature/messages_layout.html' %}
 
-{% block title %}Message Detail - Sky Engineering{% endblock %}
-{% block nav_messages %}active{% endblock %}
+{% block title %}Message Detail{% endblock %}
 
-{% block content %}
-<div class="messages-page-wrapper">
-    <div class="sidebar-messages">
-        {% include 'messages_feature/components/sidebar_messages.html' %}
-    </div>
+{% block messages_content %}
 
-    <div class="messages-content">
-        <h1>Message Detail</h1>
+<div class="card border-0 shadow-sm main-card">
 
-        <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-                <p><strong>From:</strong> {{ message.sender.username }} ({{ message.sender.email }})</p>
-                <p><strong>To:</strong>
-                    {% for user in message.receiver.all %}
-                        {{ user.username }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                </p>
-                <p><strong>Date:</strong> {{ message.timestamp|date:"M d, Y H:i" }}</p>
-                <p><strong>Subject:</strong> {{ message.subject }}</p>
-                <hr>
-                <p>{{ message.body|linebreaks }}</p>
-            </div>
-        </div>
+    <div class="card-body p-4">
 
-        <div class="d-flex gap-2 mb-3">
-            <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}" class="btn btn-primary">Reply</a>
-            <a href="{% url 'delete_message' message.id %}" class="btn btn-danger" onclick="return confirm('Delete this message?');">Delete</a>
-            <a href="{% url 'inbox' %}" class="btn btn-secondary">Back to Inbox</a>
-        </div>
+        <!-- subject -->
+        <h4 class="fw-bold mb-3">
+            {{ message.subject|default:"(No Subject)" }}
+        </h4>
 
-        {% if message.replies.all %}
-        <h3>Thread</h3>
-        <div class="list-group">
-            {% for reply in message.replies.all %}
-            <div class="list-group-item mb-2 shadow-sm">
-                <p><strong>{{ reply.sender.username }}</strong> <small class="text-muted">{{ reply.timestamp|date:"M d, Y H:i" }}</small></p>
-                <p>{{ reply.body|linebreaks }}</p>
-            </div>
+        <!-- sender -->
+        <p><strong>From:</strong> {{ message.sender.username }}</p>
+
+        <!-- receivers -->
+        <p>
+            <strong>To:</strong>
+            {% for user in message.receiver.all %}
+                {{ user.username }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
+        </p>
+
+        <hr>
+
+        <!-- message body -->
+        <p style="white-space: pre-line;">
+            {{ message.body|linebreaks }}
+        </p>
+
+        <!--  quick actions -->
+        <div class="d-flex gap-2 mt-3">
+
+            <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"
+               class="btn btn-primary btn-sm">
+                Reply
+            </a>
+
+            <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"
+               class="btn btn-outline-primary btn-sm">
+                Reply All
+            </a>
+
+            <a href="{% url 'delete_message' message.id %}"
+               class="btn btn-danger btn-sm">
+                Delete
+            </a>
+
         </div>
-        {% endif %}
+
     </div>
 </div>
+
 {% endblock %}

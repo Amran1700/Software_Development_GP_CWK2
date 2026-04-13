@@ -1,42 +1,60 @@
-{% extends 'global.html' %}
+<!-- Author: Amran Mohammed id:w2066724 -->
+{% extends 'messages_feature/messages_layout.html' %}
 
-{% block title %}Drafts - Sky Engineering{% endblock %}
-{% block nav_messages %}active{% endblock %}
+{% block title %}Drafts{% endblock %}
 
-{% block content %}
-<div class="messages-page-wrapper">
-    <div class="sidebar-messages">
-        {% include 'messages_feature/components/sidebar_messages.html' %}
-    </div>
+{% block messages_content %}
 
-    <div class="messages-content">
-        <h1>Drafts</h1>
+<div class="card border-0 shadow-sm main-card">
 
-        {% if messages %}
-        <div class="list-group">
-            {% for draft in messages %}
-            <div class="list-group-item d-flex justify-content-between align-items-center mb-2 shadow-sm rounded">
-                <div>
-                    <h5>{{ draft.subject|default:"(No Subject)" }}</h5>
-                    <p><strong>To:</strong>
-                        {% for user in draft.receiver.all %}
-                            {{ user.username }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                    <small class="text-muted">{{ draft.timestamp|date:"M d, Y H:i" }}</small>
+    <div class="card-body p-4">
+
+        <h3 class="fw-bold mb-3" style="color:#4277D6;">Draft Messages</h3>
+
+        {% for message in messages %}
+
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+
+                <!-- subject -->
+                <h5>{{ message.subject|default:"(No Subject)" }}</h5>
+
+                <!-- recipients -->
+                <p>
+                    <strong>To:</strong>
+                    {% for user in message.receiver.all %}
+                        {{ user.username }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+
+                <!-- timestamp -->
+                <small class="text-muted">
+                    {{ message.timestamp|date:"M d, Y H:i" }}
+                </small>
+
+                <!-- quick actions -->
+                <div class="mt-2 d-flex gap-2">
+                    <!-- edit-->
+                    <a href="{% url 'edit_draft' message.id %}"
+                       class="btn btn-sm btn-primary">
+                        Edit
+                    </a>
+
+                    <!-- view -->
+                    <a href="{% url 'message_detail' message.id %}"
+                       class="btn btn-sm btn-outline-primary">
+                        View
+                    </a>
                 </div>
-                <div class="d-flex gap-2">
-                    <a href="{% url 'compose' %}?draft_id={{ draft.id }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                    <a href="{% url 'delete_message' draft.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this draft?');">Delete</a>
-                </div>
+
             </div>
-            {% endfor %}
         </div>
-        {% else %}
-        <p class="text-muted">No drafts saved.</p>
-        {% endif %}
 
-        <a href="{% url 'compose' %}" class="btn btn-primary mt-3">Compose New Message</a>
+        {% empty %}
+        <p class="text-muted">No drafts available.</p>
+        {% endfor %}
+
     </div>
 </div>
+
 {% endblock %}

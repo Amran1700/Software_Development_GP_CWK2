@@ -1,19 +1,59 @@
-<div class="sidebar-messages">
-    <h3>Mailbox</h3>
-    <ul>
-        <li><a href="{% url 'inbox' %}" class="{% if request.resolver_match.url_name == 'inbox' %}active{% endif %}">
-            <i class="bi bi-inbox"></i> Inbox
-            {% if inbox_count %}<span class="badge">{{ inbox_count }}</span>{% endif %}
-        </a></li>
-        <li><a href="{% url 'sent' %}" class="{% if request.resolver_match.url_name == 'sent' %}active{% endif %}">
-            <i class="bi bi-send"></i> Sent
-        </a></li>
-        <li><a href="{% url 'drafts' %}" class="{% if request.resolver_match.url_name == 'drafts' %}active{% endif %}">
-            <i class="bi bi-pencil"></i> Drafts
-            {% if drafts_count %}<span class="badge">{{ drafts_count }}</span>{% endif %}
-        </a></li>
-        <li><a href="{% url 'deleted' %}" class="{% if request.resolver_match.url_name == 'deleted' %}active{% endif %}">
-            <i class="bi bi-trash"></i> Deleted
-        </a></li>
-    </ul>
+<!-- Author: Amran Mohammed id:w2066724 -->
+ 
+<!-- this holds the sidebar container  -->
+<div class="card border-0 shadow-sm" style="border-radius: 12px; width: 240px; height: 100%;">
+    <!-- sidebar content area and holds the header for the sidebar-->
+    <div class="card-body p-2 d-flex flex-column">
+        <h5 class="fw-bold mb-3 p-2" style="color:#4277D6;">
+            <i class="bi bi-envelope me-2"></i>
+            Mailbox
+        </h5>
+
+        <div class="list-group list-group-flush flex-grow-1">
+
+            <!-- inbox-->
+            <a href="{% url 'inbox' %}"
+               class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center
+               {% if request.resolver_match.url_name == 'inbox' %}active{% endif %}">
+                <span>Inbox</span>
+
+                {% if inbox_count %}
+                <span class="badge bg-primary">{{ inbox_count }}</span>
+                {% endif %}
+            </a>
+
+            <!-- sent -->
+            <a href="{% url 'sent' %}"
+               class="list-group-item list-group-item-action border-0
+               {% if request.resolver_match.url_name == 'sent' %}active{% endif %}">
+                Sent
+            </a>
+
+            <!-- drafts -->
+            <a href="{% url 'drafts' %}"
+               class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center
+               {% if request.resolver_match.url_name == 'drafts' %}active{% endif %}">
+                <span>Drafts</span>
+
+                {% if drafts_count %}
+                <span class="badge bg-secondary">{{ drafts_count }}</span>
+                {% endif %}
+            </a>
+
+            <!-- deleted -->
+            <a href="{% url 'deleted' %}"
+               class="list-group-item list-group-item-action border-0
+               {% if request.resolver_match.url_name == 'deleted' %}active{% endif %}">
+                Deleted
+            </a>
+
+            <!-- compose -->
+            <a href="{% url 'compose' %}"
+               class="list-group-item list-group-item-action border-0
+               {% if request.resolver_match.url_name == 'compose' %}active{% endif %}">
+                Compose
+            </a>
+
+        </div>
+    </div>
 </div>
