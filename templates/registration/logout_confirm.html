@@ -1,0 +1,43 @@
+{% extends "global.html" %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+  * { font-family: 'Roboto', sans-serif; }
+  :root {
+    --brand-gradient: linear-gradient(135deg, #4277D6, #6C71CF, #6F50A0);
+    --brand-mid: #6C71CF;
+  }
+  .logout-wrapper { min-height: 80vh; display: flex; align-items: center; justify-content: center; background: #f4f6fb; padding: 24px; }
+  .logout-card { background: white; border-radius: 16px; padding: 48px 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; max-width: 420px; width: 100%; }
+  .logout-icon { width: 72px; height: 72px; border-radius: 50%; background: #fde8e8; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 2rem; color: #e84c4c; }
+  .logout-card h4 { font-weight: 700; font-size: 1.3rem; color: #1a1d2e; margin-bottom: 10px; }
+  .logout-card p { color: #888; font-size: 0.9rem; margin-bottom: 32px; line-height: 1.6; }
+  .btn-logout { background: linear-gradient(135deg, #e84c4c, #c0392b); color: white; border: none; border-radius: 8px; padding: 11px 28px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: opacity .2s; text-decoration: none; width: 100%; justify-content: center; margin-bottom: 12px; }
+  .btn-logout:hover { opacity: .88; color: white; }
+  .btn-cancel { background: #f4f6fb; color: #555; border: 1px solid #e0e0e0; border-radius: 8px; padding: 11px 28px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: background .2s; text-decoration: none; width: 100%; justify-content: center; }
+  .btn-cancel:hover { background: #ede8ff; color: var(--brand-mid); border-color: var(--brand-mid); }
+</style>
+
+<div class="logout-wrapper">
+  <div class="logout-card">
+    <div class="logout-icon">
+      <i class="bi bi-box-arrow-right"></i>
+    </div>
+    <h4>Log out of Sky Engineering?</h4>
+    <p>You are about to log out of the Sky Engineering Teams Portal. You will need to log back in to access your account.</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn-logout">
+        <i class="bi bi-box-arrow-right"></i> Yes, log me out
+      </button>
+    </form>
+    <a href="/" class="btn-cancel">
+      <i class="bi bi-arrow-left"></i> Cancel, go back
+    </a>
+  </div>
+</div>
+
+{% endblock %}
