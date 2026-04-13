@@ -1,3 +1,4 @@
+""" Marc Ferandes w2081572 """
 from django.contrib import admin
 
 from .models import (

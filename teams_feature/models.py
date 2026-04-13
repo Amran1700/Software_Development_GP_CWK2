@@ -1,8 +1,14 @@
+"""  w2081572 """
 from django.db import models
 from django.contrib.auth.models import User
 from organisation_feature.models import Department
 
+
 class TeamType(models.Model):
+    """
+    Categorises teams by their type e.g. Engineering, Research, Operations.
+    Used as a ForeignKey on the Team model for filtering and display.
+    """
     type_name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
@@ -11,6 +17,11 @@ class TeamType(models.Model):
 
 
 class Skill(models.Model):
+    """
+    Represents a skill that can be assigned to one or more teams.
+    Linked to Team through the TeamSkill junction table.
+    skill_name is unique to prevent duplicate skill entries in the database.
+    """
     skill_name = models.CharField(max_length=100, unique=True)
     category = models.CharField(max_length=50, blank=True)
 
@@ -19,6 +30,10 @@ class Skill(models.Model):
 
 
 class Role(models.Model):
+    """
+    Represents a job role that can be assigned to users via the UserRole junction table.
+    is_active allows roles to be deactivated without deleting them from the database.
+    """
     role_name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
     category = models.CharField(max_length=50, blank=True)
@@ -29,18 +44,22 @@ class Role(models.Model):
 
 
 class Team(models.Model):
+    """
+    Core model representing an engineering team within the Sky portal.
+    is_active allows teams to be soft-deleted without removing data.
+    """
     team_name = models.CharField(max_length=100)
     department = models.ForeignKey(
-        Department, on_delete=models.CASCADE, 
+        Department, on_delete=models.CASCADE,
         related_name='teams'
     )
     manager = models.ForeignKey(
-        User, on_delete=models.SET_NULL, 
+        User, on_delete=models.SET_NULL,
         null=True, blank=True,
         related_name='managed_teams'
     )
     team_type = models.ForeignKey(
-        TeamType, on_delete=models.SET_NULL, 
+        TeamType, on_delete=models.SET_NULL,
         null=True, blank=True,
         related_name='teams'
     )
@@ -55,6 +74,10 @@ class Team(models.Model):
 
 
 class TeamMember(models.Model):
+    """
+    Represents an individual member belonging to a team.
+    Linked to Team via ForeignKey — deleting a team removes all its members.
+    """
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -62,7 +85,7 @@ class TeamMember(models.Model):
     phone_number = models.CharField(max_length=20, blank=True)
     date_joined = models.DateField(auto_now_add=True)
     team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, 
+        Team, on_delete=models.CASCADE,
         related_name='members'
     )
 
@@ -71,13 +94,17 @@ class TeamMember(models.Model):
 
 
 class TeamRepository(models.Model):
+    """
+    Stores GitHub or other code repository links associated with a team.
+    is_active allows repos to be hidden without deletion when outdated.
+    """
     repo_name = models.CharField(max_length=100)
     repo_url = models.URLField()
     repo_type = models.CharField(max_length=50, blank=True)
     last_update = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, 
+        Team, on_delete=models.CASCADE,
         related_name='repositories'
     )
 
@@ -87,16 +114,21 @@ class TeamRepository(models.Model):
 
 # M:M Junction — Team <-> Skill
 class TeamSkill(models.Model):
+    """
+    Junction table linking Team to Skill in a Many-to-Many relationship.
+    Also stores the team's proficiency level for each skill.
+    unique_together ensures a team cannot have the same skill listed twice.
+    """
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_skills')
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='team_skills')
     proficiency_level = models.CharField(
-        max_length=20, 
+        max_length=20,
         choices=[('beginner', 'Beginner'), ('intermediate', 'Intermediate'), ('advanced', 'Advanced')],
         default='intermediate'
     )
 
     class Meta:
-        unique_together = ('team', 'skill')  # Compound PK
+        unique_together = ('team', 'skill')
 
     def __str__(self):
         return f"{self.team.team_name} — {self.skill.skill_name}"
@@ -104,11 +136,15 @@ class TeamSkill(models.Model):
 
 # M:M Junction — User <-> Role
 class UserRole(models.Model):
+    """
+    Junction table linking Django Users to Roles in a Many-to-Many relationship.
+    unique_together prevents a user being assigned the same role twice.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_roles')
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='user_roles')
     assigned_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, 
-        null=True, blank=True, 
+        User, on_delete=models.SET_NULL,
+        null=True, blank=True,
         related_name='roles_assigned'
     )
     is_active = models.BooleanField(default=True)
@@ -122,12 +158,16 @@ class UserRole(models.Model):
 
 # M:M Self-Referencing — Upstream Dependencies
 class UpstreamDependency(models.Model):
+    """
+    Records which teams THIS team depends on (upstream = teams we rely on).
+    unique_together prevents the same dependency being recorded twice.
+    """
     team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, 
+        Team, on_delete=models.CASCADE,
         related_name='upstream_dependencies'
     )
     upstream_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, 
+        Team, on_delete=models.CASCADE,
         related_name='downstream_dependents'
     )
     description = models.TextField(blank=True)
@@ -141,12 +181,16 @@ class UpstreamDependency(models.Model):
 
 # M:M Self-Referencing — Downstream Dependencies
 class DownstreamDependency(models.Model):
+    """
+    Records which teams depend on THIS team (downstream = teams that rely on us).
+    Kept separate from UpstreamDependency for query clarity in views.
+    """
     team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, 
+        Team, on_delete=models.CASCADE,
         related_name='downstream_dependencies'
     )
     downstream_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, 
+        Team, on_delete=models.CASCADE,
         related_name='upstream_dependents'
     )
     description = models.TextField(blank=True)
@@ -156,5 +200,3 @@ class DownstreamDependency(models.Model):
 
     def __str__(self):
         return f"{self.downstream_team.team_name} depends on {self.team.team_name}"
-
-# Create your models here.

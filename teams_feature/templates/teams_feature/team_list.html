@@ -1,3 +1,4 @@
+<!-- Marc Fernandes w2081572-->
 {% extends 'global.html' %}
 
 {% block title %}Engineering Teams — Sky Engineering Portal{% endblock %}
@@ -307,7 +308,7 @@
 
                 <!-- Department badge — colour cycles by forloop counter -->
                 <td>
-                    <span class="dept-badge dept-badge-{{ forloop.counter0|divisibleby:8|yesno:'0,'}}{% cycle '0' '1' '2' '3' '4' '5' '6' '7' %}">
+                    <span class="dept-badge dept-badge-{% cycle '0' '1' '2' '3' '4' '5' '6' '7' %}">
                         {{ team.department.department_name }}
                     </span>
                 </td>
@@ -338,6 +339,28 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- Pagination controls -->
+{% if page_obj.has_other_pages %}
+<div class="d-flex justify-content-center align-items-center gap-2 py-3 border-top">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}&department={{ department }}"
+       class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-chevron-left"></i> Previous
+    </a>
+    {% endif %}
+
+    <span class="text-muted" style="font-size:0.85rem">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}&q={{ query }}&department={{ department }}"
+       class="btn btn-outline-secondary btn-sm">
+        Next <i class="bi bi-chevron-right"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
     <div class="table-hint">
         <i class="bi bi-cursor me-1"></i>Click on a team row to view detailed information
     </div>
