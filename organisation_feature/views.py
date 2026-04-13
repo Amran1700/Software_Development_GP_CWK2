@@ -1,7 +1,5 @@
 """ Name: Ehsaan Zakriya
  ID: W2115831 """
-
-
 from django.shortcuts import render, get_object_or_404
 from .models import Department, TeamType
 from teams_feature.models import Team, UpstreamDependency, DownstreamDependency
@@ -27,13 +25,11 @@ def department_list(request):
     Filters by department name if a filter chip is selected.
     3+ Teams filter shows departments with 3 or more teams.
     """
-    query = request.GET.get('q', '')  # Get search query from URL params
-    active_filter = request.GET.get('filter', '')  # Get active filter chip
-
+    query = request.GET.get('q', '')
+    active_filter = request.GET.get('filter', '')
     departments = Department.objects.all()
 
     if query:
-        # Filter by name or specialisation
         departments = departments.filter(
             department_name__icontains=query
         ) | departments.filter(
@@ -41,10 +37,8 @@ def department_list(request):
         )
 
     if active_filter == '3teams':
-        # Filter departments with 3 or more teams
         departments = [d for d in departments if d.teams.count() >= 3]
     elif active_filter:
-        # Filter by department name
         departments = departments.filter(department_name__icontains=active_filter)
 
     return render(request, 'organisation_feature/department_list.html', {
@@ -62,13 +56,10 @@ def department_detail(request, department_id):
     """
     # Get department or return 404 if not found
     department = get_object_or_404(Department, id=department_id)
-
     # Get all teams belonging to this department
     teams = Team.objects.filter(department=department)
-
     # Get all team types for the team types section
     team_types = TeamType.objects.all()
-
     # Build dependency data for each team in this department
     team_dependencies = []
     for team in teams:
