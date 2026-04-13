@@ -11,6 +11,7 @@ class DepartmentAdmin(admin.ModelAdmin):
     """
     list_display = ['department_name', 'specialisation']
     search_fields = ['department_name', 'specialisation']
+    list_filter = ['specialisation']
 
 
 @admin.register(TeamType)
