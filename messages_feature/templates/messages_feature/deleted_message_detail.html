@@ -1,6 +1,6 @@
 {% extends 'messages_feature/messages_layout.html' %}
 
-{% block title %}Message Detail{% endblock %}
+{% block title %}Deleted Message Detail{% endblock %}
 {% block nav_messages %}active{% endblock %}
 
 {% block messages_content %}
@@ -13,13 +13,21 @@
             {{ message.subject|default:"(No Subject)" }}
         </h4>
 
-        <p><strong>From:</strong> {{ message.sender.username }}</p>
+        <p>
+            <strong>From:</strong>
+            {{ message.sender.username }} ({{ message.sender.email }})
+        </p>
 
         <p>
             <strong>To:</strong>
             {% for user in message.receiver.all %}
                 {{ user.username }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
+        </p>
+
+        <p>
+            <strong>Date:</strong>
+            {{ message.timestamp|date:"M d, Y H:i" }}
         </p>
 
         <hr>
@@ -36,14 +44,9 @@
                 Reply
             </a>
 
-            <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"
-               class="btn btn-outline-primary btn-sm">
-                Reply All
-            </a>
-
             <a href="{% url 'delete_message' message.id %}"
                class="btn btn-danger btn-sm">
-                Delete
+                Delete Permanently
             </a>
 
         </div>

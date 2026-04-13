@@ -1,55 +1,115 @@
-{% extends 'global.html' %}
+{% extends 'messages_feature/messages_layout.html' %}
 
 {% block title %}Compose Message - Sky Engineering{% endblock %}
 {% block nav_messages %}active{% endblock %}
 
-{% block content %}
-<div class="messages-page-wrapper">
-    <div class="sidebar-messages">
-        {% include 'messages_feature/components/sidebar_messages.html' %}
-    </div>
+{% block messages_content %}
 
-    <div class="messages-content">
-        <h1>Compose Message</h1>
+<div class="card border-0 shadow-sm main-card">
+    <div class="card-body p-4">
+
+        <h3 class="fw-bold mb-4" style="color:#4277D6;">
+            Compose Message
+        </h3>
 
         {% if error %}
-        <div class="alert alert-danger">{{ error }}</div>
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
         {% endif %}
 
-        <div class="card mb-4 shadow-sm">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label for="recipient">Recipient *</label>
-                    <select name="recipient" id="recipient" multiple size="5" required class="form-select">
-                        {% for user in users %}
-                        <option value="{{ user.id }}" {% if initial_receiver and user.id in initial_receiver %}selected{% endif %}>{{ user.username }}</option>
-                        {% endfor %}
-                    </select>
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- RECIPIENTS -->
+            <div class="mb-3">
+
+                <label class="fw-bold d-flex align-items-center gap-2">
+                    Recipients <span class="text-danger">*</span>
+                    <small class="text-muted fw-normal">
+                        (Select one or more recipients)
+                    </small>
+                </label>
+
+                <div class="card p-3" style="max-height: 220px; overflow-y: auto;">
+
+                    {% for user in users %}
+                    <div class="form-check">
+
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="recipient"
+                               value="{{ user.id }}"
+                               id="user{{ user.id }}"
+                               {% if user.id in recipient_ids %}checked{% endif %}>
+
+                        <label class="form-check-label" for="user{{ user.id }}">
+                            {{ user.username }}
+                        </label>
+
+                    </div>
+                    {% endfor %}
+
                 </div>
 
-                <div class="mb-3">
-                    <label for="subject">Subject</label>
-                    <input type="text" name="subject" id="subject" value="{{ initial_subject|default:'' }}" class="form-control">
-                </div>
+            </div>
 
-                <div class="mb-3">
-                    <label for="body">Message *</label>
-                    <textarea name="body" id="body" rows="6" required class="form-control">{{ body|default:'' }}</textarea>
-                </div>
+            <!-- SUBJECT -->
+            <div class="mb-3">
 
-                <div class="mb-3">
-                    <label>Attachments</label>
-                    <input type="file" name="attachments" multiple class="form-control">
-                </div>
+                <label class="fw-bold">
+                    Subject
+                </label>
+
+                <input type="text"
+                       name="subject"
+                       value="{{ initial_subject|default:'' }}"
+                       class="form-control"
+                       placeholder="Optional subject...">
+
+            </div>
+
+            <!-- MESSAGE -->
+            <div class="mb-3">
+
+                <label class="fw-bold">
+                    Message <span class="text-danger">*</span>
+                </label>
+
+                <textarea name="body"
+                          rows="6"
+                          class="form-control"
+                          placeholder="Write your message...">{{ body|default:'' }}</textarea>
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="card p-3 border-0 shadow-sm"
+                 style="background:#f8f9fa; border-radius:10px;">
 
                 <div class="d-flex gap-2">
-                    <button type="submit" name="status" value="sent" class="btn btn-primary">Send</button>
-                    <button type="submit" name="status" value="draft" class="btn btn-secondary">Save as Draft</button>
-                    <a href="{% url 'inbox' %}" class="btn btn-danger">Discard</a>
+
+                    <button type="submit"
+                            name="status"
+                            value="sent"
+                            class="btn btn-primary">
+                        Send
+                    </button>
+
+                    <button type="submit"
+                            name="status"
+                            value="draft"
+                            class="btn btn-outline-secondary">
+                        Save Draft
+                    </button>
+
                 </div>
-            </form>
-        </div>
+
+            </div>
+
+        </form>
+
     </div>
 </div>
+
 {% endblock %}
