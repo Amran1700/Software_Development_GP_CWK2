@@ -1,6 +1,5 @@
-"""Name: Ehsaan Zakriya 
-ID: W2115831 """
-
+""" Name: Ehsaan Zakriya
+ ID: W2115831 """
 from django.db import models
 
 
@@ -11,10 +10,8 @@ class TeamType(models.Model):
     Examples: Frontend, Backend, DevOps, Data.
     Used to classify teams across all departments.
     """
-
     # Name of the team type
     type_name = models.CharField(max_length=100)
-
     # Optional longer description of the team type
     description = models.TextField(blank=True)
 
@@ -34,13 +31,10 @@ class Department(models.Model):
     Each department contains multiple teams and has a specialisation area.
     Links to teams via the Team model in teams_feature (FK on Team side).
     """
-
     # Full department name
     department_name = models.CharField(max_length=150)
-
     # Optional area of expertise for the department
     specialisation = models.CharField(max_length=200, blank=True)
-
     # Optional longer description of the department
     description = models.TextField(blank=True)
 
