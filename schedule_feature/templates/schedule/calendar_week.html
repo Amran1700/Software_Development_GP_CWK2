@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "global.html" %}
 {% block content %}
 {% load schedule_tags %}
 
@@ -47,32 +48,51 @@
   .empty-day { color: #ddd; font-size: 0.75rem; text-align: center; padding-top: 20px; }
 </style>
 
+<!-- Main layout: sidebar on the left, weekly calendar on the right -->
 <div class="calendar-wrapper">
+
+  <!-- ── LEFT SIDEBAR ─────────────────────────────────────────── -->
   <div class="cal-sidebar">
+
+    <!-- This Week box: lists all meetings happening in the current week -->
     <div class="upcoming-box">
       <h6><i class="bi bi-calendar-event me-1"></i> This Week</h6>
+
+      <!-- Loop through each day of the week and show any meetings -->
       {% for day in week_days %}
         {% if day in meetings_by_day %}
           {% for meeting in meetings_by_day|get_item:day %}
           <div class="upcoming-item">
+            <!-- Meeting title -->
             <div style="font-weight:600; font-size:0.82rem;">{{ meeting.title }}</div>
+            <!-- Day and time of the meeting -->
             <div style="color:#888; font-size:0.75rem;">{{ day|date:"D d" }} · {{ meeting.time|time:"g:i A" }}</div>
           </div>
           {% endfor %}
         {% endif %}
+      <!-- Shown when there are no meetings at all this week -->
       {% empty %}
       <p class="text-muted" style="font-size:0.8rem;">No meetings this week</p>
       {% endfor %}
     </div>
-  </div>
 
+  </div>
+  <!-- ── END SIDEBAR ───────────────────────────────────────────── -->
+
+
+  <!-- ── MAIN CALENDAR AREA ────────────────────────────────────── -->
   <div class="cal-main">
+
+    <!-- Header: calendar title, date range, view toggle buttons and create meeting button -->
     <div class="cal-header">
       <div>
         <h4><i class="bi bi-calendar3 me-2"></i>Team Calendar</h4>
+        <!-- Shows the start and end date of the current week -->
         <small class="text-muted">Week of {{ week_start|date:"F j" }} – {{ week_end|date:"F j, Y" }}</small>
       </div>
       <div class="d-flex gap-2 align-items-center flex-wrap">
+
+        <!-- View toggle: switch between Day, Week, Month and List views -->
         <div class="view-toggle">
           <a href="{% url 'schedule:calendar_day' %}" class="view-btn">Day</a>
           <a href="{% url 'schedule:calendar_week' %}" class="view-btn active">Week</a>
@@ -80,46 +100,72 @@
           <a href="{% url 'schedule:calendar_week' %}" class="view-btn">Today</a>
           <a href="{% url 'schedule:upcoming_meetings' %}" class="view-btn">List</a>
         </div>
+
+        <!-- Button that links to the create meeting form -->
         <a href="{% url 'schedule:create_meeting' %}" class="btn-create-meeting">
           <i class="bi bi-plus-lg"></i> Create Meeting
         </a>
+
       </div>
     </div>
 
+    <!-- Week navigation: go to the previous or next week using an offset value -->
     <div class="cal-nav">
       <a href="?offset={{ prev_offset }}"><i class="bi bi-chevron-left"></i> Previous</a>
       <strong>{{ week_start|date:"F j" }} – {{ week_end|date:"F j, Y" }}</strong>
       <a href="?offset={{ next_offset }}">Next <i class="bi bi-chevron-right"></i></a>
     </div>
 
+    <!-- Weekly grid: 7 columns, one for each day of the week -->
     <div class="week-grid">
+
+      <!-- Week header row: shows the day name and date number for each column -->
       <div class="week-header">
         {% for day in week_days %}
+        <!-- 'today-col' highlights the current day with a gradient circle -->
         <div class="week-header-cell {% if day == today %}today-col{% endif %}">
           <div class="day-name">{{ day|date:"D" }}</div>
           <div class="day-num">{{ day|date:"j" }}</div>
         </div>
         {% endfor %}
       </div>
+
+      <!-- Week body: one column per day containing that day's meetings -->
       <div class="week-body">
         {% for day in week_days %}
+
+        <!-- Each day column — highlighted in blue if it is today -->
         <div class="week-day-col {% if day == today %}today-col{% endif %}">
+
           {% if day in meetings_by_day %}
+            <!-- Loop through all meetings for this day and display them as coloured blocks -->
             {% for meeting in meetings_by_day|get_item:day %}
+            <!-- Each meeting links to its detail page
+                 Colour depends on the platform: Zoom=blue, Teams=purple, Meet=green -->
             <a href="{% url 'schedule:meeting_detail' meeting.pk %}"
                class="week-meeting {% if meeting.platform == 'zoom' %}pill-zoom{% elif meeting.platform == 'teams' %}pill-teams{% elif meeting.platform == 'meet' %}pill-meet{% else %}pill-default{% endif %}">
+              <!-- Meeting start time -->
               <span class="meet-time">{{ meeting.time|time:"g:i A" }}</span>
+              <!-- Meeting title (truncated if too long) -->
               <span class="meet-title">{{ meeting.title }}</span>
             </a>
             {% endfor %}
+
           {% else %}
+            <!-- Show a dash if there are no meetings on this day -->
             <div class="empty-day">–</div>
           {% endif %}
+
         </div>
         {% endfor %}
       </div>
+
     </div>
+    <!-- ── END WEEKLY GRID ──────────────────────────────────────── -->
+
   </div>
+  <!-- ── END MAIN CALENDAR AREA ────────────────────────────────── -->
+
 </div>
 
 {% endblock %}

@@ -1,9 +1,11 @@
-{% extends "global.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "base.html" %}
 {% block title %}Home – Sky Engineering Portal{% endblock %}
 {% block content %}
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<!-- Chart.js library used to render the bar and doughnut charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
@@ -20,63 +22,18 @@
 
   .dash-wrapper { padding: 28px 24px; background: var(--bg); min-height: 100vh; }
 
-  /* Header */
   .dash-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
   .dash-header h4 { font-weight:700; font-size:1.3rem; color:var(--text-primary); margin:0; }
   .dash-header small { color:var(--text-muted); font-size:0.82rem; display:block; margin-top:3px; }
 
-  /* Hero */
-  .hero {
-    background: var(--brand-gradient); border-radius:14px; padding:26px 30px;
-    color:#fff; display:flex; align-items:center; justify-content:space-between;
-    gap:20px; margin-bottom:24px; position:relative; overflow:hidden;
-  }
-  .hero::before { content:''; position:absolute; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,.07); right:-40px; top:-50px; }
-  .hero::after  { content:''; position:absolute; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,.05); right:90px; bottom:-50px; }
-  .hero-text h5 { font-size:1.2rem; font-weight:700; margin:0 0 6px; }
-  .hero-text p  { font-size:0.83rem; opacity:.85; margin:0; }
-  .hero-btns { display:flex; gap:10px; z-index:1; flex-wrap:wrap; }
-  .hero-btn {
-    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
-    color:#fff; border-radius:8px; padding:8px 16px; font-size:0.82rem;
-    font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-    transition:background .2s;
-  }
-  .hero-btn:hover { background:rgba(255,255,255,.28); color:#fff; }
-
-  /* Stat Cards */
-  .stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
-  .stat-card {
-    background:var(--surface); border-radius:14px; padding:20px 22px;
-    box-shadow:0 2px 10px rgba(0,0,0,.06); display:flex; align-items:center; gap:16px;
-    transition:transform .18s, box-shadow .18s;
-  }
-  .stat-card:hover { transform:translateY(-3px); box-shadow:0 8px 22px rgba(0,0,0,.1); }
-  .stat-icon { width:50px; height:50px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.35rem; flex-shrink:0; }
-  .si-blue  { background:#e8f0fe; color:#4277D6; }
-  .si-purple{ background:#ede8ff; color:#6C71CF; }
-  .si-orange{ background:#fff3e8; color:#e8872e; }
-  .si-green { background:#e6f9f0; color:#2db97a; }
-  .stat-val { font-size:1.8rem; font-weight:700; color:var(--text-primary); line-height:1; }
-  .stat-lbl { font-size:0.76rem; color:var(--text-muted); font-weight:500; margin-top:4px; }
-  .stat-badge { margin-left:auto; font-size:0.68rem; font-weight:600; padding:3px 8px; border-radius:20px; white-space:nowrap; align-self:flex-start; }
-  .sb-blue  { background:#e8f0fe; color:#4277D6; }
-  .sb-orange{ background:#fff3e8; color:#e8872e; }
-  .sb-green { background:#e6f9f0; color:#2db97a; }
-
-  /* Cards */
   .dash-card { background:var(--surface); border-radius:14px; padding:22px; box-shadow:0 2px 10px rgba(0,0,0,.06); }
   .card-title { font-weight:700; font-size:0.88rem; color:var(--text-primary); margin-bottom:18px; display:flex; align-items:center; gap:7px; }
   .card-title i { color:var(--brand-mid); }
   .chart-wrap { position:relative; height:220px; }
 
-  /* Mid row */
   .mid-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
+  .bot-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 
-  /* Bottom row */
-  .bot-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
-
-  /* Module cards */
   .mod-card {
     background:var(--surface); border-radius:14px; padding:22px;
     box-shadow:0 2px 10px rgba(0,0,0,.06); text-align:center;
@@ -94,15 +51,14 @@
   .mod-btn:hover { opacity:.88; color:#fff; }
 
   @media(max-width:1100px){
-    .stat-grid{ grid-template-columns:repeat(2,1fr); }
     .mid-row, .bot-row{ grid-template-columns:1fr; }
-    .hero{ flex-direction:column; align-items:flex-start; }
   }
 </style>
 
+<!-- Main dashboard wrapper -->
 <div class="dash-wrapper">
 
-  <!-- Header -->
+  <!-- Page header: shows the Home title and welcome message -->
   <div class="dash-header">
     <div>
       <h4><i class="bi bi-house-fill me-2" style="color:var(--brand-mid);"></i>Home</h4>
@@ -110,108 +66,69 @@
     </div>
   </div>
 
-  <!-- Hero Banner -->
-  <div class="hero">
-    <div class="hero-text">
-      <h5><i class="bi bi-broadcast me-2"></i>Sky Engineering Teams Portal</h5>
-      <p>Manage teams, departments, messages, meetings and reports — all from one place.</p>
-    </div>
-    <div class="hero-btns">
-      <a href="/teams/TeamPage/"         class="hero-btn"><i class="bi bi-people-fill"></i> Teams</a>
-      <a href="/schedule/calendar/"      class="hero-btn"><i class="bi bi-calendar3"></i> Calendar</a>
-      <a href="/reports/"                class="hero-btn"><i class="bi bi-bar-chart-fill"></i> Reports</a>
-      <a href="/messages/"               class="hero-btn"><i class="bi bi-envelope-fill"></i> Messages</a>
-    </div>
-  </div>
-
-  <!-- Stat Cards -->
-  <div class="stat-grid">
-    <div class="stat-card">
-      <div class="stat-icon si-blue"><i class="bi bi-people-fill"></i></div>
-      <div>
-        <div class="stat-val">{{ total_teams|default:"—" }}</div>
-        <div class="stat-lbl">Total Teams</div>
-      </div>
-      <span class="stat-badge sb-blue">Active</span>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon si-purple"><i class="bi bi-diagram-3-fill"></i></div>
-      <div>
-        <div class="stat-val">{{ total_departments|default:"—" }}</div>
-        <div class="stat-lbl">Departments</div>
-      </div>
-      <span class="stat-badge sb-blue">Org</span>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon si-orange"><i class="bi bi-envelope-fill"></i></div>
-      <div>
-        <div class="stat-val">{{ unread_messages|default:"—" }}</div>
-        <div class="stat-lbl">Unread Messages</div>
-      </div>
-      <span class="stat-badge sb-orange">Inbox</span>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon si-green"><i class="bi bi-calendar-check-fill"></i></div>
-      <div>
-        <div class="stat-val">{{ upcoming_count|default:"—" }}</div>
-        <div class="stat-lbl">Upcoming Meetings</div>
-      </div>
-      <span class="stat-badge sb-green">Soon</span>
-    </div>
-  </div>
-
-  <!-- Charts Row -->
+  <!-- Charts row: two side by side charts -->
   <div class="mid-row">
+
+    <!-- Bar chart: shows number of meetings scheduled per month -->
     <div class="dash-card">
       <div class="card-title"><i class="bi bi-bar-chart-fill"></i> Meetings per Month</div>
       <div class="chart-wrap"><canvas id="meetingsChart"></canvas></div>
     </div>
+
+    <!-- Doughnut chart: shows the split between meeting platforms -->
     <div class="dash-card">
       <div class="card-title"><i class="bi bi-pie-chart-fill"></i> Platform Breakdown</div>
       <div class="chart-wrap"><canvas id="platformChart"></canvas></div>
     </div>
+
   </div>
 
-  <!-- Module Cards -->
+  <!-- Module cards: six cards linking to each section of the portal -->
   <div class="bot-row">
 
+    <!-- Teams card -->
     <div class="mod-card">
-      <div class="mod-icon" style="background:#e8f0fe;"><i class="bi bi-people-fill" style="color:#4277D6;"></i></div>
+      <div class="mod-icon" style="background:#e8f0fe;"><i class="bi bi-people-fill" style="color:#4277D6;font-size:1.4rem;"></i></div>
       <h6>Team Management</h6>
       <p>View all teams, search by department, manage skills and dependencies.</p>
-      <a href="/teams/TeamPage/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Teams</a>
+      <a href="/teams/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Teams</a>
     </div>
 
+    <!-- Organisation card -->
     <div class="mod-card">
-      <div class="mod-icon" style="background:#ede8ff;"><i class="bi bi-diagram-3-fill" style="color:#6C71CF;"></i></div>
+      <div class="mod-icon" style="background:#ede8ff;"><i class="bi bi-diagram-3-fill" style="color:#6C71CF;font-size:1.4rem;"></i></div>
       <h6>Organisation</h6>
       <p>Explore the org chart, view departments and their team structures.</p>
-      <a href="/org-chart/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Org</a>
+      <a href="/departments/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Org</a>
     </div>
 
+    <!-- Messages card -->
     <div class="mod-card">
-      <div class="mod-icon" style="background:#fff3e8;"><i class="bi bi-envelope-fill" style="color:#e8872e;"></i></div>
+      <div class="mod-icon" style="background:#fff3e8;"><i class="bi bi-envelope-fill" style="color:#e8872e;font-size:1.4rem;"></i></div>
       <h6>Messages</h6>
       <p>Compose messages, check your inbox, sent items and drafts.</p>
-      <a href="/messages/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Messages</a>
+      <a href="/messages/inbox/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Messages</a>
     </div>
 
+    <!-- Schedule card -->
     <div class="mod-card">
-      <div class="mod-icon" style="background:#e6f9f0;"><i class="bi bi-calendar3" style="color:#2db97a;"></i></div>
+      <div class="mod-icon" style="background:#e6f9f0;"><i class="bi bi-calendar3" style="color:#2db97a;font-size:1.4rem;"></i></div>
       <h6>Schedule</h6>
       <p>Create meetings, view the monthly calendar and upcoming meetings.</p>
       <a href="/schedule/calendar/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Schedule</a>
     </div>
 
+    <!-- Reports card -->
     <div class="mod-card">
-      <div class="mod-icon" style="background:#fde8e8;"><i class="bi bi-file-earmark-bar-graph-fill" style="color:#e84c4c;"></i></div>
+      <div class="mod-icon" style="background:#fde8e8;"><i class="bi bi-file-earmark-bar-graph-fill" style="color:#e84c4c;font-size:1.4rem;"></i></div>
       <h6>Reports</h6>
       <p>Generate and export team reports in PDF or Excel format.</p>
       <a href="/reports/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Reports</a>
     </div>
 
+    <!-- Admin panel card -->
     <div class="mod-card">
-      <div class="mod-icon" style="background:#e8f0fe;"><i class="bi bi-shield-lock-fill" style="color:#4277D6;"></i></div>
+      <div class="mod-icon" style="background:#e8f0fe;"><i class="bi bi-shield-lock-fill" style="color:#4277D6;font-size:1.4rem;"></i></div>
       <h6>Admin Panel</h6>
       <p>Manage users, data and system settings via the Django admin panel.</p>
       <a href="/admin/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Admin</a>
@@ -225,6 +142,7 @@
   /* eslint-disable */
   // @ts-nocheck
 
+  // Bar chart: meetings per month over the last 6 months
   new Chart(document.getElementById('meetingsChart'), {
     type: 'bar',
     data: {
@@ -246,6 +164,7 @@
     }
   });
 
+  // Doughnut chart: breakdown of meetings by platform
   new Chart(document.getElementById('platformChart'), {
     type: 'doughnut',
     data: {

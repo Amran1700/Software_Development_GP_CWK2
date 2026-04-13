@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "global.html" %}
 {% block content %}
 {% load schedule_tags %}
 
@@ -16,8 +17,6 @@
   }
 
   .calendar-wrapper { display: flex; gap: 20px; padding: 24px; }
-
-  /* Sidebar */
   .cal-sidebar { width: 230px; flex-shrink: 0; }
   .mini-cal { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; }
   .mini-cal .mini-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -28,90 +27,35 @@
   .mini-cal th { color: #999; font-weight: 600; }
   .mini-cal td:hover { background: #f0f0f0; border-radius: 50%; cursor: pointer; }
   .today-dot { background: var(--brand-gradient); color: white !important; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; }
-
   .upcoming-box { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
   .upcoming-box h6 { font-weight: 700; margin-bottom: 12px; font-size: 0.85rem; color: #333; }
   .upcoming-item { padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.8rem; }
   .upcoming-item:last-child { border-bottom: none; }
   .upcoming-item .meeting-title { font-weight: 600; color: #333; }
   .upcoming-item .meeting-time { color: #888; font-size: 0.75rem; margin-top: 2px; }
-
-  /* Main Calendar */
   .cal-main { flex: 1; min-width: 0; }
   .cal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
   .cal-header h4 { font-weight: 700; margin: 0; color: #222; }
   .cal-header small { color: #888; font-size: 0.82rem; }
-
-  .btn-create-meeting {
-    background: var(--brand-gradient);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 9px 18px;
-    font-weight: 600;
-    font-size: 0.88rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: opacity 0.2s;
-  }
+  .btn-create-meeting { background: var(--brand-gradient); color: white; border: none; border-radius: 8px; padding: 9px 18px; font-weight: 600; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
   .btn-create-meeting:hover { opacity: 0.9; color: white; }
-
   .view-toggle { display: flex; gap: 4px; }
-  .view-btn {
-    border: 1px solid #ddd;
-    background: white;
-    color: #555;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 0.82rem;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
+  .view-btn { border: 1px solid #ddd; background: white; color: #555; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; text-decoration: none; transition: all 0.2s; }
   .view-btn:hover { border-color: #6C71CF; color: #6C71CF; }
   .view-btn.active { background: var(--brand-gradient); color: white; border-color: transparent; }
-
   .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   .cal-nav a { color: #6C71CF; text-decoration: none; font-weight: 500; font-size: 0.88rem; padding: 6px 14px; border: 1px solid #ddd; border-radius: 6px; transition: all 0.2s; }
   .cal-nav a:hover { background: #f8f4ff; border-color: #6C71CF; }
   .cal-nav strong { font-size: 1rem; color: #222; }
-
-  /* Calendar Table */
   .cal-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
   .cal-table th { background: #f8f9fa; padding: 12px 8px; text-align: center; font-size: 0.82rem; font-weight: 600; color: #666; border-bottom: 1px solid #eee; }
   .cal-table td { border: 1px solid #f0f0f0; vertical-align: top; padding: 8px; height: 130px; width: 14.28%; transition: background 0.15s; }
   .cal-table td:hover:not(.empty) { background: #fafafe; }
   .cal-table td.today { background: #f0f4ff; }
   .cal-table td.empty { background: #fafafa; }
-
   .day-number { font-size: 0.82rem; font-weight: 600; color: #444; margin-bottom: 5px; display: flex; align-items: center; }
-  .today .day-number span {
-    background: var(--brand-gradient);
-    color: white;
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-  }
-
-  .meeting-pill {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.7rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-bottom: 2px;
-    text-decoration: none;
-    color: white;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: opacity 0.2s;
-  }
+  .today .day-number span { background: var(--brand-gradient); color: white; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+  .meeting-pill { display: flex; align-items: center; gap: 4px; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-bottom: 2px; text-decoration: none; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity 0.2s; }
   .meeting-pill:hover { opacity: 0.85; color: white; }
   .pill-zoom { background: #4285f4; }
   .pill-teams { background: #6264a7; }
@@ -119,26 +63,34 @@
   .pill-default { background: var(--brand-mid); }
 </style>
 
+<!-- Main layout: sidebar on the left,  calendar grid on the right ---->
 <div class="calendar-wrapper">
 
-  <!-- Sidebar -->
+  <!--── LEFT SIDEBAR ─────────────────────────────────────────── -->
   <div class="cal-sidebar">
+
+    <!---- Mini calendar: small month  overview for quick date reference -->
     <div class="mini-cal">
       <div class="mini-header">
+        <!-- Navigate to  previous month ---->
         <a href="?year={{ prev_year }}&month={{ prev_month }}">‹</a>
         <span>{{ month_name }} {{ year }}</span>
+        <!-- Navigate to next month -->
         <a href="?year={{ next_year }}&month={{ next_month }}">›</a>
       </div>
       <table>
         <thead>
+          <!--- Day of week headers -->
           <tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr>
         </thead>
         <tbody>
+          <!-- Loop through each week and render the day numbers ---->
           {% for week in cal %}
           <tr>
             {% for day in week %}
             <td>
               {% if day != 0 %}
+                <!--- Highlight today's date with a gradient dot ---->
                 {% if day == today.day and month == today.month and year == today.year %}
                   <span class="today-dot">{{ day }}</span>
                 {% else %}
@@ -153,6 +105,7 @@
       </table>
     </div>
 
+    <!--- Upcoming today box: lists all meetings scheduled for today ---->
     <div class="upcoming-box">
       <h6><i class="bi bi-calendar-event me-1"></i> Upcoming Today</h6>
       {% for meeting in upcoming_today %}
@@ -163,34 +116,49 @@
         </div>
       </div>
       {% empty %}
+      <!---- Shown when there are no meetings today ---->
       <p class="text-muted mb-0" style="font-size:0.8rem;">No meetings today</p>
       {% endfor %}
     </div>
-  </div>
 
-  <!-- Main Calendar -->
+  </div>
+  <!-- ── END of SIDEBAR ────────────── -->
+
+
+  <!-- ── MAIN CALENDAR AREA ───────────────────────── -->
   <div class="cal-main">
+
+    <!-- Header: calendar title, meeting count, view toggle buttons and create meeting button -->
     <div class="cal-header">
       <div>
         <h4><i class="bi bi-calendar3 me-2"></i>Team Calendar</h4>
+        <!-- Shows how many days in this month have at least one meeting ---->
         <small>{{ meetings_by_day|length }} meetings this month</small>
       </div>
       <div class="d-flex gap-2 align-items-center">
+
+        <!---- View toggle: switch between Day, Week, Month and Today views ---->
         <div class="view-toggle">
           <a href="{% url 'schedule:calendar_day' %}" class="view-btn">Day</a>
           <a href="{% url 'schedule:calendar_week' %}" class="view-btn">Week</a>
           <a href="?year={{ year }}&month={{ month }}" class="view-btn active">Month</a>
           <a href="?year={{ today.year }}&month={{ today.month }}" class="view-btn">Today</a>
         </div>
+
+        <!---- Link to the upcoming meetings list view ---->
         <a href="{% url 'schedule:upcoming_meetings' %}" class="view-btn">
           <i class="bi bi-list-ul"></i> List
         </a>
+
+        <!---- Button to open the create meeting form ---->
         <a href="{% url 'schedule:create_meeting' %}" class="btn-create-meeting">
           <i class="bi bi-plus-lg"></i> Create Meeting
         </a>
+
       </div>
     </div>
 
+    <!--- Month navigation: go to previous or next month --->
     <div class="cal-nav">
       <a href="?year={{ prev_year }}&month={{ prev_month }}">
         <i class="bi bi-chevron-left"></i> Previous
@@ -201,19 +169,26 @@
       </a>
     </div>
 
+    <!-- Monthly calendar grid table -->
     <table class="cal-table">
       <thead>
+        <!-- Column headers for each day of the week -->
         <tr>
           <th>Mon</th><th>Tue</th><th>Wed</th>
           <th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
         </tr>
       </thead>
       <tbody>
+        <!-- Loop through each week of the month -->
         {% for week in cal %}
         <tr>
           {% for day in week %}
+          <!-- day == 0 means an empty cell (padding before/after the month)
+               'today' class is added to highlight the current date -->
           <td class="{% if day == 0 %}empty{% elif day == today.day and month == today.month and year == today.year %}today{% endif %}">
+
             {% if day != 0 %}
+              <!-- Day number: wrapped in a circle if it is today -->
               <div class="day-number">
                 {% if day == today.day and month == today.month and year == today.year %}
                   <span>{{ day }}</span>
@@ -221,8 +196,12 @@
                   {{ day }}
                 {% endif %}
               </div>
+
+              <!-- If there are meetings on this day, display them as coloured pills -->
               {% if day in meetings_by_day %}
                 {% for meeting in meetings_by_day|get_item:day %}
+                  <!-- Each pill links to the meeting detail page
+                       Colour depends on the platform: Zoom=blue, Teams=purple, Meet=green -->
                   <a href="{% url 'schedule:meeting_detail' meeting.pk %}"
                      class="meeting-pill {% if meeting.platform == 'zoom' %}pill-zoom{% elif meeting.platform == 'teams' %}pill-teams{% elif meeting.platform == 'meet' %}pill-meet{% else %}pill-default{% endif %}">
                     <i class="bi bi-circle-fill" style="font-size:0.45rem;"></i>
@@ -230,6 +209,7 @@
                   </a>
                 {% endfor %}
               {% endif %}
+
             {% endif %}
           </td>
           {% endfor %}
@@ -237,7 +217,10 @@
         {% endfor %}
       </tbody>
     </table>
+
   </div>
+  <!-- ── END MAIN CALENDAR AREA ──────────── -->
+
 </div>
 
 {% endblock %}

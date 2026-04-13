@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "global.html" %}
 {% block content %}
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,65 +32,101 @@
   .btn-edit:hover { border-color: #6C71CF; color: #6C71CF; }
 </style>
 
+<!-- Page wrapper: contains the back link, meeting details and action buttons -->
 <div class="page-wrapper">
+
+  <!-- Back link: returns the user to the upcoming meetings list -->
   <a href="{% url 'schedule:upcoming_meetings' %}" class="back-link">
     <i class="bi bi-arrow-left"></i> Back to Meetings
   </a>
 
+  <!-- ── MAIN DETAIL CARD ───────────────────────────────────────── -->
+  <!-- Shows the platform tag, meeting title and all key meeting info -->
   <div class="detail-card">
+
+    <!-- Platform tag row: shows the platform (Zoom/Teams/Meet) as a coloured badge
+         Also shows a Recurring badge if the meeting repeats -->
     <div class="tag-row">
       <span class="tag tag-{% if meeting.platform == 'zoom' %}zoom{% elif meeting.platform == 'teams' %}teams{% elif meeting.platform == 'meet' %}meet{% else %}default{% endif %}">
         {{ meeting.get_platform_display }}
       </span>
       {% if meeting.is_recurring %}
+        <!-- Only shown if the meeting is set to repeat -->
         <span class="tag tag-recurring"><i class="bi bi-arrow-repeat"></i> Recurring</span>
       {% endif %}
     </div>
 
+    <!-- Large meeting title -->
     <div class="meeting-title-big">{{ meeting.title }}</div>
 
+    <!-- Date row -->
     <div class="info-row">
       <div class="info-label"><i class="bi bi-calendar3"></i> Date</div>
       <div class="info-value">{{ meeting.date|date:"l, F j, Y" }}</div>
     </div>
+
+    <!-- Time and duration row -->
     <div class="info-row">
       <div class="info-label"><i class="bi bi-clock"></i> Time</div>
       <div class="info-value">{{ meeting.time|time:"g:i A" }} · {{ meeting.duration_minutes }} minutes</div>
     </div>
+
+    <!-- Platform row -->
     <div class="info-row">
       <div class="info-label"><i class="bi bi-camera-video"></i> Platform</div>
       <div class="info-value">{{ meeting.get_platform_display }}</div>
     </div>
+
+    <!-- Created by row: shows the username of whoever created the meeting -->
     <div class="info-row">
       <div class="info-label"><i class="bi bi-person"></i> Created by</div>
       <div class="info-value">{{ meeting.created_by.username }}</div>
     </div>
+
+    <!-- Description row: only shown if a description was provided -->
     {% if meeting.description %}
     <div class="info-row">
       <div class="info-label"><i class="bi bi-text-left"></i> Description</div>
       <div class="info-value">{{ meeting.description }}</div>
     </div>
     {% endif %}
-  </div>
 
+  </div>
+  <!-- ── END MAIN DETAIL CARD ───────────────────────────────────── -->
+
+
+  <!-- ── ATTENDEES CARD ─────────────────────────────────────────── -->
+  <!-- Lists all users who have been invited to this meeting -->
   <div class="detail-card">
     <h5><i class="bi bi-people"></i> Attendees ({{ attendees.count }})</h5>
+
+    <!-- Loop through each attendee and display them as a pill/chip -->
     {% for attendee in attendees %}
       <span class="attendee-chip">
         {{ attendee.user.username }} – {{ attendee.user.first_name }} {{ attendee.user.last_name }}
       </span>
     {% empty %}
+      <!-- Shown when no attendees have been added to this meeting -->
       <p class="text-muted" style="font-size:0.88rem;">No attendees added</p>
     {% endfor %}
-  </div>
 
-  <div class="d-flex gap-3 align-items-center">
-    <a href="#" class="btn-join-big"><i class="bi bi-camera-video"></i> Join Meeting</a>
-    <a href="{% url 'schedule:edit_meeting' meeting.pk %}" class="btn-edit"><i class="bi bi-pencil"></i> Edit</a>
   </div>
+  <!-- ── END ATTENDEES CARD ─────────────────────────────────────── -->
+
+
+  <!-- ── ACTION BUTTONS ────────────────────────────────────────── -->
+  <!-- Join Meeting opens the video call, Edit opens the edit form -->
+  <div class="d-flex gap-3 align-items-center">
+
+    <!-- Join Meeting button: currently links to # (no URL set yet) -->
+    <a href="#" class="btn-join-big"><i class="bi bi-camera-video"></i> Join Meeting</a>
+
+    <!-- Edit button: links to the edit meeting form for this meeting -->
+    <a href="{% url 'schedule:edit_meeting' meeting.pk %}" class="btn-edit"><i class="bi bi-pencil"></i> Edit</a>
+
+  </div>
+  <!-- ── END ACTION BUTTONS ─────────────────────────────────────── -->
+
 </div>
 
 {% endblock %}
-```
-
- 

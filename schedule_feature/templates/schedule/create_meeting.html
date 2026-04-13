@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "global.html" %}
 {% block content %}
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,14 +33,19 @@
   .btn-submit:hover { opacity: 0.9; }
 </style>
 
+<!-- Page wrapper: centres the form and limits its width -->
 <div class="create-wrapper">
+
+  <!-- Page heading and subtitle -->
   <div class="page-title"><i class="bi bi-calendar-plus me-2"></i>Create New Meeting</div>
   <div class="page-sub">Schedule a meeting and invite participants from your organisation.</div>
 
+  <!-- Main form: submits to the create_meeting view using POST -->
   <form method="POST" action="{% url 'schedule:create_meeting' %}">
     {% csrf_token %}
 
-    <!-- Meeting Details -->
+    <!-- ── SECTION 1: Meeting Details ─────────────────────────── -->
+    <!-- Collects the meeting title, date, time and duration -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-pencil-square"></i></div>
@@ -48,10 +54,14 @@
           <div class="card-sub">Basic information about your meeting</div>
         </div>
       </div>
+
+      <!-- Meeting title input -->
       <div class="mb-3">
         <label class="form-label">Meeting Title *</label>
         {{ form.title }}
       </div>
+
+      <!-- Date and time inputs side by side -->
       <div class="row mb-3">
         <div class="col">
           <label class="form-label">Date *</label>
@@ -62,13 +72,18 @@
           {{ form.time }}
         </div>
       </div>
+
+      <!-- Duration dropdown -->
       <div class="mb-0">
         <label class="form-label">Duration</label>
         {{ form.duration_minutes }}
       </div>
     </div>
+    <!-- ── END SECTION 1 ───────────────────────────────────────── -->
 
-    <!-- Platform -->
+
+    <!-- ── SECTION 2: Meeting Platform ───────────────────────── -->
+    <!-- Radio buttons to choose between Zoom, MS Teams or Google Meet -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-camera-video"></i></div>
@@ -89,8 +104,11 @@
         </label>
       </div>
     </div>
+    <!-- ── END SECTION 2 ───────────────────────────────────────── -->
 
-    <!-- Attendees -->
+
+    <!-- ── SECTION 3: Attendees ───────────────────────────────── -->
+    <!-- Scrollable checklist of all users in the system (excluding the creator) -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-people"></i></div>
@@ -99,20 +117,28 @@
           <div class="card-sub">Invite individuals to your meeting</div>
         </div>
       </div>
+
+      <!-- Scrollable list of users with checkboxes -->
       <div class="attendee-list">
         {% for user in users %}
         <label class="attendee-item">
+          <!-- Checkbox sends the user's ID to the view when the form is submitted -->
           <input type="checkbox" name="attendees" value="{{ user.id }}">
+          <!-- Avatar shows the first letter of the username -->
           <div class="attendee-avatar">{{ user.username|first|upper }}</div>
           <span class="attendee-name">{{ user.username }} – {{ user.first_name }} {{ user.last_name }}</span>
         </label>
         {% empty %}
+        <!-- Shown when there are no other users in the system -->
         <p class="text-muted mb-0" style="font-size:0.85rem;">No other users found</p>
         {% endfor %}
       </div>
     </div>
+    <!-- ── END SECTION 3 ───────────────────────────────────────── -->
 
-    <!-- Recurring -->
+
+    <!-- ── SECTION 4: Recurring Meeting ──────────────────────── -->
+    <!-- Toggle switch to mark the meeting as recurring -->
     <div class="form-card">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
@@ -122,13 +148,17 @@
             <div class="card-sub mb-0">Set up a repeating schedule</div>
           </div>
         </div>
+        <!-- Bootstrap toggle switch for the is_recurring field -->
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" name="is_recurring" style="width:2.5em; height:1.4em;">
         </div>
       </div>
     </div>
+    <!-- ── END SECTION 4 ───────────────────────────────────────── -->
 
-    <!-- Description -->
+
+    <!-- ── SECTION 5: Description ─────────────────────────────── -->
+    <!-- Optional text area for meeting agenda or notes -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-text-left"></i></div>
@@ -140,15 +170,21 @@
       {{ form.description }}
       <small class="text-muted mt-1 d-block">Supports markdown formatting</small>
     </div>
+    <!-- ── END SECTION 5 ───────────────────────────────────────── -->
 
-    <!-- Buttons -->
+
+    <!-- ── FORM ACTIONS ───────────────────────────────────────── -->
+    <!-- Cancel goes back to the monthly calendar, Submit saves the meeting -->
     <div class="d-flex justify-content-between align-items-center mb-5">
       <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Calendar invites will be sent automatically</small>
       <div class="d-flex gap-2">
+        <!-- Cancel button: navigates back to the month view without saving -->
         <a href="{% url 'schedule:calendar_month' %}" class="btn-cancel">Cancel</a>
+        <!-- Submit button: saves the meeting and redirects to the calendar -->
         <button type="submit" class="btn-submit"><i class="bi bi-plus-lg me-1"></i>Create Meeting</button>
       </div>
     </div>
+    <!-- ── END FORM ACTIONS ────────────────────────────────────── -->
 
   </form>
 </div>

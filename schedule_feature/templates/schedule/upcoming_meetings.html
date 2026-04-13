@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "global.html" %}
 {% block content %}
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,68 +42,118 @@
   .empty-state i { font-size: 3rem; margin-bottom: 12px; display: block; }
 </style>
 
+<!-- Page wrapper: contains the header, search bar and meeting list -->
 <div class="page-wrapper">
+
+  <!-- ── PAGE HEADER ────────────────────────────────────────────── -->
+  <!-- Shows the page title, total meeting count, and action buttons -->
   <div class="page-header">
     <div>
       <h2 class="page-title"><i class="bi bi-calendar-week me-2"></i>Upcoming Meetings</h2>
+      <!-- Shows the total number of upcoming meetings -->
       <div class="page-sub">You have {{ meetings.count }} meetings scheduled</div>
     </div>
     <div class="d-flex gap-2">
+      <!-- Button to switch back to the monthly calendar view -->
       <a href="{% url 'schedule:calendar_month' %}" class="btn-back">
         <i class="bi bi-calendar3"></i> Calendar View
       </a>
+      <!-- Button to open the create meeting form -->
       <a href="{% url 'schedule:create_meeting' %}" class="btn-create">
         <i class="bi bi-plus-lg"></i> New Meeting
       </a>
     </div>
   </div>
+  <!-- ── END PAGE HEADER ────────────────────────────────────────── -->
 
+
+  <!-- ── SEARCH BAR ────────────────────────────────────────────── -->
+  <!-- Live search input: filters meeting cards in real time using JavaScript -->
   <div class="search-bar">
     <i class="bi bi-search"></i>
     <input type="text" placeholder="Search meetings..." id="searchInput">
   </div>
+  <!-- ── END SEARCH BAR ─────────────────────────────────────────── -->
 
+
+  <!-- ── MEETING LIST ───────────────────────────────────────────── -->
   {% if meetings %}
+
+    <!-- Group meetings by date so each date has its own labelled section -->
     {% regroup meetings by date as meetings_by_date %}
+
     {% for date_group in meetings_by_date %}
+
+      <!-- Date section label: shows the full date as a heading above each group -->
       <div class="section-label">{{ date_group.grouper|date:"l, F j, Y" }}</div>
+
+      <!-- Loop through all meetings on this date -->
       {% for meeting in date_group.list %}
+
+      <!-- Individual meeting card: each card has a unique ID for the search filter -->
       <div class="meeting-card" id="meeting-{{ meeting.pk }}">
+
+        <!-- Date badge: shows the day number and abbreviated month on the left -->
         <div class="date-badge">
           <div class="day-num">{{ meeting.date|date:"j" }}</div>
           <div class="month-name">{{ meeting.date|date:"M" }}</div>
         </div>
+
+        <!-- Meeting information: title, time, attendee count, platform and recurring badge -->
         <div class="meeting-info">
           <div class="meeting-title">{{ meeting.title }}</div>
           <div class="meeting-meta">
+
+            <!-- Start time and duration -->
             <span class="meta-item"><i class="bi bi-clock"></i> {{ meeting.time|time:"g:i A" }} · {{ meeting.duration_minutes }} min</span>
+
+            <!-- Number of attendees invited to this meeting -->
             <span class="meta-item"><i class="bi bi-people"></i> {{ meeting.attendees.count }} attendees</span>
+
+            <!-- Platform badge: colour changes based on the platform used -->
             <span class="platform-badge {% if meeting.platform == 'zoom' %}badge-zoom{% elif meeting.platform == 'teams' %}badge-teams{% elif meeting.platform == 'meet' %}badge-meet{% else %}badge-default{% endif %}">
               {{ meeting.get_platform_display }}
             </span>
+
+            <!-- Recurring badge: only shown if the meeting repeats -->
             {% if meeting.is_recurring %}
               <span class="tag-recurring"><i class="bi bi-arrow-repeat"></i> Recurring</span>
             {% endif %}
+
           </div>
         </div>
+
+        <!-- Join button: links to the meeting detail page -->
         <a href="{% url 'schedule:meeting_detail' meeting.pk %}" class="btn-join">Join</a>
+
       </div>
       {% endfor %}
+
     {% endfor %}
+
   {% else %}
+
+    <!-- Empty state: shown when there are no upcoming meetings -->
     <div class="empty-state">
       <i class="bi bi-calendar-x"></i>
       <p>No upcoming meetings scheduled</p>
+      <!-- Quick link to create a new meeting -->
       <a href="{% url 'schedule:create_meeting' %}" class="btn-create">+ Create Meeting</a>
     </div>
+
   {% endif %}
+  <!-- ── END MEETING LIST ───────────────────────────────────────── -->
+
 </div>
 
 <script>
+  // Live search: listens for input in the search box and hides any meeting cards
+  // whose title does not match what the user has typed
   document.getElementById('searchInput').addEventListener('input', function() {
     const q = this.value.toLowerCase();
     document.querySelectorAll('.meeting-card').forEach(card => {
       const title = card.querySelector('.meeting-title').textContent.toLowerCase();
+      // Show the card if the title matches, hide it if it does not
       card.style.display = title.includes(q) ? 'flex' : 'none';
     });
   });

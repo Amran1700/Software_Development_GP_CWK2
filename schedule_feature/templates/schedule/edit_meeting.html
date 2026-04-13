@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "global.html" %}
 {% block content %}
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -29,13 +30,19 @@
   .btn-submit:hover { opacity: 0.9; }
 </style>
 
+<!-- Page wrapper: centres the form and limits its width -->
 <div class="create-wrapper">
+
+  <!-- Page heading and subtitle showing the meeting being edited -->
   <div class="page-title"><i class="bi bi-pencil-square me-2"></i>Edit Meeting</div>
   <div class="page-sub">Update the details for "{{ meeting.title }}"</div>
 
+  <!-- Main form: submits a POST request to the edit_meeting view for this meeting -->
   <form method="POST" action="{% url 'schedule:edit_meeting' meeting.pk %}">
     {% csrf_token %}
 
+    <!-- ── SECTION 1: Meeting Details ─────────────────────────── -->
+    <!-- Allows the user to update the title, date, time and duration -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-pencil-square"></i></div>
@@ -44,10 +51,14 @@
           <div class="card-sub">Basic information about your meeting</div>
         </div>
       </div>
+
+      <!-- Meeting title input: pre-filled with the existing title -->
       <div class="mb-3">
         <label class="form-label">Meeting Title *</label>
         {{ form.title }}
       </div>
+
+      <!-- Date and time inputs side by side: pre-filled with existing values -->
       <div class="row mb-3">
         <div class="col">
           <label class="form-label">Date *</label>
@@ -58,12 +69,19 @@
           {{ form.time }}
         </div>
       </div>
+
+      <!-- Duration dropdown: pre-filled with the existing duration -->
       <div class="mb-0">
         <label class="form-label">Duration</label>
         {{ form.duration_minutes }}
       </div>
     </div>
+    <!-- ── END SECTION 1 ───────────────────────────────────────── -->
 
+
+    <!-- ── SECTION 2: Meeting Platform ───────────────────────── -->
+    <!-- Radio buttons to change the platform
+         The 'checked' attribute pre-selects the platform already saved on the meeting -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-camera-video"></i></div>
@@ -73,6 +91,7 @@
         </div>
       </div>
       <div class="platform-options">
+        <!-- Each option checks if it matches the current platform and pre-selects it -->
         <label class="platform-label">
           <input type="radio" name="platform" value="zoom" {% if meeting.platform == 'zoom' %}checked{% endif %}> 🎥 Zoom
         </label>
@@ -84,7 +103,11 @@
         </label>
       </div>
     </div>
+    <!-- ── END SECTION 2 ───────────────────────────────────────── -->
 
+
+    <!-- ── SECTION 3: Attendees ───────────────────────────────── -->
+    <!-- Scrollable checklist of all users in the system (excluding the creator) -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-people"></i></div>
@@ -93,18 +116,26 @@
           <div class="card-sub">Invite individuals to your meeting</div>
         </div>
       </div>
+
+      <!-- Scrollable list of users with checkboxes -->
       <div class="attendee-list">
         {% for user in users %}
         <label class="attendee-item">
+          <!-- Checkbox sends the user's ID when the form is submitted -->
           <input type="checkbox" name="attendees" value="{{ user.id }}">
           <span>{{ user.username }} – {{ user.first_name }} {{ user.last_name }}</span>
         </label>
         {% empty %}
+        <!-- Shown when there are no other users in the system -->
         <p class="text-muted mb-0" style="font-size:0.85rem;">No other users found</p>
         {% endfor %}
       </div>
     </div>
+    <!-- ── END SECTION 3 ───────────────────────────────────────── -->
 
+
+    <!-- ── SECTION 4: Description ─────────────────────────────── -->
+    <!-- Optional text area for updating the meeting agenda or notes -->
     <div class="form-card">
       <div class="d-flex align-items-center gap-2 mb-3">
         <div class="section-icon"><i class="bi bi-text-left"></i></div>
@@ -113,19 +144,35 @@
           <div class="card-sub mb-0">Add agenda or notes for attendees</div>
         </div>
       </div>
+      <!-- Description textarea: pre-filled with the existing description -->
       {{ form.description }}
     </div>
+    <!-- ── END SECTION 4 ───────────────────────────────────────── -->
 
+
+    <!-- ── FORM ACTIONS ───────────────────────────────────────── -->
+    <!-- Cancel goes back to the meeting detail page without saving
+         Delete opens the delete confirmation page
+         Save Changes submits the updated meeting data -->
     <div class="d-flex justify-content-between align-items-center mb-5">
+
+      <!-- Cancel button: returns to the meeting detail page -->
       <a href="{% url 'schedule:meeting_detail' meeting.pk %}" class="btn-cancel">Cancel</a>
+
       <div class="d-flex gap-2">
-        <a href="{% url 'schedule:delete_meeting' meeting.pk %}" 
+        <!-- Delete button: links to the delete confirmation page for this meeting -->
+        <a href="{% url 'schedule:delete_meeting' meeting.pk %}"
            class="btn btn-outline-danger btn-sm">
           <i class="bi bi-trash"></i> Delete
         </a>
+
+        <!-- Save button: submits the form and saves the updated meeting -->
         <button type="submit" class="btn-submit"><i class="bi bi-check-lg me-1"></i>Save Changes</button>
       </div>
+
     </div>
+    <!-- ── END FORM ACTIONS ────────────────────────────────────── -->
+
   </form>
 </div>
 

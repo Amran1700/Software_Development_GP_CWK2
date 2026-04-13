@@ -1,36 +1,21 @@
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Page title: each page can override this using  -->
   <title>{% block title %}Sky Engineering Portal{% endblock %}</title>
+
+  <!-- Bootstrap CSS: provides the grid system and utility classes -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons: provides all the icons used throughout the portal -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Custom styles: loaded from the static folder -->
   <link rel="stylesheet" href="{% static 'styles.css' %}">
-  {% comment %} <style>
-    body { background-color: #f8f9fa; }
-    .navbar-brand { font-weight: 700; }
-    .sidebar {
-      min-height: calc(100vh - 56px);
-      background-color: #1a3a5c;
-      padding-top: 1rem;
-    }
-    .sidebar .nav-link {
-      color: rgba(255,255,255,0.75);
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      margin: 2px 8px;
-      font-size: 0.9rem;
-    }
-    .sidebar .nav-link:hover,
-    .sidebar .nav-link.active {
-      background-color: rgba(255,255,255,0.15);
-      color: #fff;
-    }
-    .sidebar .nav-link i { margin-right: 8px; }
-    .main-content { padding: 1.5rem; }
-  </style> {% endcomment %}
 
   <style>
   body {
@@ -38,7 +23,6 @@
     font-family: 'Roboto', sans-serif;
   }
 
-  /* ===== NAVBAR (STICKY + GRADIENT) ===== */
   .navbar {
     position: sticky;
     top: 0;
@@ -48,97 +32,110 @@
 
   .navbar-brand {
     font-weight: 700;
+    color: white !important;
+    text-decoration: none;
   }
 
-  /* ===== SIDEBAR ===== */
-  .sidebar {
-    min-height: calc(100vh - 56px);
-    background: linear-gradient(180deg, #4277D6, #6C71CF, #6F50A0);
-    padding-top: 1rem;
-  }
-
-  .sidebar .nav-link {
-    color: rgba(255,255,255,0.85);
-    padding: 0.6rem 1.2rem;
+  .nav-top-link {
+    color: rgba(255,255,255,0.85) !important;
+    text-decoration: none;
+    padding: 8px 14px;
     border-radius: 6px;
-    margin: 4px 8px;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-  }
-
-  /* Hover effect */
-  .sidebar .nav-link:hover {
-    background-color: rgba(255,255,255,0.15);
-    color: #fff;
+    font-size: 0.88rem;
     font-weight: 500;
-    transform: translateX(3px);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background .2s;
   }
 
-  /* Active state (you already use class="active") */
-  .sidebar .nav-link.active {
-    background-color: rgba(255,255,255,0.25);
-    color: #fff;
+  .nav-top-link:hover {
+    background: rgba(255,255,255,0.15);
+    color: white !important;
     font-weight: 600;
   }
 
-  .sidebar .nav-link i {
-    margin-right: 8px;
+  .nav-top-link.active {
+    background: rgba(255,255,255,0.25);
+    color: white !important;
+    font-weight: 600;
   }
 
-  /* ===== MAIN CONTENT ===== */
   .main-content {
     padding: 1.5rem;
   }
-</style>
+  </style>
 </head>
 <body>
 
-  <nav class="navbar navbar-dark bg-primary px-3">
-    <a class="navbar-brand" href="#">
-      <i class="bi bi-broadcast-pin me-2"></i>Sky Engineering Portal
+  <!-- ── TOP NAVIGATION BAR ─────────────────────────────────────── -->
+  <!-- Sticky navbar with the brand logo, nav links and login/logout button -->
+  <nav class="navbar navbar-dark px-3 d-flex justify-content-between align-items-center">
+
+    <!-- Brand logo: clicking it takes the user back to the home page -->
+    <a class="navbar-brand" href="/">
+      <i class="bi bi-broadcast-pin me-2"></i>Sky Engineering
     </a>
-    <div class="d-flex align-items-center gap-3">
+
+    <!-- Navigation links: 'active' class is added when the current URL matches the link -->
+    <div class="d-flex align-items-center gap-1">
+
+      <!-- Home link: active when on the root URL -->
+      <a href="/" class="nav-top-link {% if request.path == '/' %}active{% endif %}">
+        <i class="bi bi-house"></i> Home
+      </a>
+
+      <!-- Teams link: active when the URL contains /teams/ -->
+      <a href="/teams/" class="nav-top-link {% if '/teams/' in request.path %}active{% endif %}">
+        <i class="bi bi-people"></i> Teams
+      </a>
+
+      <!-- Organisation link: active when on departments or org chart pages -->
+      <a href="/departments/" class="nav-top-link {% if '/departments/' in request.path or '/org-chart/' in request.path %}active{% endif %}">
+        <i class="bi bi-diagram-3"></i> Organisation
+      </a>
+
+      <!-- Messages link: active when the URL contains /messages/ -->
+      <a href="/messages/" class="nav-top-link {% if '/messages/' in request.path %}active{% endif %}">
+        <i class="bi bi-envelope"></i> Messages
+      </a>
+
+      <!-- Schedule link: active when the URL contains /schedule/ -->
+      <a href="/schedule/calendar/" class="nav-top-link {% if '/schedule/' in request.path %}active{% endif %}">
+        <i class="bi bi-calendar3"></i> Schedule
+      </a>
+
+      <!-- Reports link: active when the URL contains /reports/ -->
+      <a href="/reports/" class="nav-top-link {% if '/reports/' in request.path %}active{% endif %}">
+        <i class="bi bi-bar-chart"></i> Reports
+      </a>
+
+    </div>
+
+    <!-- Login / Logout section: shown on the right side of the navbar -->
+    <div class="d-flex align-items-center gap-2">
       {% if user.is_authenticated %}
+        <!-- Shows the logged-in username and a logout button -->
         <span class="text-white small">{{ user.username }}</span>
-        <form method="post" action="{% url 'logout' %}" class="d-inline">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-        </form>
+        <a href="/accounts/logout/" class="btn btn-outline-light btn-sm">
+          <i class="bi bi-box-arrow-right me-1"></i>Logout
+        </a>
       {% else %}
+        <!-- Shows a login button when no user is logged in -->
         <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Login</a>
       {% endif %}
     </div>
-  </nav>
 
+  </nav>
+  <!-- ── END NAVIGATION BAR ─────────────────────────────────────── -->
+
+
+  <!-- ── MAIN PAGE CONTENT ──────────────────────────────────────── -->
   <div class="container-fluid">
     <div class="row">
-
-      <div class="col-auto sidebar d-none d-md-block" style="width:220px;">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-house"></i> Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-people"></i> Teams</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-diagram-3"></i> Organisation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-chat-dots"></i> Messages</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-calendar3"></i> Schedule</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'reports:dashboard' %}">
-              <i class="bi bi-file-earmark-bar-graph"></i> Reports
-            </a>
-          </li>
-        </ul>
-      </div>
-
       <div class="col main-content">
+
+        <!-- Django messages: shows success, error or info alerts to the user -->
         {% if messages %}
           {% for message in messages %}
             <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
@@ -147,12 +144,17 @@
             </div>
           {% endfor %}
         {% endif %}
-        {% block content %}{% endblock %}
-      </div>
 
+        <!-- Content block: each page fills this area with its own content -->
+        {% block content %}{% endblock %}
+
+      </div>
     </div>
   </div>
+  <!-- ── END MAIN PAGE CONTENT ──────────────────────────────────── -->
 
+
+  <!-- Bootstrap JavaScript: needed for alerts, dropdowns and other interactive components -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
