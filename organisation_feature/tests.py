@@ -34,6 +34,11 @@ class OrgChartTests(TestCase):
         response = self.client.get(reverse('org_chart'))
         self.assertContains(response, 'Engineering')
 
+    def test_org_chart_does_not_show_nonexistent_department(self):
+        """TC1 NEGATIVE - Org chart does not show a department that was never created."""
+        response = self.client.get(reverse('org_chart'))
+        self.assertNotContains(response, 'Nonexistent Department XYZ')
+
 
 class DepartmentListTests(TestCase):
     """Tests for the department list view (TC4, TC5, TC6)."""
@@ -87,6 +92,21 @@ class DepartmentListTests(TestCase):
         self.assertContains(response, 'Engineering')
         self.assertContains(response, 'Marketing')
 
+    def test_department_search_wrong_term_returns_no_results(self):
+        """TC5 NEGATIVE - Searching for a term that matches nothing returns empty state."""
+        response = self.client.get(reverse('department_list'), {'q': 'zzznomatch'})
+        self.assertContains(response, 'No departments found')
+
+    def test_department_filter_wrong_name_returns_no_results(self):
+        """TC6 NEGATIVE - Filter with a non-existent department name returns no results."""
+        response = self.client.get(reverse('department_list'), {'filter': 'Finance'})
+        self.assertContains(response, 'No departments found')
+
+    def test_department_search_case_insensitive(self):
+        """TC5 NEGATIVE - Search is case insensitive, lowercase still finds department."""
+        response = self.client.get(reverse('department_list'), {'q': 'engineering'})
+        self.assertContains(response, 'Engineering')
+
 
 class DepartmentDetailTests(TestCase):
     """Tests for the department detail view (TC7, TC8, TC9)."""
@@ -119,3 +139,18 @@ class DepartmentDetailTests(TestCase):
         """TC9 - Department detail shows specialisation."""
         response = self.client.get(reverse('department_detail', args=[self.dept.id]))
         self.assertContains(response, 'Backend Development')
+
+    def test_department_detail_does_not_show_wrong_name(self):
+        """TC7 NEGATIVE - Department detail does not show a different department's name."""
+        response = self.client.get(reverse('department_detail', args=[self.dept.id]))
+        self.assertNotContains(response, 'Marketing')
+
+    def test_department_detail_negative_id_returns_404(self):
+        """TC7 NEGATIVE - Very large non-existent ID returns 404."""
+        response = self.client.get(reverse('department_detail', args=[99999]))
+        self.assertEqual(response.status_code, 404)
+
+    def test_department_detail_zero_id_returns_404(self):
+        """TC7 NEGATIVE - ID of zero returns 404."""
+        response = self.client.get(reverse('department_detail', args=[0]))
+        self.assertEqual(response.status_code, 404)
