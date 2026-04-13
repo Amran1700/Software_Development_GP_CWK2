@@ -1,3 +1,6 @@
+<!-- Name: Ehsaan Zakriya -->
+<!-- ID: W2115831 -->
+
 {% extends 'global.html' %}
 
 {% block title %}Organisation Chart - Sky Engineering{% endblock %}
@@ -8,34 +11,39 @@
 
 <div class="container-fluid">
 
-    <!-- Page Header -->
+    <!-- Page header area with title, subtitle, and navigation button -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
+            <!-- Main page title -->
             <h2 class="fw-bold" style="color: #4277D6;">
                 <i class="bi bi-diagram-3"></i> Organisation Structure
             </h2>
+            <!-- Short description explaining what the page shows -->
             <p class="text-muted">Visual overview of Sky Engineering's department structure</p>
         </div>
+        <!-- Button to go back to the department list page -->
         <a href="/departments/" class="btn btn-outline-secondary btn-sm">
             <i class="bi bi-list me-1"></i> View Department List
         </a>
     </div>
 
-    <!-- Zoom Controls -->
+    <!-- Zoom control buttons for resizing the organisation chart -->
     <div class="d-flex align-items-center gap-2 mb-3">
         <button class="btn btn-outline-secondary btn-sm" id="zoomOut">−</button>
+        <!-- Shows the current zoom percentage -->
         <span id="zoomLevel" class="fw-bold" style="min-width: 45px; text-align: center;">100%</span>
         <button class="btn btn-outline-secondary btn-sm" id="zoomIn">+</button>
         <button class="btn btn-outline-secondary btn-sm" id="zoomReset">Reset View</button>
     </div>
 
+    <!-- Main layout: organisation chart on the left and legend on the right -->
     <div class="d-flex gap-4 align-items-start">
 
-        <!-- Org Chart -->
+        <!-- Organisation chart container -->
         <div id="orgChart" class="card border-0 shadow-sm mb-4 flex-grow-1" style="border-radius: 12px; overflow-x: auto;">
             <div class="card-body p-4">
 
-                <!-- Top Level: Sky Engineering -->
+                <!-- Top-level root node for the organisation -->
                 <div class="d-flex justify-content-center mb-4">
                     <div class="text-center px-4 py-3 rounded-3 text-white fw-bold"
                          style="background: linear-gradient(to right, #4277D6, #6F50A0); min-width: 220px; font-size: 1.1rem;">
@@ -43,55 +51,71 @@
                     </div>
                 </div>
 
-                <!-- Connector Line -->
+                <!-- Vertical connector from the root node down to the department level -->
                 <div class="d-flex justify-content-center mb-0">
                     <div style="width: 2px; height: 30px; background-color: #6C71CF;"></div>
                 </div>
 
-                <!-- Horizontal Line -->
+                <!-- Horizontal connector line across all departments -->
                 <div class="d-flex justify-content-center mb-0">
                     <div style="height: 2px; background-color: #6C71CF; width: 80%;"></div>
                 </div>
 
-                <!-- Department Nodes -->
+                <!-- Department nodes displayed in a responsive row -->
                 <div class="d-flex justify-content-around flex-wrap mt-0 pt-0">
                     {% for department in departments %}
 
-                    <!-- Assign colour based on department name -->
+                    <!-- Use the department name to decide the colour theme -->
                     {% with dept_name=department.department_name|lower %}
                     {% if "engineering" in dept_name %}
+                        <!-- Engineering department styling -->
                         {% with dept_color="#1565C0" dept_bg="#E3F2FD" %}
                         <div class="text-center" style="min-width: 200px; margin-top: 0;">
+                            <!-- Connector from the main organisation line down to this department -->
                             <div class="d-flex justify-content-center">
                                 <div style="width: 2px; height: 30px; background-color: #6C71CF;"></div>
                             </div>
+
+                            <!-- Department card -->
                             <div class="card border-0 shadow-sm mx-2 mb-3 dept-card" style="border-radius: 10px; border-top: 4px solid {{ dept_color }} !important;">
                                 <div class="card-body p-3 text-center">
+                                    <!-- Circular icon for the department -->
                                     <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width:40px; height:40px; background-color: {{ dept_color }};">
                                         <i class="bi bi-building text-white"></i>
                                     </div>
+                                    <!-- Department name -->
                                     <h6 class="fw-bold mb-1" style="color: {{ dept_color }};">{{ department.department_name }}</h6>
+                                    <!-- Department specialisation or fallback text -->
                                     <p class="text-muted small mb-2">{{ department.specialisation|default:"No specialisation" }}</p>
+                                    <!-- Link to the department details page -->
                                     <a href="/departments/{{ department.id }}/" class="btn btn-sm text-white" style="background-color: {{ dept_color }}; border-radius: 6px; font-size: 0.75rem;">
                                         <i class="bi bi-arrow-right-circle me-1"></i> View
                                     </a>
                                 </div>
                             </div>
+
+                            <!-- Connector from department card to the team list -->
                             <div class="d-flex justify-content-center">
                                 <div style="width: 2px; height: 20px; background-color: #c5cae9;"></div>
                             </div>
+
+                            <!-- Team list under this department -->
                             <div class="card border-0 mx-2" style="border-radius: 8px; background-color: {{ dept_bg }};">
                                 <div class="card-body p-2 text-center">
+                                    <!-- Show all teams belonging to this department -->
                                     {% for team in department.teams.all %}
                                     <small class="d-block text-muted mb-1"><i class="bi bi-people me-1"></i> {{ team.team_name }}</small>
                                     {% empty %}
+                                    <!-- Message if the department has no teams -->
                                     <small class="text-muted"><i class="bi bi-people me-1"></i> No teams yet</small>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
                         {% endwith %}
+
                     {% elif "design" in dept_name %}
+                        <!-- Design department styling -->
                         {% with dept_color="#6F50A0" dept_bg="#F3E5F5" %}
                         <div class="text-center" style="min-width: 200px; margin-top: 0;">
                             <div class="d-flex justify-content-center">
@@ -123,7 +147,9 @@
                             </div>
                         </div>
                         {% endwith %}
+
                     {% elif "product" in dept_name %}
+                        <!-- Product department styling -->
                         {% with dept_color="#2E7D32" dept_bg="#E8F5E9" %}
                         <div class="text-center" style="min-width: 200px; margin-top: 0;">
                             <div class="d-flex justify-content-center">
@@ -155,7 +181,9 @@
                             </div>
                         </div>
                         {% endwith %}
+
                     {% elif "marketing" in dept_name %}
+                        <!-- Marketing department styling -->
                         {% with dept_color="#E65100" dept_bg="#FFF3E0" %}
                         <div class="text-center" style="min-width: 200px; margin-top: 0;">
                             <div class="d-flex justify-content-center">
@@ -187,7 +215,9 @@
                             </div>
                         </div>
                         {% endwith %}
+
                     {% else %}
+                        <!-- Default styling for any department that doesn't match the categories above -->
                         {% with dept_color="#4277D6" dept_bg="#E8EAF6" %}
                         <div class="text-center" style="min-width: 200px; margin-top: 0;">
                             <div class="d-flex justify-content-center">
@@ -223,6 +253,7 @@
                     {% endwith %}
 
                     {% empty %}
+                    <!-- Empty state shown when there are no departments to display -->
                     <div class="col-12">
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle me-2"></i> No departments found.
@@ -234,7 +265,7 @@
             </div>
         </div>
 
-        <!-- Department Legend -->
+        <!-- Legend explaining the department colour coding -->
         <div class="card border-0 shadow-sm p-3 mb-4" style="border-radius: 12px; min-width: 180px;">
             <h6 class="fw-bold mb-3 text-muted">Department Legend</h6>
             <div class="d-flex align-items-center mb-2">
@@ -259,6 +290,7 @@
 
 </div>
 
+<!-- Custom hover effect for department cards -->
 <style>
     .dept-card {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -270,23 +302,31 @@
     }
 </style>
 
+<!-- Zoom functionality for the organisation chart -->
 <script>
+    // Start at default zoom level
     let zoom = 100;
     const min = 50;
     const max = 200;
     const step = 25;
     const chart = document.getElementById('orgChart');
 
+    // Increase zoom when the plus button is clicked
     document.getElementById('zoomIn').addEventListener('click', () => {
         if (zoom < max) { zoom += step; applyZoom(); }
     });
+
+    // Decrease zoom when the minus button is clicked
     document.getElementById('zoomOut').addEventListener('click', () => {
         if (zoom > min) { zoom -= step; applyZoom(); }
     });
+
+    // Reset zoom back to 100%
     document.getElementById('zoomReset').addEventListener('click', () => {
         zoom = 100; applyZoom();
     });
 
+    // Apply the current zoom value to the chart
     function applyZoom() {
         chart.style.transform = `scale(${zoom / 100})`;
         chart.style.transformOrigin = 'top left';
