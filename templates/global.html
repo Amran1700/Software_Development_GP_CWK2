@@ -1,6 +1,4 @@
-<! -- Name: Ehsaan Zakriya 
-ID: W2115831 -->
-
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,29 +21,44 @@ ID: W2115831 -->
 <body>
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid px-4">
-        <a class="navbar-brand" href="#"><i class="bi bi-building"></i> Sky Engineering</a>
+        <a class="navbar-brand" href="/"><i class="bi bi-building"></i> Sky Engineering</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
                     <a class="nav-link {% block nav_home %}{% endblock %}" href="/"><i class="bi bi-house"></i> Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% block nav_teams %}{% endblock %}" href="#"><i class="bi bi-people"></i> Teams</a>
+                    <a class="nav-link {% block nav_teams %}{% endblock %}" href="/teams/"><i class="bi bi-people"></i> Teams</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% block nav_organisation %}{% endblock %}" href="/departments/"><i class="bi bi-diagram-3"></i> Organisation</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% block nav_messages %}{% endblock %}" href="/messages/inbox/"><i class="bi bi-envelope"></i> Messages</a>
+                    <a class="nav-link {% block nav_messages %}{% endblock %}" href="/messages/"><i class="bi bi-envelope"></i> Messages</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% block nav_schedule %}{% endblock %}" href="/schedule/calendar/"><i class="bi bi-calendar"></i> Schedule</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% block nav_reports %}{% endblock %}" href="/reports/"><i class="bi bi-bar-chart"></i> Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% block nav_admin %}{% endblock %}" href="/admin/"><i class="bi bi-shield-lock"></i> Admin</a>
+                </li>
+                <li class="nav-item ms-3">
+                    {% if user.is_authenticated %}
+                        <span class="text-white small me-2">{{ user.username }}</span>
+                        <a href="/accounts/logout/" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        </a>
+                    {% else %}
+                        <a href="/accounts/login/" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                        </a>
+                    {% endif %}
                 </li>
             </ul>
         </div>
