@@ -1,7 +1,78 @@
 [
-  {"model": "auth.user", "pk": 2, "fields": {"username": "w2115831", "email": "w2115831@westminster.ac.uk", "first_name": "Ehsaan", "last_name": "Zakriya", "password": "!unusable", "is_active": true, "is_staff": false, "is_superuser": false}},
-  {"model": "auth.user", "pk": 3, "fields": {"username": "w2116289", "email": "w2116289@westminster.ac.uk", "first_name": "Sadana", "last_name": "Suresh", "password": "!unusable", "is_active": true, "is_staff": false, "is_superuser": false}},
-  {"model": "auth.user", "pk": 4, "fields": {"username": "w2081572", "email": "w2081572@westminster.ac.uk", "first_name": "Marc", "last_name": "Fernandes", "password": "!unusable", "is_active": true, "is_staff": false, "is_superuser": false}},
-  {"model": "auth.user", "pk": 5, "fields": {"username": "w2066724", "email": "w2066724@westminster.ac.uk", "first_name": "Amran", "last_name": "Mohammed", "password": "!unusable", "is_active": true, "is_staff": false, "is_superuser": false}},
-  {"model": "auth.user", "pk": 6, "fields": {"username": "w1905510", "email": "w1905510@westminster.ac.uk", "first_name": "Ibrahim", "last_name": "Chowdhury", "password": "!unusable", "is_active": true, "is_staff": false, "is_superuser": false}}
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "ehsaanzxk",
+      "email": "ehsaan@example.com",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "w2115831",
+      "email": "w2115831@westminster.ac.uk",
+      "first_name": "Ehsaan",
+      "last_name": "Zakriya",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "w2116289",
+      "email": "w2116289@westminster.ac.uk",
+      "first_name": "Sadana",
+      "last_name": "Suresh",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "username": "w2081572",
+      "email": "w2081572@westminster.ac.uk",
+      "first_name": "Marc",
+      "last_name": "Fernandes",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "username": "w2066724",
+      "email": "w2066724@westminster.ac.uk",
+      "first_name": "Amran",
+      "last_name": "Mohammed",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "username": "w1905510",
+      "email": "w1905510@westminster.ac.uk",
+      "first_name": "Ibrahim",
+      "last_name": "Chowdhury",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true
+    }
+  }
 ]

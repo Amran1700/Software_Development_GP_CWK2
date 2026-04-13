@@ -1,6 +1,4 @@
-
 [
-
   {
     "model": "messages_feature.message",
     "pk": 1,
@@ -24,7 +22,7 @@
       "subject": "Re: Welcome",
       "body": "Thanks! Excited to be here.",
       "status": "sent",
-      "read_status": false,
+      "read_status": true,
       "parent": null,
       "timestamp": "2026-04-09T09:05:00Z"
     }
@@ -80,7 +78,7 @@
       "subject": "Re: Feature Proposal",
       "body": "Sure, let's meet at 2 PM.",
       "status": "sent",
-      "read_status": false,
+      "read_status": true,
       "parent": null,
       "timestamp": "2026-04-09T09:25:00Z"
     }
@@ -94,7 +92,7 @@
       "subject": "Server Maintenance",
       "body": "Server maintenance scheduled tonight at 11 PM.",
       "status": "sent",
-      "read_status": true,
+      "read_status": false,
       "parent": null,
       "timestamp": "2026-04-09T09:30:00Z"
     }
@@ -141,7 +139,6 @@
       "timestamp": "2026-04-09T09:45:00Z"
     }
   },
-
   {
     "model": "messages_feature.message",
     "pk": 11,
@@ -252,302 +249,6 @@
       "read_status": false,
       "parent": null,
       "timestamp": "2026-04-09T10:25:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 19,
-    "fields": {
-      "sender": 2,
-      "receiver": [3],
-      "subject": "Reminder",
-      "body": "Standup tomorrow at 10.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T10:30:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 20,
-    "fields": {
-      "sender": 3,
-      "receiver": [2],
-      "subject": "Re: Reminder",
-      "body": "Thanks!",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T10:35:00Z"
-    }
-  },
-
-  {
-    "model": "messages_feature.message",
-    "pk": 21,
-    "fields": {
-      "sender": 1,
-      "receiver": [4],
-      "subject": "UI Review",
-      "body": "Check latest dashboard UI.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T10:40:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 22,
-    "fields": {
-      "sender": 4,
-      "receiver": [1],
-      "subject": "Re: UI Review",
-      "body": "Looks good!",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T10:45:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 23,
-    "fields": {
-      "sender": 2,
-      "receiver": [5],
-      "subject": "Client Feedback",
-      "body": "Client wants changes.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T10:50:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 24,
-    "fields": {
-      "sender": 5,
-      "receiver": [2],
-      "subject": "Re: Feedback",
-      "body": "I’ll update it.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T10:55:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 25,
-    "fields": {
-      "sender": 3,
-      "receiver": [6],
-      "subject": "Migration Notice",
-      "body": "Database migration tonight at 8 PM.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T11:00:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 26,
-    "fields": {
-      "sender": 1,
-      "receiver": [2],
-      "subject": "Draft: Project Idea",
-      "body": "This is still a work in progress...",
-      "status": "draft",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:00:00Z"
-    }
-  },
-
-  {
-    "model": "messages_feature.message",
-    "pk": 27,
-    "fields": {
-      "sender": 1,
-      "receiver": [2],
-      "subject": "Infrastructure scalability, CI/CD integration, platform resilience",
-      "body": "Discussing scaling strategies, pipeline reliability, and system resilience improvements.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:10:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 28,
-    "fields": {
-      "sender": 2,
-      "receiver": [1],
-      "subject": "Advanced debugging tools, automated error detection, root cause analysis",
-      "body": "We should implement smarter observability tools and faster RCA workflows.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:12:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 29,
-    "fields": {
-      "sender": 3,
-      "receiver": [4],
-      "subject": "Security compliance, encryption techniques, data integrity",
-      "body": "Reviewing encryption standards and compliance requirements for upcoming audit.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:14:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 30,
-    "fields": {
-      "sender": 4,
-      "receiver": [3],
-      "subject": "Agile transformation, workflow optimization, lean process improvement",
-      "body": "We need to streamline workflows and reduce delivery bottlenecks.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:16:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 31,
-    "fields": {
-      "sender": 5,
-      "receiver": [6],
-      "subject": "Automated deployment pipelines, release management, rollback strategies",
-      "body": "Improving CI/CD reliability with safer rollback mechanisms.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:18:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 32,
-    "fields": {
-      "sender": 6,
-      "receiver": [5],
-      "subject": "Cryptographic security, authentication protocols, secure APIs",
-      "body": "Enhancing API security with stronger authentication layers.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:20:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 33,
-    "fields": {
-      "sender": 7,
-      "receiver": [1],
-      "subject": "DevOps best practices, Kubernetes orchestration, cloud automation",
-      "body": "Standardizing Kubernetes deployment patterns across services.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:22:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 34,
-    "fields": {
-      "sender": 1,
-      "receiver": [7],
-      "subject": "Cloud infrastructure, API gateway development, serverless architecture",
-      "body": "Evaluating serverless options for upcoming API gateway redesign.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:24:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 35,
-    "fields": {
-      "sender": 2,
-      "receiver": [3],
-      "subject": "Cloud-native applications, distributed systems, multi-region deployments",
-      "body": "Planning multi-region architecture for better availability.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:26:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 36,
-    "fields": {
-      "sender": 3,
-      "receiver": [2],
-      "subject": "Frontend and backend synchronization, API integration, UX/UI consistency",
-      "body": "Ensuring frontend-backend contract stability and consistent UX.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:28:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 37,
-    "fields": {
-      "sender": 4,
-      "receiver": [5],
-      "subject": "Log aggregation, AI-driven anomaly detection, real-time monitoring",
-      "body": "Integrating AI-based monitoring for faster incident detection.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:30:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 38,
-    "fields": {
-      "sender": 5,
-      "receiver": [6],
-      "subject": "Knowledge management, engineering playbooks, documentation automation",
-      "body": "Automating documentation generation from engineering workflows.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:32:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 39,
-    "fields": {
-      "sender": 6,
-      "receiver": [7],
-      "subject": "High-performance computing, low-latency data processing, algorithm efficiency",
-      "body": "Optimizing compute pipelines for lower latency and higher throughput.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T12:34:00Z"
     }
   }
 ]
