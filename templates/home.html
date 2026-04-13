@@ -1,8 +1,11 @@
-{% extends "global.html" %}
+<!--Author : Ibrahim Chowdhury | Student Number: W1905510 -->
+{% extends "base.html" %}
+{% block title %}Home – Sky Engineering Portal{% endblock %}
 {% block content %}
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<!-- Chart.js library used to render the bar and doughnut charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
@@ -16,27 +19,46 @@
     --text-primary: #1a1d2e;
     --text-muted: #888;
   }
+
   .dash-wrapper { padding: 28px 24px; background: var(--bg); min-height: 100vh; }
+
   .dash-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
   .dash-header h4 { font-weight:700; font-size:1.3rem; color:var(--text-primary); margin:0; }
   .dash-header small { color:var(--text-muted); font-size:0.82rem; display:block; margin-top:3px; }
+
   .dash-card { background:var(--surface); border-radius:14px; padding:22px; box-shadow:0 2px 10px rgba(0,0,0,.06); }
   .card-title { font-weight:700; font-size:0.88rem; color:var(--text-primary); margin-bottom:18px; display:flex; align-items:center; gap:7px; }
   .card-title i { color:var(--brand-mid); }
   .chart-wrap { position:relative; height:220px; }
+
   .mid-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
   .bot-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .mod-card { background:var(--surface); border-radius:14px; padding:22px; box-shadow:0 2px 10px rgba(0,0,0,.06); text-align:center; transition:transform .18s, box-shadow .18s; }
+
+  .mod-card {
+    background:var(--surface); border-radius:14px; padding:22px;
+    box-shadow:0 2px 10px rgba(0,0,0,.06); text-align:center;
+    transition:transform .18s, box-shadow .18s;
+  }
   .mod-card:hover { transform:translateY(-3px); box-shadow:0 8px 22px rgba(0,0,0,.1); }
   .mod-icon { width:56px; height:56px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin:0 auto 14px; }
   .mod-card h6 { font-weight:700; font-size:0.88rem; color:var(--text-primary); margin:0 0 6px; }
   .mod-card p  { font-size:0.76rem; color:var(--text-muted); margin:0 0 16px; line-height:1.5; }
-  .mod-btn { background:var(--brand-gradient); color:#fff; border:none; border-radius:8px; padding:7px 16px; font-size:0.78rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:opacity .2s; }
+  .mod-btn {
+    background:var(--brand-gradient); color:#fff; border:none; border-radius:8px;
+    padding:7px 16px; font-size:0.78rem; font-weight:600; text-decoration:none;
+    display:inline-flex; align-items:center; gap:5px; transition:opacity .2s;
+  }
   .mod-btn:hover { opacity:.88; color:#fff; }
-  @media(max-width:1100px){ .mid-row, .bot-row{ grid-template-columns:1fr; } }
+
+  @media(max-width:1100px){
+    .mid-row, .bot-row{ grid-template-columns:1fr; }
+  }
 </style>
 
+<!-- Main dashboard wrapper -->
 <div class="dash-wrapper">
+
+  <!-- Page header: shows the Home title and welcome message -->
   <div class="dash-header">
     <div>
       <h4><i class="bi bi-house-fill me-2" style="color:var(--brand-mid);"></i>Home</h4>
@@ -44,74 +66,122 @@
     </div>
   </div>
 
+  <!-- Charts row: two side by side charts -->
   <div class="mid-row">
+
+    <!-- Bar chart: shows number of meetings scheduled per month -->
     <div class="dash-card">
       <div class="card-title"><i class="bi bi-bar-chart-fill"></i> Meetings per Month</div>
       <div class="chart-wrap"><canvas id="meetingsChart"></canvas></div>
     </div>
+
+    <!-- Doughnut chart: shows the split between meeting platforms -->
     <div class="dash-card">
       <div class="card-title"><i class="bi bi-pie-chart-fill"></i> Platform Breakdown</div>
       <div class="chart-wrap"><canvas id="platformChart"></canvas></div>
     </div>
+
   </div>
 
+  <!-- Module cards: six cards linking to each section of the portal -->
   <div class="bot-row">
+
+    <!-- Teams card -->
     <div class="mod-card">
       <div class="mod-icon" style="background:#e8f0fe;"><i class="bi bi-people-fill" style="color:#4277D6;font-size:1.4rem;"></i></div>
       <h6>Team Management</h6>
       <p>View all teams, search by department, manage skills and dependencies.</p>
       <a href="/teams/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Teams</a>
     </div>
+
+    <!-- Organisation card -->
     <div class="mod-card">
       <div class="mod-icon" style="background:#ede8ff;"><i class="bi bi-diagram-3-fill" style="color:#6C71CF;font-size:1.4rem;"></i></div>
       <h6>Organisation</h6>
       <p>Explore the org chart, view departments and their team structures.</p>
       <a href="/departments/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Org</a>
     </div>
+
+    <!-- Messages card -->
     <div class="mod-card">
       <div class="mod-icon" style="background:#fff3e8;"><i class="bi bi-envelope-fill" style="color:#e8872e;font-size:1.4rem;"></i></div>
       <h6>Messages</h6>
       <p>Compose messages, check your inbox, sent items and drafts.</p>
       <a href="/messages/inbox/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Messages</a>
     </div>
+
+    <!-- Schedule card -->
     <div class="mod-card">
       <div class="mod-icon" style="background:#e6f9f0;"><i class="bi bi-calendar3" style="color:#2db97a;font-size:1.4rem;"></i></div>
       <h6>Schedule</h6>
       <p>Create meetings, view the monthly calendar and upcoming meetings.</p>
       <a href="/schedule/calendar/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Schedule</a>
     </div>
+
+    <!-- Reports card -->
     <div class="mod-card">
       <div class="mod-icon" style="background:#fde8e8;"><i class="bi bi-file-earmark-bar-graph-fill" style="color:#e84c4c;font-size:1.4rem;"></i></div>
       <h6>Reports</h6>
       <p>Generate and export team reports in PDF or Excel format.</p>
       <a href="/reports/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Reports</a>
     </div>
+
+    <!-- Admin panel card -->
     <div class="mod-card">
       <div class="mod-icon" style="background:#e8f0fe;"><i class="bi bi-shield-lock-fill" style="color:#4277D6;font-size:1.4rem;"></i></div>
       <h6>Admin Panel</h6>
       <p>Manage users, data and system settings via the Django admin panel.</p>
       <a href="/admin/" class="mod-btn"><i class="bi bi-arrow-right"></i> Go to Admin</a>
     </div>
+
   </div>
+
 </div>
 
 <script>
+  /* eslint-disable */
+  // @ts-nocheck
+
+  // Bar chart: meetings per month over the last 6 months
   new Chart(document.getElementById('meetingsChart'), {
     type: 'bar',
     data: {
       labels: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'],
-      datasets: [{ label: 'Meetings', data: [2, 1, 4, 3, 5, 4], backgroundColor: 'rgba(108,113,207,.75)', borderRadius: 7, borderSkipped: false }]
+      datasets: [{
+        label: 'Meetings',
+        data: [2, 1, 4, 3, 5, 4],
+        backgroundColor: 'rgba(108,113,207,.75)',
+        borderRadius: 7, borderSkipped: false,
+      }]
     },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#777' } }, y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 11 }, color: '#777' }, grid: { color: '#f0f0f0' } } } }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#777' } },
+        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 11 }, color: '#777' }, grid: { color: '#f0f0f0' } }
+      }
+    }
   });
 
+  // Doughnut chart: breakdown of meetings by platform
   new Chart(document.getElementById('platformChart'), {
     type: 'doughnut',
     data: {
       labels: ['Zoom', 'MS Teams', 'Google Meet', 'Other'],
-      datasets: [{ data: [7, 5, 4, 3], backgroundColor: ['#4285f4', '#6264a7', '#34a853', '#6C71CF'], borderWidth: 2, borderColor: '#fff', hoverOffset: 6 }]
+      datasets: [{
+        data: [7, 5, 4, 3],
+        backgroundColor: ['#4285f4', '#6264a7', '#34a853', '#6C71CF'],
+        borderWidth: 2, borderColor: '#fff', hoverOffset: 6,
+      }]
     },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, color: '#555', padding: 12, boxWidth: 12 } } } }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, color: '#555', padding: 12, boxWidth: 12 } }
+      }
+    }
   });
 </script>
 
