@@ -89,7 +89,7 @@ def deleted(request):
         status='deleted'
     ).filter(
         Q(sender=request.user) |
-        Q(receiver__in=[request.user])  # ✅ FIXED ManyToMany
+        Q(receiver__in=[request.user]) 
     ).distinct().order_by('-timestamp')
 
     inbox_count = Message.objects.filter(
