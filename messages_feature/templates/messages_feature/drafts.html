@@ -28,7 +28,7 @@
                 <div class="status-bar"></div>
 
                 <!-- MAIN CONTENT -->
-                <a href="{% url 'message_detail' message.id %}"
+                <a href="{% url 'edit_draft' message.id %}"
                    class="flex-grow-1 px-4 py-3 text-decoration-none">
 
                     <!-- top row -->
@@ -67,13 +67,13 @@
                     </a>
 
                     <!-- VIEW -->
-                    <a href="{% url 'message_detail' message.id %}"
+                    {% comment %} <a href="{% url 'message_detail' message.id %}"
                        class="btn btn-sm btn-outline-secondary"
                        style="border-radius:10px;">
 
                         View
 
-                    </a>
+                    </a> {% endcomment %}
 
                 </div>
 

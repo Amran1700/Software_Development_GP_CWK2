@@ -8,23 +8,19 @@ from .models import Message
 
 
 # INBOX VIEW
-# Shows messages RECEIVED by the logged-in user
 @login_required
 def inbox(request):
-    # FIX: direct query instead of reverse M2M manager
     messages = Message.objects.filter(
         receiver=request.user,
         status='sent'
     ).order_by('-timestamp')
 
-    # Count unread messages for badge display in sidebar
     inbox_count = Message.objects.filter(
         receiver=request.user,
         status='sent',
         read_status=False
     ).count()
 
-    # Drafts count (sent messages saved as draft)
     drafts_count = Message.objects.filter(
         sender=request.user,
         status='draft'
@@ -38,7 +34,6 @@ def inbox(request):
 
 
 # SENT VIEW
-# Shows messages SENT by the logged-in user
 @login_required
 def sent(request):
     messages = Message.objects.filter(
@@ -65,7 +60,6 @@ def sent(request):
 
 
 # DRAFTS VIEW
-# Shows messages saved as drafts by the user
 @login_required
 def drafts(request):
     messages = Message.objects.filter(
@@ -88,16 +82,14 @@ def drafts(request):
     })
 
 
-# DELETED VIEW
-# Shows soft-deleted messages related to the user
+# DELETED VIEW (FIXED)
 @login_required
 def deleted(request):
-    # FIX: Q import + safe direct filtering
     messages = Message.objects.filter(
         status='deleted'
     ).filter(
         Q(sender=request.user) |
-        Q(receiver=request.user)
+        Q(receiver__in=[request.user])  # ✅ FIXED ManyToMany
     ).distinct().order_by('-timestamp')
 
     inbox_count = Message.objects.filter(
@@ -119,17 +111,13 @@ def deleted(request):
 
 
 # MESSAGE DETAIL VIEW
-# Shows full message content
-# Also marks message as READ if receiver opens it
 @login_required
 def message_detail(request, message_id):
     message = get_object_or_404(Message, id=message_id)
 
-    # Security check: only sender or receiver can view message
     if request.user != message.sender and request.user not in message.receiver.all():
         return redirect('inbox')
 
-    # Mark as read ONLY if receiver has opened it
     if request.user in message.receiver.all() and not message.read_status:
         message.read_status = True
         message.save()
@@ -152,24 +140,34 @@ def message_detail(request, message_id):
     })
 
 
-# DELETE MESSAGE
-# Marks message as deleted instead of removing from DB
+# SOFT DELETE (moves to trash)
 @login_required
 def delete_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
 
-    # Security: only sender or receiver can delete
     if request.user != message.sender and request.user not in message.receiver.all():
         return redirect('inbox')
 
-    # Soft delete
     message.status = 'deleted'
     message.save()
 
-    return redirect('inbox')
+    return redirect('deleted')  # ✅ FIXED redirect
 
 
-# DELETED MESSAGE DETAIL VIEW
+# PERMANENT DELETE (ACTUAL DELETE)
+@login_required
+def delete_message_permanently(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+
+    if request.user != message.sender and request.user not in message.receiver.all():
+        return redirect('deleted')
+
+    message.delete()  # ✅ REAL deletion
+
+    return redirect('deleted')
+
+
+# DELETED MESSAGE DETAIL
 @login_required
 def deleted_message_detail(request, message_id):
     message = get_object_or_404(Message, id=message_id)
@@ -198,7 +196,7 @@ def deleted_message_detail(request, message_id):
     })
 
 
-# COMPOSE MESSAGE VIEW
+# COMPOSE VIEW
 @login_required
 def compose(request):
     users = User.objects.exclude(id=request.user.id)
@@ -263,7 +261,7 @@ def compose(request):
     return render(request, 'messages_feature/compose.html', context)
 
 
-# EDIT DRAFT VIEW
+# EDIT DRAFT
 @login_required
 def edit_draft(request, message_id):
     message = get_object_or_404(Message, id=message_id, status='draft')

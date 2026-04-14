@@ -1,5 +1,5 @@
 <!-- Author: Amran Mohammed id:w2066724 -->
- 
+
 {% extends 'messages_feature/messages_layout.html' %}
 
 {% block title %}Deleted{% endblock %}
@@ -32,7 +32,6 @@
                 <a href="{% url 'deleted_message_detail' message.id %}"
                    class="flex-grow-1 px-4 py-3 text-decoration-none">
 
-                    <!-- top row -->
                     <div class="d-flex justify-content-between align-items-center mb-1">
 
                         <div class="subject fw-semibold">
@@ -45,23 +44,19 @@
 
                     </div>
 
-                    <!-- sender -->
                     <div class="text-muted small">
-                        <strong>From:</strong>
-                        {{ message.sender.username }}
+                        <strong>From:</strong> {{ message.sender.username }}
                     </div>
 
                 </a>
 
-                <!-- VIEW BUTTON (NOW BLUE) -->
-                <div class="d-flex align-items-center pe-3">
+                <!-- ACTIONS -->
+                <div class="d-flex align-items-center pe-3 gap-2">
 
                     <a href="{% url 'deleted_message_detail' message.id %}"
                        class="btn btn-sm btn-outline-primary"
                        style="border-radius:10px;">
-
                         View
-
                     </a>
 
                 </div>
