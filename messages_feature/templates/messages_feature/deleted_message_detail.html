@@ -1,5 +1,5 @@
 <!-- Author: Amran Mohammed id:w2066724 -->
- 
+
 {% extends 'messages_feature/messages_layout.html' %}
 {% block title %}Deleted Message Detail{% endblock %}
 {% block nav_messages %}active{% endblock %}
@@ -8,57 +8,70 @@
 <div class="card border-0 shadow-sm main-card">
     <div class="card-body p-4">
 
-        <!-- subject -->
-        <h4 class="fw-bold mb-3" style="color:#2c3e50;">
+        <!-- SUBJECT -->
+        <h4 class="fw-bold mb-4" style="color:#111111;">
             {{ message.subject|default:"(No Subject)" }}
         </h4>
 
-        <!-- sender -->
-        <p>
-            <strong>From:</strong>
-            {{ message.sender.username }}
-            <!-- Sender username -->
-            ({{ message.sender.email }})
-            <!-- Sender email address -->
-        </p>
+        <!-- META INFO CARD -->
+        <div class="card border-0 mb-3" style="background:#f7f7f7; border-radius: 12px;">
+            <div class="card-body p-3">
 
-        <!-- recipients -->
-        <p>
-            <strong>To:</strong>
-            {% for user in message.receiver.all %}
-                <!-- Loop through all recipients -->
-                {{ user.username }}
-                <!-- Display the current username -->
-                {% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
+                <!-- sender -->
+                <p class="mb-2">
+                    <strong>From:</strong>
+                    {{ message.sender.username }}
+                    <span class="text-muted">
+                        ({{ message.sender.email }})
+                    </span>
+                </p>
 
-        <!-- timestamp -->
-        <p>
-            <strong>Date:</strong>
-            {{ message.timestamp|date:"M d, Y H:i" }}
-            <!-- Format: Month Day, Year Hour:Minute -->
-        </p>
+                <!-- recipients -->
+                <p class="mb-2">
+                    <strong>To:</strong>
+                    {% for user in message.receiver.all %}
+                        <span class="badge bg-dark" style="border-radius: 12px; font-weight:400;">
+                            {{ user.username }}
+                        </span>
+                    {% empty %}
+                        <span class="text-muted">No recipients</span>
+                    {% endfor %}
+                </p>
 
-        <hr>
-        <!-- body-->
-        <p style="white-space: pre-line;">
-            <!-- Keeps line breaks exactly as user wrote them -->
-            {{ message.body|linebreaks }}
-        </p>
+                <!-- timestamp -->
+                <p class="mb-0 text-muted">
+                    <strong>Date:</strong>
+                    {{ message.timestamp|date:"M d, Y H:i" }}
+                </p>
 
-        <!-- quick actions -->
-        <div class="d-flex gap-2 mt-3">
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="card border-0 mb-4" style="border-radius: 12px; background:white;">
+            <div class="card-body p-3">
+
+                <p style="white-space: pre-line; margin:0; color:#2c3e50;">
+                    {{ message.body|linebreaks }}
+                </p>
+
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="d-flex gap-2">
 
             <!-- reply -->
             <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"
-               class="btn btn-primary btn-sm">
+               class="btn btn-dark px-4"
+               style="border-radius: 10px;">
                 Reply
             </a>
 
-            <!-- delete Permanently  -->
+            <!-- delete permanently -->
             <a href="{% url 'delete_message' message.id %}"
-               class="btn btn-danger btn-sm">
+               class="btn btn-outline-danger px-4"
+               style="border-radius: 10px;">
                 Delete Permanently
             </a>
 

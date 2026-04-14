@@ -9,7 +9,10 @@
 
     <div class="card-body p-4">
 
-        <h3 class="fw-bold mb-4" style="color:#4277D6;">Compose Message</h3>
+        <!-- Header -->
+        <h3 class="fw-bold mb-4" style="color:#111111;">
+            Compose Message
+        </h3>
 
         <!-- error message -->
         {% if error %}
@@ -21,49 +24,80 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- Recipients -->
-            <label class="fw-bold mb-2">Recipients</label>
+            <!-- Recipients Section -->
+            <div class="mb-3">
 
-            <div class="card p-3 mb-3" style="max-height: 200px; overflow-y:auto;">
+                <label class="fw-semibold mb-2">
+                    Recipients <span style="color:red;">*</span>
+                </label>
 
-                {% for user in users %}
-                <div class="form-check">
+                <div class="card border-0 p-3"
+                     style="max-height: 220px; overflow-y:auto; background:#f7f7f7; border-radius: 12px;">
 
-                    <input type="checkbox"
-                           name="recipient"
-                           value="{{ user.id }}"
-                           class="form-check-input"
-                           id="user{{ user.id }}">
+                    {% for user in users %}
+                    <div class="form-check mb-2">
 
-                    <label class="form-check-label" for="user{{ user.id }}">
-                        {{ user.username }}
-                    </label>
+                        <input type="checkbox"
+                               name="recipient"
+                               value="{{ user.id }}"
+                               class="form-check-input"
+                               id="user{{ user.id }}">
+
+                        <label class="form-check-label" for="user{{ user.id }}">
+                            {{ user.username }}
+                        </label>
+
+                    </div>
+                    {% empty %}
+                        <span class="text-muted">No users available</span>
+                    {% endfor %}
 
                 </div>
-                {% endfor %}
-
             </div>
 
             <!-- subject -->
-            <input type="text"
-                   name="subject"
-                   class="form-control mb-3"
-                   placeholder="Subject (optional)">
+            <div class="mb-3">
+                <label class="fw-semibold mb-2">Subject</label>
+                <input type="text"
+                       name="subject"
+                       class="form-control"
+                       style="border-radius: 10px;"
+                       placeholder="Enter subject (optional)">
+            </div>
 
-            <!-- body-->
-            <textarea name="body"
-                      class="form-control mb-3"
-                      rows="6"
-                      placeholder="Write your message..."></textarea>
+            <!-- body -->
+            <div class="mb-4">
+                <label class="fw-semibold mb-2">
+                    Message <span style="color:red;">*</span>
+                </label>
 
-            <!-- quick action buttons -->
-            <button type="submit" name="status" value="sent" class="btn btn-primary">
-                Send
-            </button>
+                <textarea name="body"
+                          class="form-control"
+                          rows="6"
+                          style="border-radius: 10px;"
+                          placeholder="Write your message..."></textarea>
+            </div>
 
-            <button type="submit" name="status" value="draft" class="btn btn-outline-secondary">
-                Save Draft
-            </button>
+            <!-- buttons -->
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        name="status"
+                        value="sent"
+                        class="btn btn-dark px-4"
+                        style="border-radius: 10px;">
+                    Send
+                </button>
+
+                <button type="submit"
+                        name="status"
+                        value="draft"
+                        class="btn btn-outline-dark px-4"
+                        style="border-radius: 10px;">
+                    Save Draft
+                </button>
+
+            </div>
 
         </form>
 

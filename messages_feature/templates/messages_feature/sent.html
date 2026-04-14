@@ -8,46 +8,130 @@
 
 <div class="card border-0 shadow-sm main-card">
 
-    <div class="card-body p-4">
+    <div class="card-body p-0">
 
-        <h3 class="fw-bold mb-3" style="color:#4277D6;">Sent Messages</h3>
+        <!-- header -->
+        <div class="p-4 border-bottom">
+            <h3 class="fw-bold mb-0" style="color:#000;">
+                Sent Messages
+            </h3>
+        </div>
 
-        {% for message in messages %}
-        <div class="card border-0 shadow-sm mb-3">
-            <div class="card-body">
+        {% if messages %}
 
-                <!-- subject -->
-                <h5>{{ message.subject|default:"(No Subject)" }}</h5>
+        <div class="sent-list p-3">
 
-                <!-- recipients -->
-                <p>
-                    <strong>To:</strong>
-                    {% for user in message.receiver.all %}
-                        {{ user.username }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                </p>
+            {% for message in messages %}
 
-                <!-- timestamp -->
-                <small class="text-muted">
-                    {{ message.timestamp|date:"M d, Y H:i" }}
-                </small>
+            <div class="sent-row d-flex align-items-stretch">
 
-                <!-- View button -->
-                <div class="mt-2">
+                <!-- LEFT BAR -->
+                <div class="status-bar"></div>
+
+                <!-- MAIN CLICKABLE AREA -->
+                <a href="{% url 'message_detail' message.id %}"
+                   class="flex-grow-1 px-4 py-3 text-decoration-none">
+
+                    <!-- top row -->
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+
+                        <div class="subject fw-semibold">
+                            {{ message.subject|default:"(No Subject)" }}
+                        </div>
+
+                        <div class="text-muted small">
+                            {{ message.timestamp|date:"M d, Y H:i" }}
+                        </div>
+
+                    </div>
+
+                    <!-- recipients -->
+                    <div class="text-muted small">
+                        <strong>To:</strong>
+                        {% for user in message.receiver.all %}
+                            {{ user.username }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </a>
+
+                <!-- VIEW BUTTON (BLUE OUTLINE) -->
+                <div class="d-flex align-items-center pe-3">
+
                     <a href="{% url 'message_detail' message.id %}"
-                       class="btn btn-sm btn-outline-primary">
+                       class="btn btn-sm btn-outline-primary"
+                       style="border-radius:10px;"
+                       title="View message">
+
                         View
+
                     </a>
+
                 </div>
 
             </div>
+
+            {% endfor %}
+
         </div>
 
-        {% empty %}
-        <p class="text-muted">No sent messages.</p>
-        {% endfor %}
+        {% else %}
+
+        <div class="p-4 text-muted">
+            No sent messages.
+        </div>
+
+        {% endif %}
 
     </div>
 </div>
+
+
+<style>
+
+/* list container */
+.sent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* curved sent row */
+.sent-row {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    background: #fff;
+    transition: all 0.15s ease;
+    color: inherit;
+}
+
+/* hover */
+.sent-row:hover {
+    background-color: #f5f8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* left accent bar */
+.status-bar {
+    width: 5px;
+    background: #e0e0e0;
+}
+
+/* subject */
+.subject {
+    color: #202124;
+    font-size: 1rem;
+}
+
+/* text truncation safety */
+.sent-row .text-muted {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+</style>
 
 {% endblock %}

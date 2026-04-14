@@ -10,57 +10,84 @@
 
         <!-- header-->
         <div class="p-4 border-bottom">
-            <h3 class="fw-bold mb-0" style="color:#4277D6;">
+            <h3 class="fw-bold mb-0" style="color:#000;">
                 Inbox
             </h3>
         </div>
 
         {% if messages %}
 
-        <div class="gmail-list">
-            <!-- Container for all message rows (Gmail-style list) -->
+        <div class="gmail-list p-3">
 
             {% for message in messages %}
-            <!-- Loop through each message in inbox -->
 
-            <a href="{% url 'message_detail' message.id %}"
-               class="gmail-row d-flex align-items-stretch text-decoration-none
-                      {% if not message.read_status %}unread{% endif %}">
+            <div class="gmail-row d-flex align-items-stretch {% if not message.read_status %}unread{% endif %}">
 
+                <!-- LEFT BAR -->
                 <div class="status-bar {% if message.read_status %}read{% else %}unread{% endif %}">
                 </div>
-                <!-- Visual indicator:
-                     - Blue = unread
-                     - Grey = read -->
 
-                <!-- message content -->
-                <div class="flex-grow-1 px-4 py-3 overflow-hidden">
-                    <div class="d-flex justify-content-between">
+                <!-- MAIN CLICKABLE AREA -->
+                <a href="{% url 'message_detail' message.id %}"
+                   class="flex-grow-1 px-4 py-3 text-decoration-none">
+
+                    <!-- top row -->
+                    <div class="d-flex justify-content-between align-items-center mb-1">
 
                         <div class="sender">
                             {{ message.sender.username }}
                         </div>
 
                         <div class="text-muted small">
-                            <!-- Time that the message was sent -->
                             {{ message.timestamp|date:"M d H:i" }}
                         </div>
 
                     </div>
 
                     <!-- subject -->
-                    <div class="subject {% if not message.read_status %}fw-bold{% endif %}">
-                        {{ message.subject|default:"(No Subject)" }}
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div class="subject {% if not message.read_status %}unread-text{% endif %}">
+                            {{ message.subject|default:"(No Subject)" }}
+                        </div>
+
+                        {% if not message.read_status %}
+                        <span class="unread-pill">New</span>
+                        {% endif %}
+
                     </div>
 
-                    <!-- preview of message body -->
-                    <div class="preview text-muted small">
-                        {{ message.body|truncatechars:100 }}
+                    <!-- preview -->
+                    <div class="preview text-muted small mt-1">
+                        {{ message.body|truncatechars:110 }}
                     </div>
+
+                </a>
+
+                <!-- ACTION BUTTONS (NO ICONS) -->
+                <div class="d-flex align-items-center pe-3 gap-2">
+
+                    <!-- VIEW -->
+                    <a href="{% url 'message_detail' message.id %}"
+                       class="btn btn-sm btn-outline-primary"
+                       style="border-radius:10px;">
+
+                        View
+
+                    </a>
+
+                    <!-- DELETE -->
+                    <a href="{% url 'delete_message' message.id %}"
+                       class="btn btn-sm btn-outline-danger"
+                       style="border-radius:10px;">
+
+                        Delete
+
+                    </a>
 
                 </div>
 
-            </a>
+            </div>
 
             {% endfor %}
 
@@ -80,72 +107,91 @@
 
 <style>
 
+/* list container */
 .gmail-list {
     display: flex;
     flex-direction: column;
-    /* Stack messages vertically like how its done in Gmail */
+    gap: 10px;
 }
 
-
+/* curved row */
 .gmail-row {
-    border-bottom: 1px solid #eee;
-    /* small separator between messages */
-    transition: background 0.15s ease;
-    /* Smooth hover animation */
+    display: flex;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    transition: all 0.15s ease;
+    border: 1px solid #eee;
     color: inherit;
-    /* Prevent link blue color override */
 }
 
+/* hover */
 .gmail-row:hover {
-    background-color: #f2f6fc;
-    /* Light highlight when hovering */
+    background-color: #f5f8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
-.gmail-row.unread .sender,
-.gmail-row.unread .subject {
-    font-weight: 700;
-    /* Make unread messages bold */
-    color: #202124;
-    /* Dark text for emphasis */
+/* UNREAD STYLE (IMPORTANT PART) */
+.gmail-row.unread {
+    background-color: #f2f7ff;
+    border-left: 3px solid #1a73e8;
 }
 
+/* LEFT BAR */
+.status-bar {
+    width: 5px;
+}
+
+/* unread bar */
+.status-bar.unread {
+    background-color: #1a73e8;
+}
+
+/* read bar */
+.status-bar.read {
+    background-color: #e0e0e0;
+}
+
+/* sender */
 .sender {
     width: 180px;
+    font-weight: 600;
     color: #202124;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+/* subject */
 .subject {
+    font-size: 0.95rem;
     color: #202124;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    /* Prevent overflow */
 }
 
+/* unread subject */
+.unread-text {
+    font-weight: 700;
+}
+
+/* preview */
 .preview {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.status-bar {
-    width: 4px;
-    min-height: 100%;
-    /* Vertical indicator bar to show if a message has been read before */
-}
-
-/* UNREAD COLOR = BLUE */
-.status-bar.unread {
-    background-color: #1a73e8;
-}
-
-/* READ COLOR = GREY */
-.status-bar.read {
-    background-color: #e0e0e0;
+/* unread badge */
+.unread-pill {
+    font-size: 0.7rem;
+    background: #1a73e8;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
 }
 
 </style>

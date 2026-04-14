@@ -9,7 +9,7 @@
 
     <div class="card-body p-4">
 
-        <h3 class="fw-bold mb-4" style="color:#4277D6;">Edit Draft</h3>
+        <h3 class="fw-bold mb-4" style="color:#000;">Edit Draft</h3>
 
         {% if error %}
         <div class="alert alert-danger">
@@ -23,12 +23,16 @@
             <!-- recipients -->
             <div class="mb-3">
 
-                <label class="fw-bold">Recipients</label>
+                <label class="fw-bold mb-2">
+                    Recipients <span style="color:red;">*</span>
+                    <!-- Recipients can be ONE or MANY users -->
+                </label>
 
-                <div class="card p-3" style="max-height:200px; overflow-y:auto;">
+                <div class="card p-3"
+                     style="max-height:200px; overflow-y:auto; border-radius:12px; background:#f7f7f7;">
 
                     {% for user in users %}
-                    <div class="form-check">
+                    <div class="form-check mb-2">
 
                         <input type="checkbox"
                                name="recipient"
@@ -47,24 +51,52 @@
             </div>
 
             <!-- subject -->
-            <input type="text"
-                   name="subject"
-                   value="{{ message.subject }}"
-                   class="form-control mb-3">
+            <div class="mb-3">
+                <label class="fw-bold mb-2">
+                    Subject
+                </label>
+
+                <input type="text"
+                       name="subject"
+                       value="{{ message.subject }}"
+                       class="form-control"
+                       style="border-radius:10px;">
+            </div>
 
             <!-- body -->
-            <textarea name="body"
-                      rows="6"
-                      class="form-control mb-3">{{ message.body }}</textarea>
+            <div class="mb-3">
+
+                <label class="fw-bold mb-2">
+                    Message <span style="color:red;">*</span>
+                </label>
+
+                <textarea name="body"
+                          rows="6"
+                          class="form-control"
+                          style="border-radius:10px;">{{ message.body }}</textarea>
+
+            </div>
 
             <!-- quick actions -->
-            <button type="submit" name="status" value="sent" class="btn btn-primary">
-                Send
-            </button>
+            <div class="d-flex gap-2">
 
-            <button type="submit" name="status" value="draft" class="btn btn-secondary">
-                Save Draft
-            </button>
+                <button type="submit"
+                        name="status"
+                        value="sent"
+                        class="btn btn-dark px-4"
+                        style="border-radius:10px;">
+                    Send
+                </button>
+
+                <button type="submit"
+                        name="status"
+                        value="draft"
+                        class="btn btn-outline-dark px-4"
+                        style="border-radius:10px;">
+                    Save Draft
+                </button>
+
+            </div>
 
         </form>
 

@@ -7,7 +7,7 @@
       "receiver": [2, 3],
       "subject": "Welcome to Sky Engineering",
       "body": "Welcome to the team! Let me know if you need help getting started.",
-      "status": "sent",
+      "status": "draft",
       "read_status": false,
       "parent": null,
       "timestamp": "2026-04-09T09:00:00Z"
@@ -17,28 +17,28 @@
     "model": "messages_feature.message",
     "pk": 2,
     "fields": {
-      "sender": 2,
-      "receiver": [1],
-      "subject": "Re: Welcome",
-      "body": "Thanks! Excited to be here.",
+      "sender": 1,
+      "receiver": [4, 5, 6],
+      "subject": "Q2 Infrastructure Planning",
+      "body": "Hi team,\n\nWe need to finalize Q2 infrastructure budget by next Friday. Please review the attached document and add your team's estimates. Key areas include: Kubernetes cluster upgrades, database scaling, and security compliance. Let's sync on Monday if there are major changes.\n\nThanks,\nSender 1",
       "status": "sent",
-      "read_status": true,
+      "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T09:05:00Z"
+      "timestamp": "2026-04-08T14:30:00Z"
     }
   },
   {
     "model": "messages_feature.message",
     "pk": 3,
     "fields": {
-      "sender": 3,
-      "receiver": [1],
-      "subject": "Standup Reminder",
-      "body": "Daily standup starts at 10:00 AM.",
-      "status": "sent",
-      "read_status": true,
+      "sender": 1,
+      "receiver": [7],
+      "subject": "Deleted draft reminder",
+      "body": "Ignore this – old note.",
+      "status": "deleted",
+      "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T09:10:00Z"
+      "timestamp": "2026-04-07T08:00:00Z"
     }
   },
   {
@@ -46,27 +46,27 @@
     "pk": 4,
     "fields": {
       "sender": 1,
-      "receiver": [3],
-      "subject": "Re: Standup",
-      "body": "Got it, I’ll join.",
+      "receiver": [2],
+      "subject": "Meeting rescheduled",
+      "body": "The 1:1 is moved to 3 PM.",
       "status": "sent",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T09:15:00Z"
+      "timestamp": "2026-04-09T12:00:00Z"
     }
   },
   {
     "model": "messages_feature.message",
     "pk": 5,
     "fields": {
-      "sender": 4,
-      "receiver": [2],
-      "subject": "Feature Proposal",
-      "body": "Let’s discuss a new dashboard feature.",
+      "sender": 2,
+      "receiver": [1],
+      "subject": "Re: Welcome",
+      "body": "Thanks! Excited to be here.",
       "status": "sent",
       "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T09:20:00Z"
+      "parent": 1,
+      "timestamp": "2026-04-09T09:05:00Z"
     }
   },
   {
@@ -74,18 +74,158 @@
     "pk": 6,
     "fields": {
       "sender": 2,
-      "receiver": [4],
-      "subject": "Re: Feature Proposal",
-      "body": "Sure, let's meet at 2 PM.",
-      "status": "sent",
-      "read_status": true,
+      "receiver": [3, 4],
+      "subject": "On-call rotation for May",
+      "body": "Hi everyone,\n\nHere is the proposed on-call schedule for May. Please confirm if this works for you. If any conflicts, let me know by Thursday.\n\nWeek 1: Sender 3\nWeek 2: Sender 4\nWeek 3: Sender 2\nWeek 4: Sender 5\n\nWe'll also have a backup rotation in case of holidays.\n\nBest,\nSender 2",
+      "status": "draft",
+      "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T09:25:00Z"
+      "timestamp": "2026-04-09T13:20:00Z"
     }
   },
   {
     "model": "messages_feature.message",
     "pk": 7,
+    "fields": {
+      "sender": 2,
+      "receiver": [7],
+      "subject": "Old PR comment",
+      "body": "This is already resolved.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-05T10:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 8,
+    "fields": {
+      "sender": 2,
+      "receiver": [5, 6],
+      "subject": "Logging migration complete",
+      "body": "Migration done. New logs are in ELK.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T14:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 9,
+    "fields": {
+      "sender": 3,
+      "receiver": [1],
+      "subject": "Standup Reminder",
+      "body": "Daily standup starts at 10:00 AM.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:10:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 10,
+    "fields": {
+      "sender": 3,
+      "receiver": [2, 7],
+      "subject": "Incident review notes",
+      "body": "Here are the notes from yesterday's incident (downtime from 3–4 PM UTC).\n\nRoot cause: misconfigured load balancer.\nAction items:\n- Add health checks on all backends\n- Update runbook\n- Schedule follow-up next week\n\nFull doc attached.",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T15:45:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 11,
+    "fields": {
+      "sender": 3,
+      "receiver": [4],
+      "subject": "Outdated alert config",
+      "body": "This alert no longer fires.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-04T11:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 12,
+    "fields": {
+      "sender": 3,
+      "receiver": [5],
+      "subject": "Approved your request",
+      "body": "Approved. You can proceed.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T16:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 13,
+    "fields": {
+      "sender": 4,
+      "receiver": [2],
+      "subject": "Feature Proposal",
+      "body": "Let's discuss a new dashboard feature.",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T09:20:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 14,
+    "fields": {
+      "sender": 4,
+      "receiver": [1, 3, 6],
+      "subject": "New API rate limits – please read",
+      "body": "Hello team,\n\nOur API provider is introducing new rate limits starting May 1st. Currently we can make 10k requests per hour. After the change, it drops to 5k per hour. This will affect the reporting service and real-time dashboard.\n\nWe need to:\n1. Implement request caching\n2. Reduce polling frequency\n3. Add backoff logic\n\nI'll create tickets for these. Let me know if you see other impacts.\n\nThanks,\nSender 4",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T17:10:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 15,
+    "fields": {
+      "sender": 4,
+      "receiver": [7],
+      "subject": "Removed duplicate message",
+      "body": "Already handled in other thread.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-06T09:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 16,
+    "fields": {
+      "sender": 4,
+      "receiver": [5],
+      "subject": "Quick question",
+      "body": "Did you deploy the hotfix?",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T17:45:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 17,
     "fields": {
       "sender": 5,
       "receiver": [3],
@@ -99,27 +239,55 @@
   },
   {
     "model": "messages_feature.message",
-    "pk": 8,
+    "pk": 18,
     "fields": {
-      "sender": 3,
-      "receiver": [5],
-      "subject": "Re: Server Maintenance",
-      "body": "Thanks for the update.",
-      "status": "sent",
+      "sender": 5,
+      "receiver": [1, 2, 4],
+      "subject": "Post-incident database analysis",
+      "body": "Hi team,\n\nAfter yesterday's DB outage, I analyzed the slow query logs. The main issue was a missing index on `transactions.created_at`. Adding that index reduces query time from 12s to 50ms. I also found several other queries that can be optimized.\n\nI'll schedule a review session for Monday at 2 PM. Please review the attached report before then.\n\nRegards,\nSender 5",
+      "status": "draft",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T09:35:00Z"
+      "timestamp": "2026-04-09T18:00:00Z"
     }
   },
   {
     "model": "messages_feature.message",
-    "pk": 9,
+    "pk": 19,
+    "fields": {
+      "sender": 5,
+      "receiver": [6],
+      "subject": "Old backup script",
+      "body": "This script is deprecated.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-03T13:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 20,
+    "fields": {
+      "sender": 5,
+      "receiver": [7],
+      "subject": "Disk space alert resolved",
+      "body": "Cleaned up old logs. Now 40% free.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T19:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 21,
     "fields": {
       "sender": 6,
       "receiver": [1],
       "subject": "Bug Report",
       "body": "Login issue detected on mobile.",
-      "status": "sent",
+      "status": "draft",
       "read_status": false,
       "parent": null,
       "timestamp": "2026-04-09T09:40:00Z"
@@ -127,21 +295,49 @@
   },
   {
     "model": "messages_feature.message",
-    "pk": 10,
+    "pk": 22,
     "fields": {
-      "sender": 1,
-      "receiver": [6],
-      "subject": "Re: Bug Report",
-      "body": "Can you send steps to reproduce?",
+      "sender": 6,
+      "receiver": [2, 3, 5],
+      "subject": "Proposed CI/CD pipeline changes",
+      "body": "Hello,\n\nCurrently our CI runs tests sequentially, taking ~45 minutes. I propose switching to parallel stages and adding build caching. This could reduce total time to ~15 minutes.\n\nDraft pipeline is in `ci/proposal.yaml` in the infra repo. Major changes:\n- Split unit, integration, e2e\n- Cache npm and pip\n- Fail fast on unit tests\n\nLet's discuss in the engineering meeting tomorrow.\n\nThanks,\nSender 6",
       "status": "sent",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T09:45:00Z"
+      "timestamp": "2026-04-09T20:15:00Z"
     }
   },
   {
     "model": "messages_feature.message",
-    "pk": 11,
+    "pk": 23,
+    "fields": {
+      "sender": 6,
+      "receiver": [4],
+      "subject": "Test message to delete",
+      "body": "Ignore please.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-08T22:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 24,
+    "fields": {
+      "sender": 6,
+      "receiver": [7],
+      "subject": "Thanks for help",
+      "body": "The deploy worked. Appreciate it.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T21:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 25,
     "fields": {
       "sender": 7,
       "receiver": [2],
@@ -155,100 +351,492 @@
   },
   {
     "model": "messages_feature.message",
-    "pk": 12,
+    "pk": 26,
+    "fields": {
+      "sender": 7,
+      "receiver": [1, 4, 6],
+      "subject": "New security policies – mandatory training",
+      "body": "Dear team,\n\nOur security team released updated policies for remote access and data handling. Key changes:\n- MFA required for all VPN connections\n- No storing secrets in env files – use vault only\n- Quarterly security training becomes monthly\n\nPlease complete the attached training module by April 30th. Non-compliance will be flagged.\n\nLet me know if you have questions.\n\nBest,\nSender 7",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T22:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 27,
+    "fields": {
+      "sender": 7,
+      "receiver": [3],
+      "subject": "Outdated doc reference",
+      "body": "This link is broken now.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-02T16:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 28,
+    "fields": {
+      "sender": 7,
+      "receiver": [5],
+      "subject": "Patch deployed to staging",
+      "body": "Patch v2.3.1 is live on staging. Can you verify?",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T23:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 29,
+    "fields": {
+      "sender": 1,
+      "receiver": [2, 3, 4, 5, 6, 7],
+      "subject": "All-hands moved to Thursday",
+      "body": "All-hands is now Thursday 10 AM.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T23:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 30,
+    "fields": {
+      "sender": 1,
+      "receiver": [3],
+      "subject": "Re: Standup",
+      "body": "Got it, I'll join.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": 9,
+      "timestamp": "2026-04-09T09:15:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 31,
     "fields": {
       "sender": 2,
-      "receiver": [7],
-      "subject": "Re: Code Review",
-      "body": "I’ll check it today.",
+      "receiver": [1, 3],
+      "subject": "Reminder: Timesheet submission",
+      "body": "Please submit your timesheets by EOD Friday.",
       "status": "sent",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T09:55:00Z"
+      "timestamp": "2026-04-10T08:00:00Z"
     }
   },
   {
     "model": "messages_feature.message",
-    "pk": 13,
+    "pk": 32,
+    "fields": {
+      "sender": 2,
+      "receiver": [4],
+      "subject": "Draft: Performance review notes",
+      "body": "Here are my initial thoughts for Alex's performance review. Strengths: great at unblocking others, strong technical depth. Growth areas: documentation and cross-team communication. Need to add more examples before finalizing.",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T08:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 33,
+    "fields": {
+      "sender": 2,
+      "receiver": [6],
+      "subject": "Old reminder",
+      "body": "This was already done.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T18:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 34,
     "fields": {
       "sender": 3,
-      "receiver": [4],
-      "subject": "Meeting Notes",
-      "body": "Here are the notes from today’s meeting.",
+      "receiver": [1, 7],
+      "subject": "Long: Deep dive on observability",
+      "body": "Team,\n\nI've been evaluating our current observability stack (Prometheus + Grafana + Loki). We're seeing gaps in distributed tracing and log correlation. I propose we pilot Jaeger for tracing and add structured logging across all services. This will help reduce MTTR during incidents. Estimated effort: 2-3 sprints. I can lead the implementation. Let me know if you want to see a prototype first.\n\nDetailed doc attached.\n\nThanks,\nSender 3",
       "status": "sent",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T10:00:00Z"
+      "timestamp": "2026-04-10T09:15:00Z"
     }
   },
   {
     "model": "messages_feature.message",
-    "pk": 14,
+    "pk": 35,
+    "fields": {
+      "sender": 3,
+      "receiver": [2],
+      "subject": "Quick check",
+      "body": "Did you get the logs I sent?",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T09:45:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 36,
+    "fields": {
+      "sender": 3,
+      "receiver": [4, 5],
+      "subject": "Draft: Incident response update",
+      "body": "We need to update the incident response runbook. Current version still references the old alerting system. New steps: page on-call via OpsGenie, escalate after 15 mins, post in #incident channel. I'll add screenshots. Please review when ready.",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T10:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 37,
+    "fields": {
+      "sender": 3,
+      "receiver": [6],
+      "subject": "Spam test",
+      "body": "Ignore this test message.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-08T14:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 38,
     "fields": {
       "sender": 4,
-      "receiver": [3],
-      "subject": "Re: Notes",
-      "body": "Thanks!",
+      "receiver": [1, 2],
+      "subject": "Budget approval needed",
+      "body": "Please approve the attached budget by Monday.",
       "status": "sent",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T10:05:00Z"
+      "timestamp": "2026-04-10T10:30:00Z"
     }
   },
   {
     "model": "messages_feature.message",
-    "pk": 15,
+    "pk": 39,
+    "fields": {
+      "sender": 4,
+      "receiver": [3, 5, 7],
+      "subject": "Long: Quarterly roadmap review",
+      "body": "Hello everyone,\n\nHere is the draft Q3 roadmap. Major initiatives include:\n1. Migrate legacy service to Kubernetes (est. 6 weeks)\n2. Implement zero-downtime deployments (est. 3 weeks)\n3. Improve API documentation (est. 2 weeks)\n\nWe need to prioritize based on customer impact. Please add your comments to the linked document by Wednesday. I'll consolidate feedback and present to leadership on Friday.\n\nThanks for your input.\n\nBest,\nSender 4",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T11:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 40,
+    "fields": {
+      "sender": 4,
+      "receiver": [6],
+      "subject": "Duplicate message",
+      "body": "Already replied in other thread.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-07T09:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 41,
+    "fields": {
+      "sender": 5,
+      "receiver": [1, 2, 3, 4],
+      "subject": "Database maintenance this weekend",
+      "body": "Maintenance Saturday 2 AM UTC. Expected downtime: 30 mins.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T11:45:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 42,
     "fields": {
       "sender": 5,
       "receiver": [6],
-      "subject": "Logs Uploaded",
-      "body": "Server logs are now available.",
-      "status": "sent",
+      "subject": "Long: Backup strategy proposal",
+      "body": "Hi,\n\nOur current backup strategy takes full DB snapshots daily, which uses 2TB of storage. I propose switching to incremental backups with weekly fulls. This would save ~70% storage and reduce backup time from 2 hours to 20 minutes. Restoration time would increase slightly but still within RTO.\n\nI've tested this in staging. Details in the attached plan. Happy to walk through it in person.\n\nThanks,\nSender 5",
+      "status": "draft",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T10:10:00Z"
+      "timestamp": "2026-04-10T12:15:00Z"
     }
   },
   {
     "model": "messages_feature.message",
-    "pk": 16,
+    "pk": 43,
+    "fields": {
+      "sender": 5,
+      "receiver": [7],
+      "subject": "Old config",
+      "body": "This is no longer used.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-06T11:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 44,
+    "fields": {
+      "sender": 5,
+      "receiver": [2],
+      "subject": "Patch verified",
+      "body": "Patch works on my end. You can merge.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T13:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 45,
+    "fields": {
+      "sender": 6,
+      "receiver": [1, 3],
+      "subject": "Short: Meeting invite",
+      "body": "Retro at 3 PM in Zoom.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T13:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 46,
+    "fields": {
+      "sender": 6,
+      "receiver": [4, 5, 7],
+      "subject": "Long: Frontend performance audit",
+      "body": "Team,\n\nI ran Lighthouse on our main dashboard. Scores: Performance 42, Accessibility 78, SEO 85. The main issues are: unoptimized images (saving ~500KB), render-blocking JS, and no lazy loading. I also found 12 unused CSS classes.\n\nI've created a PR with fixes for images and lazy loading. That alone should bring performance to ~65. For the JS issue, we need to defer third-party scripts. Let me know if we can prioritize this next sprint.\n\nDetails in the attached report.\n\nThanks,\nSender 6",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T14:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 47,
+    "fields": {
+      "sender": 6,
+      "receiver": [2],
+      "subject": "Test only",
+      "body": "Please delete.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 48,
+    "fields": {
+      "sender": 6,
+      "receiver": [1],
+      "subject": "CI fixed",
+      "body": "Pipeline is green now.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T14:45:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 49,
+    "fields": {
+      "sender": 7,
+      "receiver": [1, 2, 3],
+      "subject": "New hire onboarding checklist",
+      "body": "Please review the attached onboarding checklist for new engineers.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T15:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 50,
+    "fields": {
+      "sender": 7,
+      "receiver": [4, 5, 6],
+      "subject": "Long: Refactoring the auth service",
+      "body": "Hello,\n\nThe auth service currently uses a mix of JWT and session cookies, which causes bugs. I propose we refactor to JWT-only with refresh tokens. This will simplify the codebase and improve security. The main challenge is migrating existing sessions. I've written a migration script that runs during low traffic.\n\nEstimated effort: 1 week including testing. I've already done a proof of concept in the `auth-refactor` branch. Please review the design doc and let me know if you see any issues.\n\nRegards,\nSender 7",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T15:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 51,
+    "fields": {
+      "sender": 7,
+      "receiver": [3],
+      "subject": "Spam",
+      "body": "Ignore this.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-05T15:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 52,
+    "fields": {
+      "sender": 1,
+      "receiver": [4, 6],
+      "subject": "Short: Lunch plan",
+      "body": "Eating at 12:30?",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T16:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 53,
+    "fields": {
+      "sender": 1,
+      "receiver": [2, 5, 7],
+      "subject": "Long: Vendor evaluation for cloud costs",
+      "body": "Team,\n\nWe're spending $50k/month on AWS. I evaluated reserved instances vs. savings plans. Reserved instances would save 30% but require upfront commitment. Savings plans offer 25% savings with more flexibility. I recommend a hybrid: purchase 1-year savings plan for baseline usage, keep on-demand for spikes.\n\nI also looked at spot instances for batch jobs – could save another 10%. Let's discuss in the FinOps meeting on Tuesday. Full analysis attached.\n\nThanks,\nSender 1",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T16:45:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 54,
+    "fields": {
+      "sender": 1,
+      "receiver": [3],
+      "subject": "Typo",
+      "body": "Ignore previous message.",
+      "status": "deleted",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T17:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 55,
+    "fields": {
+      "sender": 2,
+      "receiver": [1, 7],
+      "subject": "Approval needed",
+      "body": "Can you approve the PR?",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T17:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 56,
+    "fields": {
+      "sender": 3,
+      "receiver": [2, 4],
+      "subject": "Short: Sync needed",
+      "body": "Call me when free.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T18:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 57,
+    "fields": {
+      "sender": 4,
+      "receiver": [1, 2, 3, 5, 6, 7],
+      "subject": "Company holiday",
+      "body": "Office closed on Monday for public holiday.",
+      "status": "sent",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T18:30:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 58,
+    "fields": {
+      "sender": 5,
+      "receiver": [1],
+      "subject": "Draft: Promotion recommendation",
+      "body": "I'm writing a promotion recommendation for Jordan. Strong technical lead, delivered three major projects, mentored juniors. Need to add more metrics and impact statements. Draft attached. Please review when you can.",
+      "status": "draft",
+      "read_status": false,
+      "parent": null,
+      "timestamp": "2026-04-10T19:00:00Z"
+    }
+  },
+  {
+    "model": "messages_feature.message",
+    "pk": 59,
     "fields": {
       "sender": 6,
       "receiver": [5],
-      "subject": "Re: Logs",
-      "body": "Got them, thanks.",
-      "status": "sent",
+      "subject": "Old note",
+      "body": "Already resolved.",
+      "status": "deleted",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T10:15:00Z"
+      "timestamp": "2026-04-08T10:00:00Z"
     }
   },
   {
     "model": "messages_feature.message",
-    "pk": 17,
+    "pk": 60,
     "fields": {
       "sender": 7,
-      "receiver": [1],
-      "subject": "Task Assigned",
-      "body": "You’ve been assigned a new task.",
+      "receiver": [1, 2, 4],
+      "subject": "Short: Thanks",
+      "body": "Great work on the release!",
       "status": "sent",
       "read_status": false,
       "parent": null,
-      "timestamp": "2026-04-09T10:20:00Z"
-    }
-  },
-  {
-    "model": "messages_feature.message",
-    "pk": 18,
-    "fields": {
-      "sender": 1,
-      "receiver": [7],
-      "subject": "Re: Task",
-      "body": "Acknowledged.",
-      "status": "sent",
-      "read_status": false,
-      "parent": null,
-      "timestamp": "2026-04-09T10:25:00Z"
+      "timestamp": "2026-04-10T20:00:00Z"
     }
   }
 ]

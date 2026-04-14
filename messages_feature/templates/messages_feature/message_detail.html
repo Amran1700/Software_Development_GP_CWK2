@@ -1,54 +1,82 @@
 <!-- Author: Amran Mohammed id:w2066724 -->
- 
+
 {% extends 'messages_feature/messages_layout.html' %}
-
-{% block title %}Message Detail{% endblock %}
-
+{% block title %}Deleted Message Detail{% endblock %}
+{% block nav_messages %}active{% endblock %}
 {% block messages_content %}
 
 <div class="card border-0 shadow-sm main-card">
 
-    <div class="card-body p-4">
+    <div class="card-body p-0">
 
-        <!-- subject -->
-        <h4 class="fw-bold mb-3">
-            {{ message.subject|default:"(No Subject)" }}
-        </h4>
+        <!-- HEADER -->
+        <div class="p-4 border-bottom">
 
-        <!-- sender -->
-        <p><strong>From:</strong> {{ message.sender.username }}</p>
+            <h4 class="fw-bold mb-1" style="color:#111;">
+                {{ message.subject|default:"(No Subject)" }}
+            </h4>
 
-        <!-- receivers -->
-        <p>
-            <strong>To:</strong>
-            {% for user in message.receiver.all %}
-                {{ user.username }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
+            <div class="text-muted small">
+                {{ message.timestamp|date:"M d, Y H:i" }}
+            </div>
 
-        <hr>
+        </div>
 
-        <!-- message body -->
-        <p style="white-space: pre-line;">
-            {{ message.body|linebreaks }}
-        </p>
+        <!-- META INFO -->
+        <div class="p-4 border-bottom">
 
-        <!--  quick actions -->
-        <div class="d-flex gap-2 mt-3">
+            <div class="mb-2">
+                <strong>From:</strong>
+                {{ message.sender.username }}
+                <span class="text-muted">
+                    ({{ message.sender.email }})
+                </span>
+            </div>
 
+            <div>
+                <strong>To:</strong>
+
+                {% for user in message.receiver.all %}
+                    <span class="badge bg-light text-dark me-1"
+                          style="border:1px solid #ddd; border-radius: 12px; font-weight:500;">
+                        {{ user.username }}
+                    </span>
+                {% empty %}
+                    <span class="text-muted">No recipients</span>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="p-4">
+
+            <p style="white-space: pre-line; margin:0; color:#2c3e50; font-size:0.95rem;">
+                {{ message.body|linebreaks }}
+            </p>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="p-4 border-top d-flex gap-2">
+
+            <!-- REPLY -->
             <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"
-               class="btn btn-primary btn-sm">
+               class="btn btn-sm btn-primary"
+               style="border-radius:10px;">
+
                 Reply
+
             </a>
 
-            <a href="{% url 'compose' %}?to={{ message.sender.id }}&subject=Re: {{ message.subject|urlencode }}"
-               class="btn btn-outline-primary btn-sm">
-                Reply All
-            </a>
-
+            <!-- DELETE -->
             <a href="{% url 'delete_message' message.id %}"
-               class="btn btn-danger btn-sm">
-                Delete
+               class="btn btn-sm btn-outline-danger"
+               style="border-radius:10px;">
+
+                Delete Permanently
+
             </a>
 
         </div>

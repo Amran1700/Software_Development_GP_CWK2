@@ -1,9 +1,10 @@
 <!-- Author: Amran Mohammed id:w2066724 -->
- 
+
 <!-- this holds the sidebar container  -->
 <div class="card border-0 shadow-sm" style="border-radius: 12px; width: 240px; height: 100%;">
     <!-- sidebar content area and holds the header for the sidebar-->
     <div class="card-body p-2 d-flex flex-column">
+
         <h5 class="fw-bold mb-3 p-2" style="color:#4277D6;">
             <i class="bi bi-envelope me-2"></i>
             Mailbox
@@ -18,7 +19,9 @@
                 <span>Inbox</span>
 
                 {% if inbox_count %}
-                <span class="badge bg-primary">{{ inbox_count }}</span>
+                <span class="sidebar-badge inbox-badge">
+                    {{ inbox_count }}
+                </span>
                 {% endif %}
             </a>
 
@@ -36,7 +39,9 @@
                 <span>Drafts</span>
 
                 {% if drafts_count %}
-                <span class="badge bg-secondary">{{ drafts_count }}</span>
+                <span class="sidebar-badge draft-badge">
+                    {{ drafts_count }}
+                </span>
                 {% endif %}
             </a>
 

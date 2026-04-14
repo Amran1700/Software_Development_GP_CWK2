@@ -1,79 +1,122 @@
 <!-- Author: Amran Mohammed id:w2066724 -->
- 
 {% extends 'global.html' %}
 {% block content %}
 
 <style>
- /* holds the main layout for the page*/
+/* holds the main layout for the page*/
 .page-wrapper {
-    display: flex;
-    /* Makes sidebar & content stay next to each other */
-    gap: 20px;
-    min-height: calc(100vh - 80px);
-    align-items: stretch;
-    /* insures that the sidebar & content are equal in length */
+   display: flex;
+   /* Makes sidebar & content stay next to each other */
+   gap: 20px;
+   min-height: calc(100vh - 80px);
+   align-items: stretch;
+   /* insures that the sidebar & content are equal in length */
 }
+
 
 /* holds the css specific to the sidebar */
-
 .sidebar-container {
-    width: 240px;
-    display: flex;
-    align-self: stretch;
-    /* makes sidebar fill the full length */
+   width: 240px;
+   display: flex;
+   align-self: stretch;
+   /* makes sidebar fill the full length */
 }
+
 
 /* this insures sidebar card stretches fully */
 .sidebar-container > * {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    /* Forces sidebar inner card to match full height */
+   flex: 1;
+   display: flex;
+   flex-direction: column;
+   height: 100%;
+   /* Forces sidebar inner card to match full height */
 }
+
 
 /* the following contains the css for the main content area  */
 .messages-content-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+   flex: 1;
+   display: flex;
+   flex-direction: column;
 }
 
 .main-card {
-    flex: 1;
-    border-radius: 12px;
-     /* makes the corners of the main content area card/container rounded */
+   flex: 1;
+   border-radius: 12px;
+   /* makes the corners of the main content area card/container rounded */
 }
 
 
+/* UPDATED: smooth transition */
 .list-group-item-action {
-    transition: all 0.2s ease;
+   transition: all 0.2s ease;
 }
+
 
 /* Hover effect for sidebar links */
 .list-group-item-action:hover {
-    background-color: #eef3fb !important;
-    transform: translateX(4px);
+   background-color: #eef3fb !important;
+   transform: translateX(4px);
+   border-radius: 12px; /* keeps rounded shape on hover */
 }
+
 
 /* Active page highlight */
 .list-group-item.active {
-    background: linear-gradient(to right, #4277D6, #6F50A0) !important;
-    color: white !important;
-    border: none !important;
+   background: linear-gradient(to right, #4277D6, #6F50A0) !important;
+   color: white !important;
+   border: none !important;
+   border-radius: 12px;
 }
 
+
+/* sidebar item styling */
 .list-group-item {
-    border: none !important;
-    padding: 10px 12px;
-    font-weight: 500;
+   border: none !important;
+   padding: 10px 14px;
+   font-weight: 500;
+   border-radius: 12px;
+   margin-bottom: 8px;
 }
 
 
-.badge {
+/* optional inner spacing */
+.list-group {
+   padding: 4px;
+}
+
+
+
+.sidebar-badge {
     font-size: 0.75rem;
-    padding: 4px 8px;
-    border-radius: 12px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+    min-width: 22px;
+    text-align: center;
+    display: inline-block;
+    line-height: 1;
+}
+
+/* Inbox badge (soft blue) */
+.inbox-badge {
+    background: #e8f0ff;
+    color: #1a73e8;
+    border: 1px solid #cfe0ff;
+}
+
+/* Drafts badge (soft grey) */
+.draft-badge {
+    background: #f1f3f4;
+    color: #5f6368;
+    border: 1px solid #e0e0e0;
+}
+
+/* optional: deleted badge */
+.deleted-badge {
+    background: #fdeaea;
+    color: #d93025;
+    border: 1px solid #f7c6c2;
 }
 
 </style>
@@ -81,19 +124,17 @@
 
 <div class="container-fluid">
 
-    <div class="page-wrapper">
-        
-        <div class="sidebar-container">
-            {% include 'messages_feature/components/sidebar_messages.html' %}
-   
-        </div>
+   <div class="page-wrapper">
+      
+       <div class="sidebar-container">
+           {% include 'messages_feature/components/sidebar_messages.html' %}
+       </div>
 
-        
-        <div class="messages-content-wrapper"> 
-            {% block messages_content %}{% endblock %}
-        </div>
+       <div class="messages-content-wrapper">
+           {% block messages_content %}{% endblock %}
+       </div>
 
-    </div>
+   </div>
 
 </div>
 

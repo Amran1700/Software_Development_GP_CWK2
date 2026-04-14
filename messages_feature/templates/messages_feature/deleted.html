@@ -8,41 +8,131 @@
 
 <div class="card border-0 shadow-sm main-card">
 
-    <div class="card-body p-4">
+    <div class="card-body p-0">
 
-        <h3 class="fw-bold mb-3" style="color:#4277D6;">Deleted Messages</h3>
+        <!-- header -->
+        <div class="p-4 border-bottom">
+            <h3 class="fw-bold mb-0" style="color:#000;">
+                Deleted Messages
+            </h3>
+        </div>
 
-        {% for message in messages %}
+        {% if messages %}
 
-        <div class="card border-0 shadow-sm mb-3">
-            <div class="card-body">
+        <div class="deleted-list p-3">
 
-                <h5>{{ message.subject|default:"(No Subject)" }}</h5>
+            {% for message in messages %}
 
-                <p>
-                    <strong>From:</strong>
-                    {{ message.sender.username }}
-                </p>
+            <div class="deleted-row d-flex align-items-stretch">
 
-                <small class="text-muted">
-                    {{ message.timestamp|date:"M d, Y H:i" }}
-                </small>
+                <!-- LEFT BAR -->
+                <div class="status-bar"></div>
 
-                <div class="mt-2">
+                <!-- CONTENT -->
+                <a href="{% url 'deleted_message_detail' message.id %}"
+                   class="flex-grow-1 px-4 py-3 text-decoration-none">
+
+                    <!-- top row -->
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+
+                        <div class="subject fw-semibold">
+                            {{ message.subject|default:"(No Subject)" }}
+                        </div>
+
+                        <div class="text-muted small">
+                            {{ message.timestamp|date:"M d, Y H:i" }}
+                        </div>
+
+                    </div>
+
+                    <!-- sender -->
+                    <div class="text-muted small">
+                        <strong>From:</strong>
+                        {{ message.sender.username }}
+                    </div>
+
+                </a>
+
+                <!-- VIEW BUTTON (NOW BLUE) -->
+                <div class="d-flex align-items-center pe-3">
+
                     <a href="{% url 'deleted_message_detail' message.id %}"
-                       class="btn btn-sm btn-outline-primary">
+                       class="btn btn-sm btn-outline-primary"
+                       style="border-radius:10px;">
+
                         View
+
                     </a>
+
                 </div>
 
             </div>
+
+            {% endfor %}
+
         </div>
 
-        {% empty %}
-        <p class="text-muted">No deleted messages.</p>
-        {% endfor %}
+        {% else %}
+
+        <div class="p-4 text-muted">
+            No deleted messages.
+        </div>
+
+        {% endif %}
 
     </div>
 </div>
+
+
+<style>
+
+/* list container */
+.deleted-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* curved row */
+.deleted-row {
+    display: flex;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    transition: all 0.15s ease;
+    border: 1px solid #eee;
+    color: inherit;
+}
+
+/* hover */
+.deleted-row:hover {
+    background-color: #f5f8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* left bar */
+.status-bar {
+    width: 5px;
+    background: #bdbdbd;
+}
+
+/* subject */
+.subject {
+    font-size: 0.95rem;
+    color: #202124;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* text safety */
+.deleted-row .text-muted {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+</style>
 
 {% endblock %}
