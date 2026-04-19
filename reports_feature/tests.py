@@ -1,7 +1,7 @@
 # reports_feature/tests.py
 # Author: Student 5 – Sadana Suresh (w21162895)
 # Module: 5COSC021W – Software Development Group Project CWK2
-# Description: Full test suite for the Reports module – TC01 to TC22.
+# Description: Full test suite for the Reports module – TC01 to TC24.
 #              Covers dashboard, preview, PDF/Excel download, authentication,
 #              edge cases, and negative/invalid input scenarios.
 #              Run with: python manage.py test reports_feature
@@ -127,15 +127,17 @@ class TC09_PDFTeams(ReportsBaseTest):
 
 # TC10
 class TC10_ExcelTeams(ReportsBaseTest):
-    """TC10 – Excel download for Teams report returns correct content-type."""
+    """TC10 – Excel download for Teams report returns correct content-type and .xlsx filename."""
 
     def test_download_excel_teams(self):
         response = self.client.get(
             reverse('reports:download_report', args=['teams', 'excel'])
         )
         self.assertEqual(response.status_code, 200)
-        # Response must be an Excel-compatible content type
+        # Response must be a real Excel content type
         self.assertIn('spreadsheetml', response['Content-Type'])
+        # Filename must use .xlsx extension (not .csv)
+        self.assertIn('.xlsx', response['Content-Disposition'])
 
 
 # TC11
@@ -152,7 +154,7 @@ class TC11_PDFAllTeams(ReportsBaseTest):
 
 # TC12
 class TC12_ExcelAllTeams(ReportsBaseTest):
-    """TC12 – Excel download for All Teams returns correct content-type."""
+    """TC12 – Excel download for All Teams returns correct content-type and .xlsx filename."""
 
     def test_download_excel_all_teams(self):
         response = self.client.get(
@@ -160,6 +162,8 @@ class TC12_ExcelAllTeams(ReportsBaseTest):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn('spreadsheetml', response['Content-Type'])
+        # Filename must use .xlsx extension (not .csv)
+        self.assertIn('.xlsx', response['Content-Disposition'])
 
 
 # TC13
@@ -177,14 +181,41 @@ class TC13_PDFFilename(ReportsBaseTest):
 
 # TC14
 class TC14_ExcelFilename(ReportsBaseTest):
-    """TC14 – Excel download has correct filename in Content-Disposition header."""
+    """TC14 – Excel download has correct .xlsx filename in Content-Disposition header."""
 
     def test_excel_filename(self):
         response = self.client.get(
             reverse('reports:download_report', args=['teams', 'excel'])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('teams_report', response['Content-Disposition'])
+        self.assertIn('teams_report.xlsx', response['Content-Disposition'])
+
+
+# TC23
+class TC23_PreviewNoManager(ReportsBaseTest):
+    """TC23 – Teams Without Managers preview loads and shows the unmanaged team."""
+
+    def test_preview_no_manager(self):
+        response = self.client.get(
+            reverse('reports:preview', args=['no-manager'])
+        )
+        self.assertEqual(response.status_code, 200)
+        # Orphan Team has no manager – should appear in this report
+        self.assertContains(response, 'Orphan Team')
+        # Managed team should NOT appear in this report
+        self.assertNotContains(response, 'Phoenix Team')
+
+
+# TC24
+class TC24_PDFNoManager(ReportsBaseTest):
+    """TC24 – PDF download for no-manager report returns valid PDF."""
+
+    def test_pdf_no_manager(self):
+        response = self.client.get(
+            reverse('reports:download_report', args=['no-manager', 'pdf'])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
 
 
 # ── NEGATIVE / EDGE CASE TESTS ────────────────────────────────────────────────
