@@ -8,9 +8,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-import csv
 import io
 from datetime import datetime
+from io import BytesIO
 
 # ReportLab imports for PDF generation
 from reportlab.lib.pagesizes import A4
@@ -18,6 +18,9 @@ from reportlab.lib import colors
 from reportlab.lib.units import cm
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+
+# openpyxl import for Excel generation
+import openpyxl
 
 # Import models from teammate apps – try/except ensures app runs standalone if models not yet available
 from organisation_feature.models import Department
@@ -96,6 +99,35 @@ def get_all_teams_data():
     }
 
 
+def get_no_manager_data():
+    """
+    Builds data for the Teams Without Managers report.
+    Returns all teams where manager is NULL, with their department shown.
+    Uses select_related to avoid N+1 queries on department lookup.
+    This satisfies the brief requirement: 'teams without managers'.
+    """
+    rows = []
+    for team in Team.objects.filter(manager__isnull=True).select_related('department').order_by('team_name'):
+        rows.append([
+            team.team_name,
+            team.department.department_name if team.department else '—',
+        ])
+
+    # Stats cards shown at top of the preview page
+    stats = [
+        {'label': 'Teams Without Managers', 'value': str(len(rows))},
+        {'label': 'Total Teams',            'value': str(Team.objects.count())},
+    ]
+
+    return {
+        'title':       'Teams Without Managers',
+        'description': 'Engineering teams currently without an assigned manager.',
+        'stats':       stats,
+        'columns':     ['Team Name', 'Department'],
+        'rows':        rows,
+    }
+
+
 def get_report_meta(report_type):
     """
     Router function that maps a report_type slug to the correct builder function.
@@ -103,8 +135,9 @@ def get_report_meta(report_type):
     Adding a new report type only requires adding one entry to this dictionary.
     """
     builders = {
-        'teams':     get_teams_report_data,
-        'all-teams': get_all_teams_data,
+        'teams':      get_teams_report_data,
+        'all-teams':  get_all_teams_data,
+        'no-manager': get_no_manager_data,
     }
     builder = builders.get(report_type)
     return builder() if builder else {}
@@ -222,6 +255,29 @@ def generate_pdf(title, description, columns, rows, stats):
     return buffer
 
 
+# ── EXCEL GENERATOR ───────────────────────────────────────────────────────────
+
+def generate_excel(title, columns, rows):
+    """
+    Builds and returns a real .xlsx file as a BytesIO buffer using openpyxl.
+    Writes column headers and all data rows into a single worksheet.
+    Called from the download_report view when format is 'excel'.
+    """
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = title[:31]  # Excel worksheet tab names are capped at 31 characters
+
+    ws.append(columns)  # First row is the header
+    for row in rows:    # Remaining rows are data
+        ws.append(row)
+
+    # Save to in-memory buffer – no file written to disk
+    buffer = BytesIO()
+    wb.save(buffer)
+    buffer.seek(0)
+    return buffer
+
+
 # ── VIEWS ─────────────────────────────────────────────────────────────────────
 
 @login_required
@@ -231,8 +287,9 @@ def reports_dashboard(request):
     Protected by @login_required – unauthenticated users are redirected to login.
     """
     report_types = [
-        {'name': 'Teams Summary Report', 'slug': 'teams'},
-        {'name': 'All Teams Report',     'slug': 'all-teams'},
+        {'name': 'Teams Summary Report',    'slug': 'teams'},
+        {'name': 'All Teams Report',        'slug': 'all-teams'},
+        {'name': 'Teams Without Managers',  'slug': 'no-manager'},
     ]
     return render(request, 'reports_feature/reports_dashboard.html', {'report_types': report_types})
 
@@ -261,7 +318,7 @@ def report_preview(request, report_type):
 def download_report(request, report_type, file_format):
     """
     Handles file download requests for a given report type and format.
-    Supported formats: 'pdf' (via ReportLab) and 'excel' (CSV with Excel content-type).
+    Supported formats: 'pdf' (via ReportLab) and 'excel' (via openpyxl, real .xlsx).
     Returns 400 if report_type is not recognised or format is not supported.
     Protected by @login_required.
     """
@@ -278,14 +335,13 @@ def download_report(request, report_type, file_format):
     stats       = meta.get('stats',   [])
 
     if file_format == 'excel':
-        # Generate CSV with Excel content-type so browser opens it in Excel
+        # Generate a real .xlsx file using openpyxl
+        buffer = generate_excel(title, columns, rows)
         response = HttpResponse(
+            buffer.read(),
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
-        response['Content-Disposition'] = f'attachment; filename="{report_type}_report.csv"'
-        writer = csv.writer(response)
-        writer.writerow(columns)   # Write header row
-        writer.writerows(rows)     # Write all data rows
+        response['Content-Disposition'] = f'attachment; filename="{report_type}_report.xlsx"'
         return response
 
     elif file_format == 'pdf':
