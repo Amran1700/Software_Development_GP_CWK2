@@ -26,11 +26,11 @@ The application was built using Django 6.0 with a SQLite database and Bootstrap 
 
 | Student | Module |
 |---|---|
-| Student 1 (W2081572)|Marc Fernandes| Team Management |
-| Student 2 (W2115831)|Ehsaan Zakriya | Organisation & Department |
-| Student 3 (w2066724)|Amran Mohammed| Messages |
-| Student 4 (W1905510)|Ibrahim Chowdhury| Schedule |
-| Student 5 (W21162895)|Sadana Suresh | Reports |
+| Student 1 (W2081572)Marc Fernandes| Team Management |
+| Student 2 (W2115831)Ehsaan Zakriya | Organisation & Department |
+| Student 3 (w2066724)Amran Mohammed| Messages |
+| Student 4 (W1905510)Ibrahim Chowdhury| Schedule |
+| Student 5 (W21162895)Sadana Suresh | Reports |
 
 ---
 
