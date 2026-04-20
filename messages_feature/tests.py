@@ -7,14 +7,7 @@ from .models import Message
 class MessagesFeatureTests(TestCase):
 
     def setUp(self):
-        """
-        Runs BEFORE every test case.
-
-        Creates:
-        - test users
-        - sample messages
-        - test client session
-        """
+        #this setup runs before each test method
 
         # Create normal users
         self.user1 = User.objects.create_user(
@@ -39,7 +32,7 @@ class MessagesFeatureTests(TestCase):
 
         self.client = Client()
 
-        # Sent message (user1 → user2)
+        #sent message
         self.sent_msg = Message.objects.create(
             sender=self.user1,
             subject='Sent test',
@@ -48,7 +41,7 @@ class MessagesFeatureTests(TestCase):
         )
         self.sent_msg.receiver.set([self.user2])
 
-        # Unread message (user2 → user1)
+        
         self.unread_msg = Message.objects.create(
             sender=self.user2,
             subject='Hello',

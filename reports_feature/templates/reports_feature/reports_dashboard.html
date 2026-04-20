@@ -1,11 +1,9 @@
 {% extends 'global.html' %}
 
 {% comment %}
-  reports_feature/templates/reports_feature/reports_dashboard.html
-  Author: Student 5 – Sadana Suresh (w21162895)
-  Description: Dashboard page showing all available report type cards.
-               Each card links to the preview page for that report type.
-               Extends global.html to use the shared navbar and layout.
+  reports_dashboard.html - Sadana Suresh w21162895
+  Landing page for the Reports module. Shows three cards, one per report type.
+  Each card links to the preview page using the report slug.
 {% endcomment %}
 
 {% block title %}Reports Dashboard{% endblock %}
@@ -14,7 +12,7 @@
 {% block content %}
 <div class="container-fluid px-4 py-4">
 
-    <!-- Page header -->
+    <!-- page header -->
     <div class="mb-4">
         <h2 class="fw-bold" style="color: #2d3a5e;">
             <i class="bi bi-bar-chart-fill me-2" style="color: #4277D6;"></i>Reports Dashboard
@@ -22,13 +20,11 @@
         <p class="text-muted">Select a report type below to preview and generate reports.</p>
     </div>
 
-    <!-- Report type cards – one card per report type -->
     <div class="row g-4">
 
         <!-- Card 1: Teams Summary Report -->
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100" style="border-radius: 16px; overflow: hidden;">
-                <!-- Gradient top bar for visual branding -->
                 <div style="height: 6px; background: linear-gradient(to right, #4277D6, #6C71CF);"></div>
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
@@ -42,7 +38,7 @@
                         </div>
                     </div>
                     <p class="text-muted small mb-4">Total teams, departments, and teams without managers.</p>
-                    <!-- Link to preview page with report_type slug 'teams' -->
+                    <!-- slug 'teams' maps to get_teams_report_data() in views.py -->
                     <a href="{% url 'reports:preview' 'teams' %}"
                        class="btn w-100 text-white fw-semibold"
                        style="background: linear-gradient(to right, #4277D6, #6C71CF); border-radius: 10px; border: none;">
@@ -68,7 +64,7 @@
                         </div>
                     </div>
                     <p class="text-muted small mb-4">Every engineering team with their manager and department.</p>
-                    <!-- Link to preview page with report_type slug 'all-teams' -->
+                    <!-- slug 'all-teams' maps to get_all_teams_data() in views.py -->
                     <a href="{% url 'reports:preview' 'all-teams' %}"
                        class="btn w-100 text-white fw-semibold"
                        style="background: linear-gradient(to right, #6C71CF, #6F50A0); border-radius: 10px; border: none;">
@@ -94,8 +90,8 @@
                         </div>
                     </div>
                     <p class="text-muted small mb-4">View all teams that currently have no assigned manager.</p>
-                    <!-- Uses teams slug as it includes the no-manager stat in the summary -->
-                    <a href="{% url 'reports:preview' 'teams' %}"
+                    <!-- slug 'no-manager' maps to get_no_manager_data() in views.py -->
+                    <a href="{% url 'reports:preview' 'no-manager' %}"
                        class="btn w-100 text-white fw-semibold"
                        style="background: linear-gradient(to right, #6F50A0, #4277D6); border-radius: 10px; border: none;">
                         <i class="bi bi-eye me-2"></i>Preview Report

@@ -32,7 +32,7 @@ class Message(models.Model):
         default='sent'
     )
     read_status = models.BooleanField(default=False)
-    # true = read, false = unread
+
     parent = models.ForeignKey(
         'self',
         null=True,
@@ -40,8 +40,8 @@ class Message(models.Model):
         on_delete=models.SET_NULL,
         related_name='replies'
     )
-    # Self-referencing FK:
-    # Used for reply chains (email threads)
+    # Self-referencing fk:
+    # Used for email threading
     # Currently NOT used in views yet cause i havent implemented threading 
 
     def __str__(self):

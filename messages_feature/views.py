@@ -7,7 +7,7 @@ from django.db.models import Q
 from .models import Message
 
 
-# INBOX VIEW
+
 @login_required
 def inbox(request):
     messages = Message.objects.filter(
@@ -33,7 +33,7 @@ def inbox(request):
     })
 
 
-# SENT VIEW
+
 @login_required
 def sent(request):
     messages = Message.objects.filter(
@@ -59,7 +59,7 @@ def sent(request):
     })
 
 
-# DRAFTS VIEW
+
 @login_required
 def drafts(request):
     messages = Message.objects.filter(
@@ -82,14 +82,14 @@ def drafts(request):
     })
 
 
-# DELETED VIEW (FIXED)
+
 @login_required
 def deleted(request):
     messages = Message.objects.filter(
         status='deleted'
     ).filter(
         Q(sender=request.user) |
-        Q(receiver__in=[request.user])  # ✅ FIXED ManyToMany
+        Q(receiver__in=[request.user]) 
     ).distinct().order_by('-timestamp')
 
     inbox_count = Message.objects.filter(
@@ -110,7 +110,7 @@ def deleted(request):
     })
 
 
-# MESSAGE DETAIL VIEW
+
 @login_required
 def message_detail(request, message_id):
     message = get_object_or_404(Message, id=message_id)
@@ -140,7 +140,7 @@ def message_detail(request, message_id):
     })
 
 
-# SOFT DELETE (moves to trash)
+#soft delete 
 @login_required
 def delete_message(request, message_id):
     message = get_object_or_404(Message, id=message_id)
@@ -151,10 +151,10 @@ def delete_message(request, message_id):
     message.status = 'deleted'
     message.save()
 
-    return redirect('deleted')  # ✅ FIXED redirect
+    return redirect('deleted') 
 
 
-# PERMANENT DELETE (ACTUAL DELETE)
+
 @login_required
 def delete_message_permanently(request, message_id):
     message = get_object_or_404(Message, id=message_id)
@@ -162,12 +162,12 @@ def delete_message_permanently(request, message_id):
     if request.user != message.sender and request.user not in message.receiver.all():
         return redirect('deleted')
 
-    message.delete()  # ✅ REAL deletion
+    message.delete()  
 
     return redirect('deleted')
 
 
-# DELETED MESSAGE DETAIL
+
 @login_required
 def deleted_message_detail(request, message_id):
     message = get_object_or_404(Message, id=message_id)
@@ -196,7 +196,7 @@ def deleted_message_detail(request, message_id):
     })
 
 
-# COMPOSE VIEW
+
 @login_required
 def compose(request):
     users = User.objects.exclude(id=request.user.id)
@@ -261,7 +261,7 @@ def compose(request):
     return render(request, 'messages_feature/compose.html', context)
 
 
-# EDIT DRAFT
+
 @login_required
 def edit_draft(request, message_id):
     message = get_object_or_404(Message, id=message_id, status='draft')

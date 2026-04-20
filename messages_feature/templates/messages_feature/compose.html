@@ -24,7 +24,7 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- Recipients Section -->
+            <!-- Recipients Section to pick 1 or multiple recipients -->
             <div class="mb-3">
 
                 <label class="fw-semibold mb-2">
@@ -65,7 +65,7 @@
                        placeholder="Enter subject (optional)">
             </div>
 
-            <!-- body -->
+            <!-- body area of the message -->
             <div class="mb-4">
                 <label class="fw-semibold mb-2">
                     Message <span style="color:red;">*</span>
@@ -78,7 +78,7 @@
                           placeholder="Write your message..."></textarea>
             </div>
 
-            <!-- buttons -->
+            <!-- buttons to send and save the email as a draft -->
             <div class="d-flex gap-2">
 
                 <button type="submit"
