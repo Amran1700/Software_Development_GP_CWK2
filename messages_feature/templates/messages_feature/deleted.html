@@ -25,7 +25,7 @@
 
             <div class="deleted-row d-flex align-items-stretch">
 
-                <!-- LEFT BAR -->
+                <!-- left status bar for how many messages have been deleted -->
                 <div class="status-bar"></div>
 
                 <!-- CONTENT -->
@@ -50,7 +50,7 @@
 
                 </a>
 
-                <!-- ACTIONS -->
+                <!-- quick actions to take you to view the message -->
                 <div class="d-flex align-items-center pe-3 gap-2">
 
                     <a href="{% url 'deleted_message_detail' message.id %}"
@@ -68,7 +68,7 @@
         </div>
 
         {% else %}
-
+ <!-- the message displayed if there are no deleted messages -->
         <div class="p-4 text-muted">
             No deleted messages.
         </div>

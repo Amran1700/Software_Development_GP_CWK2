@@ -20,7 +20,7 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- recipients -->
+            <!-- recipients of the draft if already in there are shown -->
             <div class="mb-3">
 
                 <label class="fw-bold mb-2">
@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <!-- subject -->
+            <!-- shows if anything is already in the subject -->
             <div class="mb-3">
                 <label class="fw-bold mb-2">
                     Subject
@@ -63,7 +63,7 @@
                        style="border-radius:10px;">
             </div>
 
-            <!-- body -->
+            <!-- shows the body of the draft if already in there -->
             <div class="mb-3">
 
                 <label class="fw-bold mb-2">

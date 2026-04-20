@@ -28,7 +28,7 @@
                 <!-- LEFT BAR -->
                 <div class="status-bar"></div>
 
-                <!-- MAIN CLICKABLE AREA -->
+                 
                 <a href="{% url 'message_detail' message.id %}"
                    class="flex-grow-1 px-4 py-3 text-decoration-none">
 
@@ -55,7 +55,7 @@
 
                 </a>
 
-                <!-- VIEW BUTTON (BLUE OUTLINE) -->
+                
                 <div class="d-flex align-items-center pe-3">
 
                     <a href="{% url 'message_detail' message.id %}"
@@ -76,7 +76,7 @@
         </div>
 
         {% else %}
-
+ <!--  - the message displayed if there are no sent messages -->
         <div class="p-4 text-muted">
             No sent messages.
         </div>

@@ -67,7 +67,7 @@
                 <!-- quick actions -->
                 <div class="d-flex align-items-center pe-3 gap-2">
 
-                    
+                     <!-- quick actions to view the message -->
                     <a href="{% url 'message_detail' message.id %}"
                        class="btn btn-sm btn-outline-primary"
                        style="border-radius:10px;">
@@ -76,7 +76,7 @@
 
                     </a>
 
-                    
+                     <!-- quick action to soft delete the message -->
                     <a href="{% url 'delete_message' message.id %}"
                        class="btn btn-sm btn-outline-danger"
                        style="border-radius:10px;">

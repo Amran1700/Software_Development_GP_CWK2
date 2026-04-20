@@ -44,7 +44,7 @@
 
                     </div>
 
-                    <!-- recipients -->
+                    <!-- recipients are displayed -->
                     <div class="text-muted small">
                         <strong>To:</strong>
                         {% for user in message.receiver.all %}
@@ -57,7 +57,7 @@
                 <!-- quick actions -->
                 <div class="d-flex align-items-center pe-3 gap-2">
 
-                    <!-- EDIT -->
+                    <!-- quick action to take u to the edit draft page -->
                     <a href="{% url 'edit_draft' message.id %}"
                        class="btn btn-sm btn-outline-primary"
                        style="border-radius:10px;">
@@ -84,7 +84,7 @@
         </div>
 
         {% else %}
-
+ <!-- the message displayed if there are no drafts available -->
         <div class="p-4 text-muted">
             No drafts available.
         </div>
