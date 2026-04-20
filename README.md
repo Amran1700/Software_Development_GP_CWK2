@@ -4,11 +4,11 @@
 
 The Sky Engineering Teams Portal is a full-stack web application developed as part of the 5COSC021W Software Development Group Project module at the University of Westminster. The application was built for Sky's Global Apps Engineering department to replace a manually maintained Excel spreadsheet that listed all engineering teams, their managers, departments, upstream and downstream dependencies, code repositories and contact details.
 
-The portal provides a centralised, database-driven interface where authenticated users can search for engineering teams, view detailed team information, send messages, schedule meetings, visualise the organisational structure, and generate reports. The system supports team lifecycle management, including new teams being created, teams being restructured, and teams being disbanded and ensures all information is up to date and accessible across the organisation.
+The portal provides a centralised, database driven interface where authenticated users can search for engineering teams, view detailed team information, send messages, schedule meetings, visualise the organisational structure, and generate reports. The system supports team lifecycle management, including new teams being created, teams being restructured, and teams being disbanded and ensures all information is up to date and accessible across the organisation.
 
 ## What the Application Does
 
-- **Browse and search** all engineering teams across departments with real-time filtering by team name and department
+- **Browse and search** all engineering teams across departments with real time filtering by team name and department
 - **View full team details** including team purpose, description, manager, all team members with roles and contact details, linked code repositories, skills with proficiency levels, and upstream and downstream team dependencies
 - **Send internal messages** to teams and individuals through a built-in messaging system with inbox, sent, drafts and compose functionality
 - **Schedule and manage meetings** with a calendar view showing monthly and weekly schedules, platform selection and attendee management
