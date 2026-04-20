@@ -1,8 +1,25 @@
 # Sky Engineering Teams Portal
 ### 5COSC021W – Software Development Group Project | CWK2
+## Project Overview
 
-A Django web application built for Sky's Engineering Department to replace a manual Excel spreadsheet with a centralised, database-driven portal for discovering and managing engineering teams.
+The Sky Engineering Teams Portal is a full-stack web application developed as part of the 5COSC021W Software Development Group Project module at the University of Westminster. The application was built for Sky's Global Apps Engineering department to replace a manually maintained Excel spreadsheet that listed all engineering teams, their managers, departments, upstream and downstream dependencies, code repositories and contact details.
 
+The portal provides a centralised, database-driven interface where authenticated users can search for engineering teams, view detailed team information, send messages, schedule meetings, visualise the organisational structure, and generate reports. The system supports team lifecycle management — including new teams being created, teams being restructured, and teams being disbanded — and ensures all information is up to date and accessible across the organisation.
+
+## What the Application Does
+
+- **Browse and search** all engineering teams across departments with real-time filtering by team name and department
+- **View full team details** including team purpose, description, manager, all team members with roles and contact details, linked code repositories, skills with proficiency levels, and upstream and downstream team dependencies
+- **Send internal messages** to teams and individuals through a built-in messaging system with inbox, sent, drafts and compose functionality
+- **Schedule and manage meetings** with a calendar view showing monthly and weekly schedules, platform selection and attendee management
+- **Visualise organisational structure** through an interactive org chart showing how departments and teams relate to each other
+- **Generate reports** on team data including total teams by department, teams without managers, and summary statistics — exportable as PDF or Excel
+- **Self-register and manage accounts** with local user registration, login, profile update and password change functionality
+- **Django Admin panel** for full data management including adding teams, managing members, assigning skills and setting dependencies
+
+## What Was Developed
+
+The application was built using Django 6.0 with a SQLite database and Bootstrap 5 frontend. Development followed an Agile approach with weekly sprints tracked on Trello. Each of the five group members was responsible for implementing one module of the application individually, with shared responsibility for the database design, user authentication, admin panel and global navigation. All five modules were integrated into a single application through a shared base template and connected database.
 ---
 
 ## Group Members
