@@ -30,7 +30,7 @@ The application was built using Django 6.0 with a SQLite database and Bootstrap 
 | Student 2 (W2115831)| Organisation & Department |
 | Student 3 | Messages |
 | Student 4 | Schedule |
-| Student 5 | Reports |
+| Student 5 (W21162895) | Reports |
 
 ---
 
