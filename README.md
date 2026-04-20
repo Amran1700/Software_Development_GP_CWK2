@@ -27,7 +27,7 @@ The application was built using Django 6.0 with a SQLite database and Bootstrap 
 | Student | Module |
 |---|---|
 | Student 1 (W2081572) | Team Management |
-| Student 2 | Organisation & Department |
+| Student 2 (W2115831)| Organisation & Department |
 | Student 3 | Messages |
 | Student 4 | Schedule |
 | Student 5 | Reports |
