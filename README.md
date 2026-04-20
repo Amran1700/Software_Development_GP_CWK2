@@ -81,6 +81,7 @@ pip install -r requirements.txt
 
 **4 — Run migrations:**
 ```bash
+python3 manage.py makemigrations
 python manage.py migrate
 ```
 
@@ -89,6 +90,7 @@ python manage.py migrate
 python manage.py loaddata superadmins.json
 python manage.py loaddata organisation_feature/fixtures/organisation_data.json
 python manage.py loaddata organisation_feature/fixtures/teams_data.json
+python3 manage.py loaddata messages_feature/fixtures/fixtures.json
 ```
 
 **6 — Run the server:**
