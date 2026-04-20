@@ -230,7 +230,7 @@ class TC1_TeamNameSearch(TeamTestSetup):
         """Step 5 — Search for 'Propulsion' returns exactly 2 teams."""
         response = self.client.get(reverse('teams:team_list'), {'q': 'Propulsion'})
         teams = response.context['teams']
-        self.assertEqual(teams.count(), 2)
+        self.assertEqual(len(teams), 2)
 
     def test_search_excludes_non_matching_teams(self):
         """Step 5 — Teams not matching 'Propulsion' are not shown in results."""
@@ -297,7 +297,7 @@ class TC3_NoResultsEmptyState(TeamTestSetup):
         """Step 4 — Searching 'Quantum' returns zero teams."""
         response = self.client.get(reverse('teams:team_list'), {'q': 'Quantum'})
         teams = response.context['teams']
-        self.assertEqual(teams.count(), 0)
+        self.assertEqual(len(teams), 0)
 
     def test_empty_state_message_displayed(self):
         """Step 4 & 5 — 'No teams found' message is displayed when search returns nothing."""
@@ -332,7 +332,7 @@ class TC4_SpecialCharactersSearch(TeamTestSetup):
         """Step 7 — Searching ('test') returns zero results as no team has that name."""
         response = self.client.get(reverse('teams:team_list'), {'q': "('test')"})
         teams = response.context['teams']
-        self.assertEqual(teams.count(), 0)
+        self.assertEqual(len(teams), 0)
 
     def test_hash_dollar_percent_no_error(self):
         """Step 7 — Searching @#$% does not cause a server error."""
