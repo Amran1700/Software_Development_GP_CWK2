@@ -106,9 +106,8 @@ class TeamTestSetup(TestCase):
         )
 
 
-# ==============================================================================
 # TEST PLAN 1: SEARCH FOR TEAMS
-# ==============================================================================
+
 
 class TC1_TeamNameSearch(TeamTestSetup):
     """TC1 — Positive — Search by valid team name returns correct results."""
@@ -296,10 +295,8 @@ class TC14_TeamWithNoSkills(TeamTestSetup):
         self.assertContains(response, 'No skills listed yet')
         self.assertEqual(len(response.context['skills']), 0)
 
+# NEGATIVE TEST CASES
 
-# ==============================================================================
-# ADDITIONAL NEGATIVE TEST CASES
-# ==============================================================================
 
 class TC15_InactiveTeamNotVisible(TeamTestSetup):
     """TC15 — Negative — Inactive teams are hidden from the team list."""
