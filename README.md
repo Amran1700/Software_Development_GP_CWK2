@@ -82,9 +82,9 @@ Go to http://127.0.0.1:8000
 - Username: admin
 - Password: admin123
 
-**Regular test user**
-- Username: testuser
-- Password: testpass123
+**Other Login Details**
+- Usernames follow the format: membername_admin
+- All accounts use the same password: admin123
 
 The admin panel is at http://127.0.0.1:8000/admin
 
